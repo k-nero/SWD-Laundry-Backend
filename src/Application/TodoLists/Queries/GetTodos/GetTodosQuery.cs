@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SWD_Laundry_Backend.Application.TodoLists.Queries.GetTodos;
 
-[Authorize]
 public record GetTodosQuery : IRequest<TodosVm>;
 
 public class GetTodosQueryHandler : IRequestHandler<GetTodosQuery, TodosVm>

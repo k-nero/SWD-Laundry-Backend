@@ -25,7 +25,7 @@ public static class ConfigureServices
 
         services.AddRazorPages();
 
-        services.AddScoped<FluentValidationSchemaProcessor>(provider =>
+        services.AddScoped(provider =>
         {
             var validationRules = provider.GetService<IEnumerable<FluentValidationRule>>();
             var loggerFactory = provider.GetService<ILoggerFactory>();

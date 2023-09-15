@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authorization;
+using SWD_Laundry_Backend.Domain.IdentityModel;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -48,8 +50,33 @@ public static class ConfigureServices
         services.AddAuthentication()
             .AddIdentityServerJwt();
 
+        //services.AddAuthorization(options =>
+        //    options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator")));
+
         services.AddAuthorization(options =>
-            options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator")));
+        {
+            options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
+
+            options.AddPolicy("Admin", policy => policy
+                .Combine(options.DefaultPolicy)
+                .RequireRole("Admin")
+                .Build());
+            options.AddPolicy("Staff", policy => policy
+                .Combine(options.DefaultPolicy)
+                .RequireRole("Staff")
+                .Build());
+            options.AddPolicy("Customer", policy => policy
+               .Combine(options.DefaultPolicy)
+               .RequireRole("Customer")
+               .Build());
+            options.AddPolicy("AdminOrStaff", policy => policy
+        .Combine(options.DefaultPolicy)
+        .RequireRole("Admin", "Staff")
+        .Build());
+
+        });
 
         return services;
     }

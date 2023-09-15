@@ -1,13 +1,14 @@
 ﻿using System.Reflection;
-using SWD_Laundry_Backend.Application.Common.Interfaces;
-using SWD_Laundry_Backend.Domain.Entities;
-using SWD_Laundry_Backend.Infrastructure.Identity;
-using SWD_Laundry_Backend.Infrastructure.Persistence.Interceptors;
 using Duende.IdentityServer.EntityFramework.Options;
 using MediatR;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using SWD_Laundry_Backend.Application.Common.Interfaces;
+using SWD_Laundry_Backend.Domain.Entities;
+using SWD_Laundry_Backend.Domain.IdentityModel;
+//using SWD_Laundry_Backend.Infrastructure.Identity;
+using SWD_Laundry_Backend.Infrastructure.Persistence.Interceptors;
 
 namespace SWD_Laundry_Backend.Infrastructure.Persistence;
 
@@ -20,7 +21,7 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
         DbContextOptions<ApplicationDbContext> options,
         IOptions<OperationalStoreOptions> operationalStoreOptions,
         IMediator mediator,
-        AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) 
+        AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor)
         : base(options, operationalStoreOptions)
     {
         _mediator = mediator;
@@ -30,6 +31,19 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
     public DbSet<TodoList> TodoLists => Set<TodoList>();
 
     public DbSet<TodoItem> TodoItems => Set<TodoItem>();
+
+    public DbSet<ApplicationUser> ApplicationUsers => Set<ApplicationUser>();
+
+    public DbSet<Building> Buildings => Set<Building>();
+    public DbSet<Customer> Customers => Set<Customer>();
+    public DbSet<LaundryStore> LaundryStores => Set<LaundryStore>();
+    public DbSet<Order> Orders => Set<Order>();
+    public DbSet<OrderHistory> OrderHistory => Set<OrderHistory>();
+    public DbSet<PaymentMethod> PaymentMethods => Set<PaymentMethod>();
+    public DbSet<Staff> Staffs => Set<Staff>();
+    public DbSet<StaffTrip> Stasts => Set<StaffTrip>();
+    public DbSet<Transaction> Transactions => Set<Transaction>();
+    public DbSet<Wallet> Wallets => Set<Wallet>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

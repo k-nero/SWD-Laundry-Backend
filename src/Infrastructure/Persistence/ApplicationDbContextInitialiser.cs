@@ -3,6 +3,7 @@ using SWD_Laundry_Backend.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using SWD_Laundry_Backend.Domain.IdentityModel;
 
 namespace SWD_Laundry_Backend.Infrastructure.Persistence;
 
@@ -52,43 +53,63 @@ public class ApplicationDbContextInitialiser
 
     public async Task TrySeedAsync()
     {
-        // Default roles
-        var administratorRole = new IdentityRole("Administrator");
-
-        if (_roleManager.Roles.All(r => r.Name != administratorRole.Name))
         {
-            await _roleManager.CreateAsync(administratorRole);
-        }
-
-        // Default users
-        var administrator = new ApplicationUser { UserName = "administrator@localhost", Email = "administrator@localhost" };
-
-        if (_userManager.Users.All(u => u.UserName != administrator.UserName))
+            // Roles
+            var roles = new List<IdentityRole>
         {
-            await _userManager.CreateAsync(administrator, "Administrator1!");
-            if (!string.IsNullOrWhiteSpace(administratorRole.Name))
+            new IdentityRole("Customer"),
+            new IdentityRole("Staff"),
+            new IdentityRole("Store"),
+            new IdentityRole("Admin")
+        };
+
+            foreach (var role in roles)
             {
-                await _userManager.AddToRolesAsync(administrator, new [] { administratorRole.Name });
+
+                if (_roleManager.Roles.All(r => r.Name != role.Name))
+                {
+                    await _roleManager.CreateAsync(role);
+                }
             }
-        }
 
-        // Default data
-        // Seed, if necessary
-        if (!_context.TodoLists.Any())
-        {
-            _context.TodoLists.Add(new TodoList
+            // Manager
+            var administrator = new ApplicationUser
             {
-                Title = "Todo List",
-                Items =
+                UserName = "@dmin",
+                Email = "administrator@localhost",
+
+            };
+
+            if (_userManager.Users.All(u => u.UserName != administrator.UserName))
+            {
+                await _userManager.CreateAsync(administrator, "Aa123@");
+
+                var administratorRole = roles.FirstOrDefault(r => r.Name == "Admin");
+                if (administratorRole != null)
+                {
+                    await _userManager.AddToRoleAsync(administrator, administratorRole.Name);
+                }
+
+            }
+
+            // Default data
+            // Seed, if necessary
+            if (!_context.TodoLists.Any())
+            {
+                _context.TodoLists.Add(new TodoList
+                {
+                    Title = "Todo List",
+                    Items =
                 {
                     new TodoItem { Title = "Make a todo list 📃" },
                     new TodoItem { Title = "Check off the first item ✅" },
                     new TodoItem { Title = "Realise you've already done two things on the list! 🤯"},
                     new TodoItem { Title = "Reward yourself with a nice, long nap 🏆" },
                 }
-            });
+                });
 
-            await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

@@ -17,7 +17,7 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.7")
+                .HasAnnotation("ProductVersion", "6.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -344,7 +344,7 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("ListId");
 
-                    b.ToTable("TodoItems");
+                    b.ToTable("TodoItems", (string)null);
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.TodoList", b =>
@@ -374,7 +374,7 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TodoLists");
+                    b.ToTable("TodoLists", (string)null);
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Infrastructure.Identity.ApplicationUser", b =>
@@ -506,7 +506,7 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.TodoList", b =>
                 {
-                    b.OwnsOne("SWD_Laundry_Backend.Domain.ValueObjects.Colour", "Colour", b1 =>
+                    b.OwnsOne("SWD_Laundry_Backend.Domain.Entities.TodoList.Colour#SWD_Laundry_Backend.Domain.ValueObjects.Colour", "Colour", b1 =>
                         {
                             b1.Property<int>("TodoListId")
                                 .HasColumnType("int");
@@ -517,7 +517,7 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
 
                             b1.HasKey("TodoListId");
 
-                            b1.ToTable("TodoLists");
+                            b1.ToTable("TodoLists", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("TodoListId");

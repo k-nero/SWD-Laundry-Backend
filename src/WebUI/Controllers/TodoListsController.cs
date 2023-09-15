@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace SWD_Laundry_Backend.WebUI.Controllers;
 
-[Authorize]
 public class TodoListsController : ApiControllerBase
 {
     [HttpGet]

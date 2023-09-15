@@ -4,6 +4,7 @@ using SWD_Laundry_Backend.Infrastructure.Persistence;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddLogging();
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddWebUIServices();
@@ -40,6 +41,7 @@ app.UseSwaggerUi3(settings =>
     settings.DocumentPath = "/api/specification.json";
     settings.SwaggerRoutes.Add(new SwaggerUi3Route("v1.0", "/api/specification.json"));
 });
+
 
 app.UseRouting();
 

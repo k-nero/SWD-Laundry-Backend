@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Http;
 
 namespace SWD_Laundry_Backend.WebUI.Controllers;
 
-[Authorize]
 public class TodoItemsController : ApiControllerBase
 {
     [HttpGet]

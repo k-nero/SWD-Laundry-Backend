@@ -308,6 +308,7 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
@@ -318,6 +319,7 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
+
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastModified")
@@ -325,6 +327,7 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
+
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -378,7 +381,9 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
                     b.ToTable("Customers");
                 });
 
+
             modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.LaundryStore", b =>
+
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

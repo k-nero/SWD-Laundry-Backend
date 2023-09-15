@@ -42,6 +42,7 @@ app.UseSwaggerUi3(settings =>
     settings.SwaggerRoutes.Add(new SwaggerUi3Route("v1.0", "/api/specification.json"));
 });
 
+
 app.UseRouting();
 
 app.UseAuthentication();

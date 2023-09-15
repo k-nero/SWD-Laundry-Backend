@@ -9,7 +9,7 @@ public class Staff : BaseAuditableEntity
 {
     public DateTime Dob { get; set; }
     public string Address { get; set; }
-    public decimal Salary { get; set; }
+    public double Salary { get; set; }
 
     /// <summary>
     /// Relationship

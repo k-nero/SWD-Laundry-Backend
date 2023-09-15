@@ -10,7 +10,7 @@ public class StaffTrip : BaseAuditableEntity
     //public DateOnly TripDate { get; set; }
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
-    public decimal TripCollect { get; set; } = 0;
+    public int TripCollect { get; set; } = 0;
     
 
     /// <summary>

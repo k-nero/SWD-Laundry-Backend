@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿//using Microsoft.AspNetCore.Identity;
 
-namespace SWD_Laundry_Backend.Infrastructure.Identity;
+//namespace SWD_Laundry_Backend.Infrastructure.Identity;
 
-public class ApplicationUser : IdentityUser
-{
-    public string? Name { get; set; }
-}
+//public class ApplicationUser : IdentityUser
+//{
+//    public string? Name { get; set; }
+//}

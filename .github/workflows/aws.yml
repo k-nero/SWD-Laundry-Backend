@@ -1,4 +1,4 @@
-name: Deploy to Amazon ECS
+name: Deploy to Amazon EC2
 
 on:
   pull_request:
@@ -7,13 +7,15 @@ on:
 
 permissions:
   contents: read
+  
+env:
+  DEPLOYMENT_FOLDER: C:\inetpub\wwwroot\SWD-Laundry-Project\
 
 jobs:
   build:
     name: Publish and Deploy
     runs-on: windows-latest
     environment: production
-
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -26,13 +28,28 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --configuration Release --no-restore
-    - name: Publish and to Amazon EC2
-      uses: ChristopheLav/iis-deploy@v1
+    - name: Publish
+      run: dotnet publish --configuration Release --no-build --no-restore --output ./publish /p:RuntimeIdentifier=win-x64 /p:TargetFramework=net7.0
+    - name: Archive Artifacts
+      uses: actions/upload-artifact@v2
       with:
-            website-name: 'SWD-Laundry-Project'
-            msdeploy-service-url: ${{ secrets.MSDEPLOY_URL }}
-            msdeploy-username: ${{ secrets.MSDEPLOY_USERNAME }}
-            msdeploy-password: ${{ secrets.MSDEPLOY_PASSWORD }}
-            source-path: 'src/WebUI'
+        name: publish
+        path: ./publish
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@master
+      with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: 
+              Stop-Service -Name 'W3SVC' -Force
+              Remove-Item -Path '${{env.DEPLOYMENT_FOLDER}}*' -Force
+              Copy-Item -Path './publish/*' -Destination '${{env.DEPLOYMENT_FOLDER}}'
+              $json = Get-Content '${{env.DEPLOYMENT_FOLDER}}appsettings.Production.json' | ConvertFrom-Json
+              $json | Add-Member -Type NoteProperty -Name 'ConnectionStrings' -Value @{DefaultConnection = "Server=${{ secrets.DATABASE }};Database=Laundry;Trusted_Connection=False;MultipleActiveResultSets=true;User ID=${{ secrets.DATABASE_USERNAME }};Password=${{ secrets.DATABASE_PASSWORD }};TrustServerCertificate=true"}
+              $json | ConvertTo-Json -Depth 20 | Set-Content '${{env.DEPLOYMENT_FOLDER}}appsettings.Production.json'
+              Start-Service -Name 'W3SVC'
+                 
+        
 
 

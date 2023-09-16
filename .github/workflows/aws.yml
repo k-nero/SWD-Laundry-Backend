@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build:
-    name: Build
+    name: Publish and Deploy
     runs-on: windows-latest
     environment: production
 
@@ -22,7 +22,17 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '7.0.401'  # replace with your .NET version
+    - name: Install dependencies
+      run: dotnet restore
     - name: Build
-      run: dotnet build --configuration Release
+      run: dotnet build --configuration Release --no-restore
+    - name: Publish and to Amazon EC2
+      uses: ChristopheLav/iis-deploy@v1
+      with:
+            website-name: 'SWD-Laundry-Project'
+            msdeploy-service-url: ${{ secrets.MSDEPLOY_URL }}
+            msdeploy-username: ${{ secrets.MSDEPLOY_USERNAME }}
+            msdeploy-password: ${{ secrets.MSDEPLOY_PASSWORD }}
+            source-path: 'src/WebUI'
 
 

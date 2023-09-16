@@ -37,7 +37,7 @@ permissions:
 jobs:
   build:
     name: Build
-    runs-on: window
+    runs-on: windows-latest
     environment: production
 
     steps:

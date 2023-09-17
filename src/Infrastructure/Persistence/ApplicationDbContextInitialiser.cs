@@ -3,7 +3,7 @@ using SWD_Laundry_Backend.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-//using SWD_Laundry_Backend.Domain.IdentityModel;
+using SWD_Laundry_Backend.Domain.IdentityModel;
 
 namespace SWD_Laundry_Backend.Infrastructure.Persistence;
 

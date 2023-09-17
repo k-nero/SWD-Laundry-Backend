@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authorization;
+using SWD_Laundry_Backend.Domain.IdentityModel;
 
 namespace Microsoft.Extensions.DependencyInjection;
 

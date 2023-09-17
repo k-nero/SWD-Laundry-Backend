@@ -12,7 +12,10 @@ public class Staff_Trip : BaseAuditableEntity
     public DateTime StartTime { get; set; }
 
     public DateTime EndTime { get; set; }
-    public decimal TripCollect { get; set; } = 0;
+
+    public int TripCollect { get; set; } = 0;
+    
+
 
     #region Relationship
 

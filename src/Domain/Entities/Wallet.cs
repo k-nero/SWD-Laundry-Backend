@@ -11,7 +11,7 @@ namespace SWD_Laundry_Backend.Domain.Entities;
 
 public class Wallet : BaseAuditableEntity
 {
-    public decimal Balance { get; set; }
+    public double Balance { get; set; }
 
 
 }

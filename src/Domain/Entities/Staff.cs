@@ -13,6 +13,7 @@ public class Staff : BaseAuditableEntity
 
     #region Relationship
 
+
     [ForeignKey("Wallet")]
     public int WalletID { get; set; }
 

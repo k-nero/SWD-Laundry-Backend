@@ -7,11 +7,17 @@ using System.Threading.Tasks;
 using SWD_Laundry_Backend.Domain.Entities.Validation;
 using SWD_Laundry_Backend.Domain.IdentityModel;
 
+
 namespace SWD_Laundry_Backend.Domain.Entities;
 #nullable disable
 
 public class Order : BaseAuditableEntity
 {
+
+    public DateTime OrderDate { get; set; }
+    public DateTime ShipDate { get; set; }
+    public int Amount { get; set; }
+
 
     public DateTime OrderDate { get; set; }
     public DateTime ExpectedFinishDate { get; set; }

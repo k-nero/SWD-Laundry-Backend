@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.RegularExpressions;
 using SWD_Laundry_Backend.Domain.Entities.Validation;
 using SWD_Laundry_Backend.Domain.IdentityModel;
 
@@ -8,28 +9,25 @@ namespace SWD_Laundry_Backend.Domain.Entities;
 
 public class Customer : BaseAuditableEntity
 {
-    public string Name { get; set; }
-    //public string Address { get; set; }
+    public string Address { get; set; }
 
-    #region Relationship
-
-    [ForeignKey("Building")]
-    public int BuildingID { get; set; }
-
+    /// <summary>
+    /// Relationship
+    /// </summary>
+    ///
     [ForeignKey("Wallet")]
     public int WalletID { get; set; }
 
     [ForeignKey("ApplicationUser")]
     public string ApplicationUserID { get; set; }
 
-    public Building Building { get; set; }
     public Wallet Wallet { get; set; }
     public ApplicationUser ApplicationUser { get; set; }
 
-    #endregion Relationship
-
-    #region Special Attribute
-
+    /// <summary>
+    /// Special attributes
+    /// </summary>
+    ///
     private string _email;
 
     private string _phone;
@@ -41,7 +39,7 @@ public class Customer : BaseAuditableEntity
         {
             _email = new Validate().IsValidEmail(value)
                 ? value
-                : throw new ArgumentException("Invalid email.");
+                : throw new ArgumentException("Not valid mail.");
         }
     }
 
@@ -52,9 +50,7 @@ public class Customer : BaseAuditableEntity
         {
             _phone = new Validate().IsValidPhone(value)
                 ? value
-                : throw new ArgumentException("Invalid phone (must be 9-10 numbers and start with 09 or 01).");
+                : throw new ArgumentException("Not valid phone.");
         }
     }
-
-    #endregion Special Attribute
 }

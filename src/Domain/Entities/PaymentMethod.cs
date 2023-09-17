@@ -19,7 +19,7 @@ public class PaymentMethod : BaseAuditableEntity
         {
             _type = new Validate().IsValidPayment(value)
                 ? value
-                : throw new ArgumentException("Invalid payment type{CASH , PAYPAL}.");
+                : throw new ArgumentException("Not valid payment type.");
         }
     }
 }

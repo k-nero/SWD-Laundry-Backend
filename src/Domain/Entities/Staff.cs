@@ -11,9 +11,10 @@ public class Staff : BaseAuditableEntity
     public string Address { get; set; }
     public double Salary { get; set; }
 
-    #region Relationship
-
-
+    /// <summary>
+    /// Relationship
+    /// </summary>
+    ///
     [ForeignKey("Wallet")]
     public int WalletID { get; set; }
 
@@ -23,10 +24,10 @@ public class Staff : BaseAuditableEntity
     public ApplicationUser ApplicationUser { get; set; }
     public Wallet Wallet { get; set; }
 
-    #endregion Relationship
-
-    #region Special Attribute
-
+    /// <summary>
+    /// Special attributes
+    /// </summary>
+    ///
     private string _email;
 
     private string _phone;
@@ -39,7 +40,7 @@ public class Staff : BaseAuditableEntity
         {
             _role = new Validate().IsValidStaffRole(value)
                 ? value
-                : throw new ArgumentException("Invalid staff role {COLLECTOR, RECEIVER}.");
+                : throw new ArgumentException("Not valid staff role.");
         }
     }
 
@@ -50,7 +51,7 @@ public class Staff : BaseAuditableEntity
         {
             _email = new Validate().IsValidEmail(value)
                 ? value
-                : throw new ArgumentException("Invalid email.");
+                : throw new ArgumentException("Not valid mail.");
         }
     }
 
@@ -61,9 +62,7 @@ public class Staff : BaseAuditableEntity
         {
             _phone = new Validate().IsValidPhone(value)
                 ? value
-                : throw new ArgumentException("Invalid phone (must be 9-10 numbers and start with 09 or 01).");
+                : throw new ArgumentException("Not valid phone.");
         }
     }
-
-    #endregion Special Attribute
 }

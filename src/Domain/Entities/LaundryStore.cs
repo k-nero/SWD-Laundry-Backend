@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SWD_Laundry_Backend.Domain.Entities.Validation;
+﻿using SWD_Laundry_Backend.Domain.Entities.Validation;
 using SWD_Laundry_Backend.Domain.IdentityModel;
 
 namespace SWD_Laundry_Backend.Domain.Entities;
@@ -11,12 +6,14 @@ namespace SWD_Laundry_Backend.Domain.Entities;
 
 public class LaundryStore : BaseAuditableEntity
 {
+    public string Name { get; set; }
     public string Address { get; set; }
+    public DateTime StartTime { get; set; }
+    public DateTime EndTime { get; set; }
+    public bool Status { get; set; }
 
-    /// <summary>
-    /// Relationship
-    /// </summary>
-    ///
+    #region Relationship
+
     public string ApplicationUserID { get; set; }
 
     public int WalletID { get; set; }
@@ -24,10 +21,10 @@ public class LaundryStore : BaseAuditableEntity
     public ApplicationUser ApplicationUser { get; set; }
     public Wallet Wallet { get; set; }
 
-    /// <summary>
-    /// Special attributes
-    /// </summary>
-    /// 
+    #endregion Relationship
+
+    #region Special Attribute
+
     private string _email;
 
     private string _phone;
@@ -39,7 +36,7 @@ public class LaundryStore : BaseAuditableEntity
         {
             _email = new Validate().IsValidEmail(value)
                 ? value
-                : throw new ArgumentException("Not valid mail.");
+                : throw new ArgumentException("Invalid email.");
         }
     }
 
@@ -50,7 +47,9 @@ public class LaundryStore : BaseAuditableEntity
         {
             _phone = new Validate().IsValidPhone(value)
                 ? value
-                : throw new ArgumentException("Not valid phone.");
+                : throw new ArgumentException("Invalid phone (must be 9-10 numbers and start with 09 or 01).");
         }
     }
+
+    #endregion Special Attribute
 }

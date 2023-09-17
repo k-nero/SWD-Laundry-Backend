@@ -17,7 +17,7 @@ public class Validate
 
     public bool IsValidTransactionStatus(string status)
     {
-        return TransactionStatus.Contains(status);
+        return Status.Contains(status);
     }
 
     public bool IsValidPhone(string phone)
@@ -34,37 +34,45 @@ public class Validate
 
     public bool IsValidTripStatus(string status)
     {
-        return TripStatus.Contains(status);
+        return Status.Contains(status);
     }
 
     public bool IsValidPayment(string payment)
     {
         return Payment.Contains(payment);
     }
+
+    public bool IsValidOrderType(string value)
+    {
+        return  OrderType.Contains(value);
+    }
+
     //=======================================================
-    public string[] Payment = new string[]
+    private readonly string[] OrderType = new string[]
     {
-        "Cash","Paypal"
+        "ONEWAY","TWOWAY"
     };
-    public string[] TripStatus = new string[]
+
+    private readonly string[] Payment = new string[]
     {
-        "Finished","Processing","Cancelled"
+        "CASH","PAYPAL"
+    };
+    private readonly string[] Status = new string[]
+    {
+        "FINISHED","PROCESSING","CANCELLED"
+    };
+
+
+    private readonly string[] StaffRole = new string[]
+    {
+        "COLLECTOR","RECEIVER"
     };
 
 
-    public string[] StaffRole = new string[]
+    private readonly string[] AllowedTransactionType = new string[]
     {
-        "Collector","Receiver"
+        "DEPOSIT","WITHDRAWAL", "DEBT", "PAID"
     };
 
 
-    public string[] AllowedTransactionType = new string[]
-    {
-        "Deposit","Withdrawal", "Debt", "Paid"
-    };
-
-    public string[] TransactionStatus = new string[]
-    {
-        "Success","Processing","Fail"
-    };
 }

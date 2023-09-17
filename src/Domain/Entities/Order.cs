@@ -14,9 +14,7 @@ namespace SWD_Laundry_Backend.Domain.Entities;
 public class Order : BaseAuditableEntity
 {
 
-    public DateTime OrderDate { get; set; }
     public DateTime ShipDate { get; set; }
-    public int Amount { get; set; }
 
 
     public DateTime OrderDate { get; set; }

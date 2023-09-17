@@ -9,18 +9,16 @@ public class Transaction : BaseAuditableEntity
     public decimal Amount { get; set; }
     public string Description { get; set; }
 
-    /// <summary>
-    /// Relationship
-    /// </summary>
-    /// 
+    #region Relationship
+
     public int WalletID { get; set; }
 
     public List<Wallet> Wallet { get; set; }
 
-    /// <summary>
-    /// Special attribute
-    /// </summary>
-    /// 
+    #endregion Relationship
+
+    #region Special Attribute
+
     private string _transactiontype;
 
     private string _status;
@@ -31,7 +29,7 @@ public class Transaction : BaseAuditableEntity
         set
         {
             if (!new Validate().IsValidTransactionType(value))
-                throw new ArgumentException("Not valid transaction type.");
+                throw new ArgumentException("Invalid transaction type {DEPOSIT, WITHDRAWAL, DEBT, PAID}.");
             _transactiontype = value;
         }
     }
@@ -42,8 +40,10 @@ public class Transaction : BaseAuditableEntity
         set
         {
             if (!new Validate().IsValidTransactionStatus(value))
-                throw new ArgumentException("Not valid transaction status.");
+                throw new ArgumentException("Invalid transaction status {FINISHED, PROCESSING, CANCELLED}.");
             _status = value;
         }
     }
+
+    #endregion Special Attribute
 }

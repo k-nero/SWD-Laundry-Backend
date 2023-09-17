@@ -1,37 +1,32 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using SWD_Laundry_Backend.Domain.Entities.Validation;
 
 namespace SWD_Laundry_Backend.Domain.Entities;
 
 #nullable disable
 
-public class StaffTrip : BaseAuditableEntity
+public class Staff_Trip : BaseAuditableEntity
 {
-    //public DateOnly TripDate { get; set; }
+    public string Address { get; set; }
     public DateTime StartTime { get; set; }
+
     public DateTime EndTime { get; set; }
     public decimal TripCollect { get; set; } = 0;
-    
 
-    /// <summary>
-    /// Relationship
-    /// </summary>
-    ///
-    [ForeignKey("Building")]
-    public int BuildingID { get; set; }
+    #region Relationship
 
     [ForeignKey("Staff")]
     public int StaffID { get; set; }
 
-    public Building Building { get; set; }
-
     public Staff Staff { get; set; }
 
-    /// <summary>
-    /// Special attributes
-    /// </summary>
-    /// 
+    #endregion Relationship
+
+    #region Special Attribute
+
     private string _tripstatus;
+
     public string TripStatus
     {
         get { return _tripstatus; }
@@ -39,7 +34,9 @@ public class StaffTrip : BaseAuditableEntity
         {
             _tripstatus = new Validate().IsValidTripStatus(value)
                 ? value
-                : throw new ArgumentException("Not valid trip status.");
+                : throw new ArgumentException("Invalid trip status {FINISHED, PROCESSING, CANCELLED}.");
         }
     }
+
+    #endregion Special Attribute
 }

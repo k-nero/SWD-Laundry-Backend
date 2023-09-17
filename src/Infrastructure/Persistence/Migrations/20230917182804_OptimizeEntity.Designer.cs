@@ -12,8 +12,8 @@ using SWD_Laundry_Backend.Infrastructure.Persistence;
 namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230914221506_InitialDatabase2")]
-    partial class InitialDatabase2
+    [Migration("20230917182804_OptimizeEntity")]
+    partial class OptimizeEntity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -345,11 +345,11 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ApplicationUserID")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("BuildingID")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -366,6 +366,9 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
@@ -375,6 +378,8 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserID");
+
+                    b.HasIndex("BuildingID");
 
                     b.HasIndex("WalletID");
 
@@ -404,14 +409,26 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
 
                     b.Property<int>("WalletID")
                         .HasColumnType("int");
@@ -433,20 +450,26 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<short>("Amount")
+                        .HasColumnType("smallint");
 
                     b.Property<string>("ApplicationUserID")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("BuildingID")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ExpectedFinishDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsWhiteClothes")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
@@ -457,17 +480,18 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("OrderType")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("PaymentMethodID")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ShipDate")
-                        .HasColumnType("datetime2");
+                    b.Property<double>("TotalPrice")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserID");
-
-                    b.HasIndex("BuildingID");
 
                     b.HasIndex("PaymentMethodID");
 
@@ -576,8 +600,8 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
                     b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Salary")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("Salary")
+                        .HasColumnType("float");
 
                     b.Property<int>("WalletID")
                         .HasColumnType("int");
@@ -591,7 +615,7 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
                     b.ToTable("Staffs");
                 });
 
-            modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.StaffTrip", b =>
+            modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.Staff_Trip", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -599,8 +623,8 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BuildingID")
-                        .HasColumnType("int");
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -631,11 +655,9 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BuildingID");
-
                     b.HasIndex("StaffID");
 
-                    b.ToTable("Stasts");
+                    b.ToTable("Staff_Trips");
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.TodoItem", b =>
@@ -800,6 +822,61 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ApplicationUser");
+                });
+
+            modelBuilder.Entity("SWD_Laundry_Backend.Infrastructure.Identity.ApplicationUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
@@ -815,9 +892,6 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -870,7 +944,7 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("SWD_Laundry_Backend.Domain.IdentityModel.ApplicationUser", null)
+                    b.HasOne("SWD_Laundry_Backend.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -879,7 +953,7 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("SWD_Laundry_Backend.Domain.IdentityModel.ApplicationUser", null)
+                    b.HasOne("SWD_Laundry_Backend.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -894,7 +968,7 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SWD_Laundry_Backend.Domain.IdentityModel.ApplicationUser", null)
+                    b.HasOne("SWD_Laundry_Backend.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -903,7 +977,7 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("SWD_Laundry_Backend.Domain.IdentityModel.ApplicationUser", null)
+                    b.HasOne("SWD_Laundry_Backend.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -916,6 +990,12 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("ApplicationUserID");
 
+                    b.HasOne("SWD_Laundry_Backend.Domain.Entities.Building", "Building")
+                        .WithMany()
+                        .HasForeignKey("BuildingID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("SWD_Laundry_Backend.Domain.Entities.Wallet", "Wallet")
                         .WithMany()
                         .HasForeignKey("WalletID")
@@ -923,6 +1003,8 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("ApplicationUser");
+
+                    b.Navigation("Building");
 
                     b.Navigation("Wallet");
                 });
@@ -950,12 +1032,6 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("ApplicationUserID");
 
-                    b.HasOne("SWD_Laundry_Backend.Domain.Entities.Building", "Building")
-                        .WithMany()
-                        .HasForeignKey("BuildingID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SWD_Laundry_Backend.Domain.Entities.PaymentMethod", "PaymentMethod")
                         .WithMany()
                         .HasForeignKey("PaymentMethodID")
@@ -963,8 +1039,6 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("ApplicationUser");
-
-                    b.Navigation("Building");
 
                     b.Navigation("PaymentMethod");
                 });
@@ -997,21 +1071,13 @@ namespace SWD_Laundry_Backend.Infrastructure.Persistence.Migrations
                     b.Navigation("Wallet");
                 });
 
-            modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.StaffTrip", b =>
+            modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.Staff_Trip", b =>
                 {
-                    b.HasOne("SWD_Laundry_Backend.Domain.Entities.Building", "Building")
-                        .WithMany()
-                        .HasForeignKey("BuildingID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SWD_Laundry_Backend.Domain.Entities.Staff", "Staff")
                         .WithMany()
                         .HasForeignKey("StaffID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Building");
 
                     b.Navigation("Staff");
                 });

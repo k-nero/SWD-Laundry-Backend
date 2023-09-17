@@ -6,8 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using SWD_Laundry_Backend.Application.Common.Interfaces;
 using SWD_Laundry_Backend.Domain.Entities;
-using SWD_Laundry_Backend.Domain.IdentityModel;
-//using SWD_Laundry_Backend.Infrastructure.Identity;
+
+//using SWD_Laundry_Backend.Domain.IdentityModel;
+using SWD_Laundry_Backend.Infrastructure.Identity;
 using SWD_Laundry_Backend.Infrastructure.Persistence.Interceptors;
 
 namespace SWD_Laundry_Backend.Infrastructure.Persistence;
@@ -40,8 +41,9 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
     public DbSet<Order> Orders => Set<Order>();
     public DbSet<OrderHistory> OrderHistory => Set<OrderHistory>();
     public DbSet<PaymentMethod> PaymentMethods => Set<PaymentMethod>();
+    public DbSet<Staff_Trip> Staff_Trips => Set<Staff_Trip>();
     public DbSet<Staff> Staffs => Set<Staff>();
-    public DbSet<StaffTrip> Stasts => Set<StaffTrip>();
+
     public DbSet<Transaction> Transactions => Set<Transaction>();
     public DbSet<Wallet> Wallets => Set<Wallet>();
 

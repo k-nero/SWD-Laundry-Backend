@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using SWD_Laundry_Backend.Domain.Entities.Validation;
 
 namespace SWD_Laundry_Backend.Domain.Entities;
@@ -11,19 +6,17 @@ namespace SWD_Laundry_Backend.Domain.Entities;
 
 public class OrderHistory : BaseAuditableEntity
 {
-    /// <summary>
-    /// Relationship
-    /// </summary>
-    /// 
+    #region Relationship
+
     [ForeignKey("Order")]
     public int OrderID { get; set; }
 
     public Order Order { get; set; }
 
-    /// <summary>
-    /// Special attributes
-    /// </summary>
-    /// 
+    #endregion Relationship
+
+    #region Special attributes
+
     private string _orderstatus;
 
     public string Status
@@ -33,7 +26,9 @@ public class OrderHistory : BaseAuditableEntity
         {
             _orderstatus = new Validate().IsValidTripStatus(value)
                 ? value
-                : throw new ArgumentException("Not valid order status.");
+                : throw new ArgumentException("Invalid order status {FINISHED, PROCESSING, CANCELLED}.");
         }
     }
+
+    #endregion Special attributes
 }

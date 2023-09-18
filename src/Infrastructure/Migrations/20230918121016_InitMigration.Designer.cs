@@ -12,7 +12,7 @@ using SWD_Laundry_Backend.Infrastructure.Persistence;
 namespace SWD_Laundry_Backend.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230918120532_InitMigration")]
+    [Migration("20230918121016_InitMigration")]
     partial class InitMigration
     {
         /// <inheritdoc />

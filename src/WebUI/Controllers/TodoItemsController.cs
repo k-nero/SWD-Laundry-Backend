@@ -4,9 +4,7 @@ using SWD_Laundry_Backend.Application.TodoItems.Commands.DeleteTodoItem;
 using SWD_Laundry_Backend.Application.TodoItems.Commands.UpdateTodoItem;
 using SWD_Laundry_Backend.Application.TodoItems.Commands.UpdateTodoItemDetail;
 using SWD_Laundry_Backend.Application.TodoItems.Queries.GetTodoItemsWithPagination;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 
 namespace SWD_Laundry_Backend.WebUI.Controllers;
 

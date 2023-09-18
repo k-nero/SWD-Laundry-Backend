@@ -17,18 +17,19 @@ public class OrderHistory : BaseAuditableEntity
 
     #region Special attributes
 
-    private string _orderstatus;
+    //private string _orderstatus;
 
-    public string Status
-    {
-        get { return _orderstatus; }
-        set
-        {
-            _orderstatus = new Validate().IsValidTripStatus(value)
-                ? value
-                : throw new ArgumentException("Invalid order status {FINISHED, PROCESSING, CANCELLED}.");
-        }
-    }
+    //public string Status
+    //{
+    //    get { return _orderstatus; }
+    //    set
+    //    {
+    //        _orderstatus = new Validate().IsValidTripStatus(value)
+    //            ? value
+    //            : throw new ArgumentException("Invalid order status {FINISHED, PROCESSING, CANCELLED}.");
+    //    }
+    //}
+    public Status Status { get; set;}
 
     #endregion Special attributes
 }

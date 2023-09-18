@@ -28,18 +28,20 @@ public class Staff_Trip : BaseAuditableEntity
 
     #region Special Attribute
 
-    private string _tripstatus;
+    //private string _tripstatus;
 
-    public string TripStatus
-    {
-        get { return _tripstatus; }
-        set
-        {
-            _tripstatus = new Validate().IsValidTripStatus(value)
-                ? value
-                : throw new ArgumentException("Invalid trip status {FINISHED, PROCESSING, CANCELLED}.");
-        }
-    }
+    //public string TripStatus
+    //{
+    //    get { return _tripstatus; }
+    //    set
+    //    {
+    //        _tripstatus = new Validate().IsValidTripStatus(value)
+    //            ? value
+    //            : throw new ArgumentException("Invalid trip status {FINISHED, PROCESSING, CANCELLED}.");
+    //    }
+    //}
+
+    public Status TripStatus { get; set; }
 
     #endregion Special Attribute
 }

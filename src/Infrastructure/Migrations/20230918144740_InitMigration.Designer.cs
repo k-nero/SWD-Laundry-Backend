@@ -12,7 +12,7 @@ using SWD_Laundry_Backend.Infrastructure.Persistence;
 namespace SWD_Laundry_Backend.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230918121016_InitMigration")]
+    [Migration("20230918144740_InitMigration")]
     partial class InitMigration
     {
         /// <inheritdoc />
@@ -397,9 +397,6 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
@@ -410,9 +407,6 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("StartTime")
@@ -515,8 +509,8 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     b.Property<int>("OrderID")
                         .HasColumnType("int");
 
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -638,8 +632,8 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     b.Property<int>("TripCollect")
                         .HasColumnType("int");
 
-                    b.Property<string>("TripStatus")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("TripStatus")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

@@ -39,18 +39,20 @@ public class Order : BaseAuditableEntity
 
     #region Special Attribute
 
-    private string _orderType;
+    //private string _orderType;
 
-    public string OrderType
-    {
-        get => _orderType;
-        set
-        {
-            _orderType = new Validate().IsValidOrderType(value)
-                ? value
-                : throw new Exception("Invalid order type {ONEWAY, TWOWAY}");
-        }
-    }
+    //public string OrderType
+    //{
+    //    get => _orderType;
+    //    set
+    //    {
+    //        _orderType = new Validate().IsValidOrderType(value)
+    //            ? value
+    //            : throw new Exception("Invalid order type {ONEWAY, TWOWAY}");
+    //    }
+    //}
+
+    public OrderType OrderType { get; set; }
 
     #endregion Special Attribute
 }

@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using SWD_Laundry_Backend.Application.Common.Interfaces;
+using SWD_Laundry_Backend.Domain.Common;
 using SWD_Laundry_Backend.Domain.Entities;
 
 using SWD_Laundry_Backend.Domain.IdentityModel;
-//using SWD_Laundry_Backend.Infrastructure.Identity;
 using SWD_Laundry_Backend.Infrastructure.Persistence.Interceptors;
 
 namespace SWD_Laundry_Backend.Infrastructure.Persistence;
@@ -65,4 +65,6 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
 
         return await base.SaveChangesAsync(cancellationToken);
     }
+
+    public DbSet<T> Get<T>() where T : BaseAuditableEntity => Set<T>();
 }

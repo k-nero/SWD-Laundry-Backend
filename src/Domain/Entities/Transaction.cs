@@ -19,31 +19,22 @@ public class Transaction : BaseAuditableEntity
 
     #region Special Attribute
 
-    private string _transactiontype;
+    //private string _transactiontype;
 
-    private string _status;
+    //public string TransactionType
+    //{
+    //    get { return _transactiontype; }
+    //    set
+    //    {
+    //        if (!new Validate().IsValidTransactionType(value))
+    //            throw new ArgumentException("Invalid transaction type {DEPOSIT, WITHDRAWAL, DEBT, PAID}.");
+    //        _transactiontype = value;
+    //    }
+    //}
 
-    public string TransactionType
-    {
-        get { return _transactiontype; }
-        set
-        {
-            if (!new Validate().IsValidTransactionType(value))
-                throw new ArgumentException("Invalid transaction type {DEPOSIT, WITHDRAWAL, DEBT, PAID}.");
-            _transactiontype = value;
-        }
-    }
+    public AllowedTransactionType TransactionType { get; set; }
 
-    public string Status
-    {
-        get { return _status; }
-        set
-        {
-            if (!new Validate().IsValidTransactionStatus(value))
-                throw new ArgumentException("Invalid transaction status {FINISHED, PROCESSING, CANCELLED}.");
-            _status = value;
-        }
-    }
+    public Status Status { get; set;}
 
     #endregion Special Attribute
 }

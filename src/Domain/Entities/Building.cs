@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SWD_Laundry_Backend.Domain.Entities;
+﻿namespace SWD_Laundry_Backend.Domain.Entities;
 #nullable disable
 
 public class Building : BaseAuditableEntity

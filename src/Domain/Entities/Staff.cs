@@ -27,43 +27,45 @@ public class Staff : BaseAuditableEntity
 
     #region Special Attribute
 
-    private string _email;
+    public StaffRole StaffRole { get; set; }
 
-    private string _phone;
-    private string _role;
+    //private string _email;
 
-    public string Role
-    {
-        get { return _role; }
-        set
-        {
-            _role = new Validate().IsValidStaffRole(value)
-                ? value
-                : throw new ArgumentException("Invalid staff role {COLLECTOR, RECEIVER}.");
-        }
-    }
+    //private string _phone;
+    //private string _role;
 
-    public string Email
-    {
-        get { return _email; }
-        set
-        {
-            _email = new Validate().IsValidEmail(value)
-                ? value
-                : throw new ArgumentException("Invalid email.");
-        }
-    }
+    //public string Role
+    //{
+    //    get { return _role; }
+    //    set
+    //    {
+    //        _role = new Validate().IsValidStaffRole(value)
+    //            ? value
+    //            : throw new ArgumentException("Invalid staff role {COLLECTOR, RECEIVER}.");
+    //    }
+    //}
 
-    public string Phone
-    {
-        get { return _phone; }
-        set
-        {
-            _phone = new Validate().IsValidPhone(value)
-                ? value
-                : throw new ArgumentException("Invalid phone (must be 9-10 numbers and start with 09 or 01).");
-        }
-    }
+    //public string Email
+    //{
+    //    get { return _email; }
+    //    set
+    //    {
+    //        _email = new Validate().IsValidEmail(value)
+    //            ? value
+    //            : throw new ArgumentException("Invalid email.");
+    //    }
+    //}
+
+    //public string Phone
+    //{
+    //    get { return _phone; }
+    //    set
+    //    {
+    //        _phone = new Validate().IsValidPhone(value)
+    //            ? value
+    //            : throw new ArgumentException("Invalid phone (must be 9-10 numbers and start with 09 or 01).");
+    //    }
+    //}
 
     #endregion Special Attribute
 }

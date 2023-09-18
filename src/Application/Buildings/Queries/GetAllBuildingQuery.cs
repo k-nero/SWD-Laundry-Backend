@@ -2,8 +2,9 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SWD_Laundry_Backend.Application.Common.Interfaces;
+using SWD_Laundry_Backend.Domain.Entities;
 
-namespace SWD_Laundry_Backend.Application.Building.Queries;
+namespace SWD_Laundry_Backend.Application.Buildings.Queries;
 public class GetAllBuildingQuery : IRequest<List<BuildingViewModel>>
 {
 
@@ -22,7 +23,7 @@ public class GetAllBuildingQueryHandler : IRequestHandler<GetAllBuildingQuery, L
 
     public async Task<List<BuildingViewModel>> Handle(GetAllBuildingQuery request, CancellationToken cancellationToken)
     {
-        var buildingList = await _context.Get<Domain.Entities.Building>().AsNoTracking().ToListAsync(cancellationToken);
+        var buildingList = await _context.Get<Building>().AsNoTracking().ToListAsync(cancellationToken);
         return _mapper.Map<List<BuildingViewModel>>(buildingList);
     }
 

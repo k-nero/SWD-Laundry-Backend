@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SWD_Laundry_Backend.Application.Building.Commands.CreateBuilding;
-using SWD_Laundry_Backend.Application.Building.Commands.DeleteBuilding;
-using SWD_Laundry_Backend.Application.Building.Commands.UpdateBuilding;
-using SWD_Laundry_Backend.Application.Building.Queries;
+using SWD_Laundry_Backend.Application.Buildings.Commands.CreateBuilding;
+using SWD_Laundry_Backend.Application.Buildings.Commands.DeleteBuilding;
+using SWD_Laundry_Backend.Application.Buildings.Commands.UpdateBuilding;
+using SWD_Laundry_Backend.Application.Buildings.Queries;
 using SWD_Laundry_Backend.WebUI.Controllers;
-using Microsoft.AspNetCore.Http;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

@@ -1,6 +1,4 @@
-﻿using SWD_Laundry_Backend.Domain.Entities.Validation;
-
-namespace SWD_Laundry_Backend.Domain.Entities;
+﻿namespace SWD_Laundry_Backend.Domain.Entities;
 #nullable disable
 
 public class PaymentMethod : BaseAuditableEntity

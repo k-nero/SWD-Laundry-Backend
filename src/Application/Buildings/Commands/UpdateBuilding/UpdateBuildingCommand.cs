@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using SWD_Laundry_Backend.Application.Common.Exceptions;
 using SWD_Laundry_Backend.Application.Common.Interfaces;
+using SWD_Laundry_Backend.Domain.Entities;
 
-namespace SWD_Laundry_Backend.Application.Building.Commands.UpdateBuilding;
+namespace SWD_Laundry_Backend.Application.Buildings.Commands.UpdateBuilding;
 public class UpdateBuildingCommand : IRequest<int>
 {
     public int Id { get; set; }
@@ -23,10 +23,10 @@ public class UpdateBuildingCommandHandler : IRequestHandler<UpdateBuildingComman
 
     public async Task<int> Handle(UpdateBuildingCommand request, CancellationToken cancellationToken)
     {
-        var affectedRow = await _context.Get<Domain.Entities.Building>().Where(x => x.Id == request.Id).ExecuteUpdateAsync(x =>
-        x.SetProperty(y => y.Name, request.Name)
-       .SetProperty(y => y.Address, request.Address)
-       .SetProperty(y => y.Description, request.Description), cancellationToken: cancellationToken);
+        var affectedRow = await _context.Get<Building>().Where(x => x.Id == request.Id).ExecuteUpdateAsync(x =>
+        x.SetProperty(y => y.Name, y => request.Name ?? y.Name)
+       .SetProperty(y => y.Address, y => request.Address ?? y.Address)
+       .SetProperty(y => y.Description, y => request.Description ?? y.Description), cancellationToken: cancellationToken);
         return affectedRow;
     }
 }

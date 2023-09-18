@@ -1,7 +1,8 @@
 ﻿using MediatR;
 using SWD_Laundry_Backend.Application.Common.Interfaces;
+using SWD_Laundry_Backend.Domain.Entities;
 
-namespace SWD_Laundry_Backend.Application.Building.Commands.CreateBuilding;
+namespace SWD_Laundry_Backend.Application.Buildings.Commands.CreateBuilding;
 public class CreateBuildingCommand : IRequest<int>
 {
     public string? Name { get; set; }
@@ -27,7 +28,7 @@ public class CreateBuildingCommandHandler : IRequestHandler<CreateBuildingComman
             Description = request.Description
         };
 
-        _context.Get<Domain.Entities.Building>().Add(entity);
+        _context.Get<Building>().Add(entity);
 
         await _context.SaveChangesAsync(cancellationToken);
 

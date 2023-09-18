@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using SWD_Laundry_Backend.Application.Common.Interfaces;
 
-namespace SWD_Laundry_Backend.Application.Building.Commands.CreateBuilding;
+namespace SWD_Laundry_Backend.Application.Buildings.Commands.CreateBuilding;
 public class CreateBuildingCommandValidator : AbstractValidator<CreateBuildingCommand>
 {
     private readonly IApplicationDbContext _context;

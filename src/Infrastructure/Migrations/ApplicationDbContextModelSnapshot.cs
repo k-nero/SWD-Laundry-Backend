@@ -354,19 +354,10 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("WalletID")
@@ -477,8 +468,8 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("OrderType")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("OrderType")
+                        .HasColumnType("int");
 
                     b.Property<int>("PaymentMethodID")
                         .HasColumnType("int");
@@ -554,8 +545,8 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PaymentType")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("PaymentType")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -585,23 +576,17 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     b.Property<DateTime>("Dob")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Role")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<double>("Salary")
                         .HasColumnType("float");
+
+                    b.Property<int>("StaffRole")
+                        .HasColumnType("int");
 
                     b.Property<int>("WalletID")
                         .HasColumnType("int");
@@ -766,11 +751,11 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     b.Property<string>("PaymentMethod")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
-                    b.Property<string>("TransactionType")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("TransactionType")
+                        .HasColumnType("int");
 
                     b.Property<int>("WalletID")
                         .HasColumnType("int");

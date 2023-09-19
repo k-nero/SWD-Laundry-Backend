@@ -13,7 +13,16 @@ public class PaymentMethod : BaseAuditableEntity
 
     #region Special Attributes
 
-    public PaymentType PaymentType { get; set; }
 
-    #endregion Special Attributes
+    //public string PaymentType
+    //{
+    //    get { return _type; }
+    //    set
+    //    {
+    //        _type = new Validate().IsValidPayment(value)
+    //            ? value
+    //            : throw new ArgumentException("Invalid payment type{CASH , PAYPAL}.");
+    //    }
+    //}
+    public string Name { get; set; }
 }

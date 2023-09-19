@@ -1,27 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SWD_Laundry_Backend.Domain.Entities.Validation;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using SWD_Laundry_Backend.Domain.IdentityModel;
-
 
 namespace SWD_Laundry_Backend.Domain.Entities;
 #nullable disable
 
 public class Order : BaseAuditableEntity
 {
+    public DateTime OrderDate { get; set; } = DateTime.Now;
 
     public DateTime ShipDate { get; set; }
 
-
-    public DateTime OrderDate { get; set; }
     public DateTime ExpectedFinishDate { get; set; }
     public string Address { get; set; } // Address = Customer's building location
     public short Amount { get; set; }
-    public bool IsWhiteClothes { get; set; }
+
     public double TotalPrice { get; set; }
 
     #region Relationship
@@ -29,28 +21,31 @@ public class Order : BaseAuditableEntity
     [ForeignKey("PaymentMethod")]
     public int PaymentMethodID { get; set; }
 
-    [ForeignKey("ApplicationUser")]
-    public string ApplicationUserID { get; set; }
+    [ForeignKey("Customer")]
+    public int CustomerID { get; set; }
 
-    public ApplicationUser ApplicationUser { get; set; }
+    //[ForeignKey("LaundryStore")]
+    //public int LaundryStoreID { get; set; }
+
+    ////[ForeignKey("Staff")]
+    ////public int StaffID { get; set; }
+
+    //[ForeignKey("Service")]
+    //public int ServiceID { get; set; }
+
+    ////===========================
+    public Service Service { get; set; }
+
+    public virtual LaundryStore LaundryStore { get; set; }
+    public virtual Customer Customer { get; set; }
+    public virtual Staff Staff { get; set; }
+
     public PaymentMethod PaymentMethod { get; set; }
+    public List<OrderHistory> OrderHistories { get; set; }
 
     #endregion Relationship
 
     #region Special Attribute
-
-    //private string _orderType;
-
-    //public string OrderType
-    //{
-    //    get => _orderType;
-    //    set
-    //    {
-    //        _orderType = new Validate().IsValidOrderType(value)
-    //            ? value
-    //            : throw new Exception("Invalid order type {ONEWAY, TWOWAY}");
-    //    }
-    //}
 
     public OrderType OrderType { get; set; }
 

@@ -1,6 +1,4 @@
-﻿using SWD_Laundry_Backend.Domain.Entities.Validation;
-
-namespace SWD_Laundry_Backend.Domain.Entities;
+﻿namespace SWD_Laundry_Backend.Domain.Entities;
 #nullable disable
 
 public class Transaction : BaseAuditableEntity
@@ -13,7 +11,7 @@ public class Transaction : BaseAuditableEntity
 
     public int WalletID { get; set; }
 
-    public List<Wallet> Wallet { get; set; }
+    public Wallet Wallet { get; set; }
 
     #endregion Relationship
 
@@ -34,7 +32,7 @@ public class Transaction : BaseAuditableEntity
 
     public AllowedTransactionType TransactionType { get; set; }
 
-    public Status Status { get; set;}
+    public Status Status { get; set; }
 
     #endregion Special Attribute
 }

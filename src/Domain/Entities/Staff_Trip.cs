@@ -8,38 +8,26 @@ namespace SWD_Laundry_Backend.Domain.Entities;
 
 public class Staff_Trip : BaseAuditableEntity
 {
-    public string Address { get; set; }
-    public DateTime StartTime { get; set; }
-
-    public DateTime EndTime { get; set; }
-
     public int TripCollect { get; set; } = 0;
-    
-
 
     #region Relationship
 
     [ForeignKey("Staff")]
     public int StaffID { get; set; }
 
+    [ForeignKey("TimeSchedule")]
+    public int TimeScheduleID { get; set; }
+
+    [ForeignKey("Building")]
+    public int BuildingID { get; set; }
+
+    public Building Building { get; set; }
     public Staff Staff { get; set; }
+    public TimeSchedule TimeSchedule { get; set; }
 
     #endregion Relationship
 
     #region Special Attribute
-
-    //private string _tripstatus;
-
-    //public string TripStatus
-    //{
-    //    get { return _tripstatus; }
-    //    set
-    //    {
-    //        _tripstatus = new Validate().IsValidTripStatus(value)
-    //            ? value
-    //            : throw new ArgumentException("Invalid trip status {FINISHED, PROCESSING, CANCELLED}.");
-    //    }
-    //}
 
     public Status TripStatus { get; set; }
 

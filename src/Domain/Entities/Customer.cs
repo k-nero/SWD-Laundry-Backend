@@ -25,6 +25,7 @@ public class Customer : BaseAuditableEntity
     public Building Building { get; set; }
     public Wallet Wallet { get; set; }
     public ApplicationUser ApplicationUser { get; set; }
+    //public virtual List<Order> Order { get; set; }
 
     #endregion Relationship
 

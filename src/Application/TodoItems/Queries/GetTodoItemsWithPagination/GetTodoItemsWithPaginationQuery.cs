@@ -18,11 +18,16 @@ public class GetTodoItemsWithPaginationQueryHandler : IRequestHandler<GetTodoIte
 {
     private readonly IApplicationDbContext _context;
     private readonly IMapper _mapper;
-
+    
     public GetTodoItemsWithPaginationQueryHandler(IApplicationDbContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
+    }
+
+    public void Test()
+    {
+        var test1 = _context.Orders.Where(c => c.LaundryStore.Id == 1).ToList();
     }
 
     public async Task<PaginatedList<TodoItemBriefDto>> Handle(GetTodoItemsWithPaginationQuery request, CancellationToken cancellationToken)

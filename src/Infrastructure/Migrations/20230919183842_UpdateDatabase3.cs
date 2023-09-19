@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SWD_Laundry_Backend.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitMigration : Migration
+    public partial class UpdateDatabase3 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -146,6 +146,45 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Service",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Service", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TimeSchedule",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DayOfWeek = table.Column<int>(type: "int", nullable: false),
+                    TimeFrame = table.Column<int>(type: "int", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TimeSchedule", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TodoLists",
                 columns: table => new
                 {
@@ -164,17 +203,12 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Transactions",
+                name: "Wallets",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Amount = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    WalletID = table.Column<int>(type: "int", nullable: false),
-                    TransactionType = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
+                    Balance = table.Column<double>(type: "float", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -182,7 +216,7 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Transactions", x => x.Id);
+                    table.PrimaryKey("PK_Wallets", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -292,43 +326,6 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Orders",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ShipDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ExpectedFinishDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Amount = table.Column<short>(type: "smallint", nullable: false),
-                    IsWhiteClothes = table.Column<bool>(type: "bit", nullable: false),
-                    TotalPrice = table.Column<double>(type: "float", nullable: false),
-                    PaymentMethodID = table.Column<int>(type: "int", nullable: false),
-                    ApplicationUserID = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    OrderType = table.Column<int>(type: "int", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Orders_AspNetUsers_ApplicationUserID",
-                        column: x => x.ApplicationUserID,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Orders_PaymentMethods_PaymentMethodID",
-                        column: x => x.PaymentMethodID,
-                        principalTable: "PaymentMethods",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "TodoItems",
                 columns: table => new
                 {
@@ -352,53 +349,6 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                         name: "FK_TodoItems_TodoLists_ListId",
                         column: x => x.ListId,
                         principalTable: "TodoLists",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Wallets",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Balance = table.Column<double>(type: "float", nullable: false),
-                    TransactionId = table.Column<int>(type: "int", nullable: true),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Wallets", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Wallets_Transactions_TransactionId",
-                        column: x => x.TransactionId,
-                        principalTable: "Transactions",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "OrderHistory",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderID = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrderHistory", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_OrderHistory_Orders_OrderID",
-                        column: x => x.OrderID,
-                        principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -479,8 +429,6 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Dob = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Salary = table.Column<double>(type: "float", nullable: false),
                     WalletID = table.Column<int>(type: "int", nullable: false),
                     ApplicationUserID = table.Column<string>(type: "nvarchar(450)", nullable: true),
@@ -507,16 +455,98 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Transactions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Amount = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    WalletID = table.Column<int>(type: "int", nullable: false),
+                    TransactionType = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Transactions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Transactions_Wallets_WalletID",
+                        column: x => x.WalletID,
+                        principalTable: "Wallets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ShipDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ExpectedFinishDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Amount = table.Column<short>(type: "smallint", nullable: false),
+                    TotalPrice = table.Column<double>(type: "float", nullable: false),
+                    PaymentMethodID = table.Column<int>(type: "int", nullable: false),
+                    CustomerID = table.Column<int>(type: "int", nullable: false),
+                    ServiceId = table.Column<int>(type: "int", nullable: true),
+                    LaundryStoreId = table.Column<int>(type: "int", nullable: true),
+                    StaffId = table.Column<int>(type: "int", nullable: true),
+                    OrderType = table.Column<int>(type: "int", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_Customers_CustomerID",
+                        column: x => x.CustomerID,
+                        principalTable: "Customers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_LaundryStores_LaundryStoreId",
+                        column: x => x.LaundryStoreId,
+                        principalTable: "LaundryStores",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Orders_PaymentMethods_PaymentMethodID",
+                        column: x => x.PaymentMethodID,
+                        principalTable: "PaymentMethods",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_Service_ServiceId",
+                        column: x => x.ServiceId,
+                        principalTable: "Service",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Orders_Staffs_StaffId",
+                        column: x => x.StaffId,
+                        principalTable: "Staffs",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Staff_Trips",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TripCollect = table.Column<int>(type: "int", nullable: false),
                     StaffID = table.Column<int>(type: "int", nullable: false),
+                    TimeScheduleID = table.Column<int>(type: "int", nullable: false),
+                    BuildingID = table.Column<int>(type: "int", nullable: false),
                     TripStatus = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -527,9 +557,45 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Staff_Trips", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Staff_Trips_Buildings_BuildingID",
+                        column: x => x.BuildingID,
+                        principalTable: "Buildings",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Staff_Trips_Staffs_StaffID",
                         column: x => x.StaffID,
                         principalTable: "Staffs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Staff_Trips_TimeSchedule_TimeScheduleID",
+                        column: x => x.TimeScheduleID,
+                        principalTable: "TimeSchedule",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrderHistory",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrderID = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderHistory", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderHistory_Orders_OrderID",
+                        column: x => x.OrderID,
+                        principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -586,7 +652,8 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Customers_WalletID",
                 table: "Customers",
-                column: "WalletID");
+                column: "WalletID",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_DeviceCodes_DeviceCode",
@@ -612,7 +679,8 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_LaundryStores_WalletID",
                 table: "LaundryStores",
-                column: "WalletID");
+                column: "WalletID",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderHistory_OrderID",
@@ -620,14 +688,29 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 column: "OrderID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_ApplicationUserID",
+                name: "IX_Orders_CustomerID",
                 table: "Orders",
-                column: "ApplicationUserID");
+                column: "CustomerID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_LaundryStoreId",
+                table: "Orders",
+                column: "LaundryStoreId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_PaymentMethodID",
                 table: "Orders",
                 column: "PaymentMethodID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_ServiceId",
+                table: "Orders",
+                column: "ServiceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_StaffId",
+                table: "Orders",
+                column: "StaffId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PersistedGrants_ConsumedTime",
@@ -650,9 +733,20 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 columns: new[] { "SubjectId", "SessionId", "Type" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Staff_Trips_BuildingID",
+                table: "Staff_Trips",
+                column: "BuildingID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Staff_Trips_StaffID",
                 table: "Staff_Trips",
                 column: "StaffID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Staff_Trips_TimeScheduleID",
+                table: "Staff_Trips",
+                column: "TimeScheduleID",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Staffs_ApplicationUserID",
@@ -662,7 +756,8 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Staffs_WalletID",
                 table: "Staffs",
-                column: "WalletID");
+                column: "WalletID",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_TodoItems_ListId",
@@ -670,9 +765,9 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 column: "ListId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Wallets_TransactionId",
-                table: "Wallets",
-                column: "TransactionId");
+                name: "IX_Transactions_WalletID",
+                table: "Transactions",
+                column: "WalletID");
         }
 
         /// <inheritdoc />
@@ -694,16 +789,10 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Customers");
-
-            migrationBuilder.DropTable(
                 name: "DeviceCodes");
 
             migrationBuilder.DropTable(
                 name: "Keys");
-
-            migrationBuilder.DropTable(
-                name: "LaundryStores");
 
             migrationBuilder.DropTable(
                 name: "OrderHistory");
@@ -718,31 +807,43 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 name: "TodoItems");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "Transactions");
 
             migrationBuilder.DropTable(
-                name: "Buildings");
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "Staffs");
+                name: "TimeSchedule");
 
             migrationBuilder.DropTable(
                 name: "TodoLists");
 
             migrationBuilder.DropTable(
+                name: "Customers");
+
+            migrationBuilder.DropTable(
+                name: "LaundryStores");
+
+            migrationBuilder.DropTable(
                 name: "PaymentMethods");
+
+            migrationBuilder.DropTable(
+                name: "Service");
+
+            migrationBuilder.DropTable(
+                name: "Staffs");
+
+            migrationBuilder.DropTable(
+                name: "Buildings");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Wallets");
-
-            migrationBuilder.DropTable(
-                name: "Transactions");
         }
     }
 }

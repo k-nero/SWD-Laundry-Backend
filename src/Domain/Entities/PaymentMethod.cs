@@ -5,10 +5,14 @@ public class PaymentMethod : BaseAuditableEntity
 {
     public string Description { get; set; }
 
-    /// <summary>
-    /// Special attributes
-    /// </summary>
-    //private string _type;
+    #region Relationship
+
+    public List<Order> Orders { get; set; }
+
+    #endregion Relationship
+
+    #region Special Attributes
+
 
     //public string PaymentType
     //{

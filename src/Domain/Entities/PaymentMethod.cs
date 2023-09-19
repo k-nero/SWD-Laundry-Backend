@@ -5,20 +5,15 @@ public class PaymentMethod : BaseAuditableEntity
 {
     public string Description { get; set; }
 
-    /// <summary>
-    /// Special attributes
-    /// </summary>
-    //private string _type;
+    #region Relationship
 
-    //public string PaymentType
-    //{
-    //    get { return _type; }
-    //    set
-    //    {
-    //        _type = new Validate().IsValidPayment(value)
-    //            ? value
-    //            : throw new ArgumentException("Invalid payment type{CASH , PAYPAL}.");
-    //    }
-    //}
+    public List<Order> Orders { get; set; }
+
+    #endregion Relationship
+
+    #region Special Attributes
+
     public PaymentType PaymentType { get; set; }
+
+    #endregion Special Attributes
 }

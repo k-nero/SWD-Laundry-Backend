@@ -9,11 +9,11 @@ using SWD_Laundry_Backend.Domain.Enums;
 namespace SWD_Laundry_Backend.Application.PaymentMethods.Queries;
 public class GetAllPaymentMethods
 {
-    public class GetAllPaymentMethodsQuery : IRequest<PaymentMethodVm>
+    public class GetAllPaymentMethodsQuery : IRequest<PaymentMethodDto>
     {
     }
 
-    public class GetAllPaymentMethodsQueryHandler : IRequestHandler<GetAllPaymentMethodsQuery, PaymentMethodVm>
+    public class GetAllPaymentMethodsQueryHandler : IRequestHandler<GetAllPaymentMethodsQuery, PaymentMethodDto>
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -24,14 +24,10 @@ public class GetAllPaymentMethods
             _mapper = mapper;
         }
 
-        public async Task<PaymentMethodVm> Handle(GetAllPaymentMethodsQuery request, CancellationToken cancellationToken)
+        public async Task<PaymentMethodDto> Handle(GetAllPaymentMethodsQuery request, CancellationToken cancellationToken)
         {
             var paymentMethods = await _context.Get<PaymentMethod>().ProjectTo<PaymentMethodDto>(_mapper.ConfigurationProvider).ToListAsync(cancellationToken);
-            var result = new PaymentMethodVm
-            {
-                PaymentTypes = Enum.GetValues(typeof(PaymentType)).Cast<PaymentType>().Select(p => new PaymentTypeDto { Value = (int)p, Name = p.ToString() }).ToList(),
-                PaymentMethods = _mapper.Map<List<PaymentMethodDto>>(paymentMethods)
-            };
+            var result = _mapper.Map<PaymentMethodDto>(paymentMethods);
             return result;
         }
     }

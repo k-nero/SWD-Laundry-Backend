@@ -20,5 +20,5 @@ public class PaymentMethod : BaseAuditableEntity
     //            : throw new ArgumentException("Invalid payment type{CASH , PAYPAL}.");
     //    }
     //}
-    public PaymentType PaymentType { get; set; }
+    public string Name { get; set; }
 }

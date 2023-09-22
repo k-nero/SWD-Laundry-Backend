@@ -33,6 +33,7 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
 
     public DbSet<TodoItem> TodoItems => Set<TodoItem>();
 
+
     public DbSet<TimeSchedule> TimeSchedules => Set<TimeSchedule>();
     public DbSet<ApplicationUser> ApplicationUsers => Set<ApplicationUser>();
     public DbSet<LaundryStoreOrder> LaundryStoreOrders => Set<LaundryStoreOrder>();
@@ -45,6 +46,7 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
     public DbSet<PaymentMethod> PaymentMethods => Set<PaymentMethod>();
     public DbSet<Staff_Trip> Staff_Trips => Set<Staff_Trip>();
     public DbSet<Staff> Staffs => Set<Staff>();
+
 
     public DbSet<Transaction> Transactions => Set<Transaction>();
     public DbSet<Wallet> Wallets => Set<Wallet>();

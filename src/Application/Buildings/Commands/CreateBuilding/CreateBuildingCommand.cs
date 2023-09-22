@@ -21,7 +21,7 @@ public class CreateBuildingCommandHandler : IRequestHandler<CreateBuildingComman
 
     public async Task<int> Handle(CreateBuildingCommand request, CancellationToken cancellationToken)
     {
-        var entity = new Domain.Entities.Building
+        var entity = new Building
         {
             Name = request.Name,
             Address = request.Address,

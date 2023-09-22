@@ -19,8 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="PaymentMethods\Commands\DeletePaymentMethod\" />
-      <Folder Include="PaymentMethods\Commands\UpdatePaymentMethod\" />
+      <Folder Include="Customers\Commands\" />
     </ItemGroup>
 
 </Project>

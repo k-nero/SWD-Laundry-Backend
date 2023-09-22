@@ -19,14 +19,7 @@ public class LaundryStore : BaseAuditableEntity
     [ForeignKey("ApplicationUser")]
     public string ApplicationUserID { get; set; }
 
-    [ForeignKey("Wallet")]
-    public int WalletID { get; set; }
-
     public ApplicationUser ApplicationUser { get; set; }
-    public Wallet Wallet { get; set; }
-
-
-    public virtual List<Order> Orders { get; set; }
 
     #endregion Relationship
 }

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using SWD_Laundry_Backend.Domain.IdentityModel;
 
 namespace SWD_Laundry_Backend.Domain.Entities;
 #nullable disable
@@ -7,9 +6,7 @@ namespace SWD_Laundry_Backend.Domain.Entities;
 public class Order : BaseAuditableEntity
 {
     public DateTime OrderDate { get; set; } = DateTime.Now;
-
-    public DateTime ShipDate { get; set; }
-
+    public TimeFrame TimeFrame { get; set; }
     public DateTime ExpectedFinishDate { get; set; }
     public string Address { get; set; } // Address = Customer's building location
     public short Amount { get; set; }
@@ -24,24 +21,13 @@ public class Order : BaseAuditableEntity
     [ForeignKey("Customer")]
     public int CustomerID { get; set; }
 
-    //[ForeignKey("LaundryStore")]
-    //public int LaundryStoreID { get; set; }
-
-    ////[ForeignKey("Staff")]
-    ////public int StaffID { get; set; }
-
-    //[ForeignKey("Service")]
-    //public int ServiceID { get; set; }
-
     ////===========================
-    public Service Service { get; set; }
-
-    public virtual LaundryStore LaundryStore { get; set; }
-    public virtual Customer Customer { get; set; }
-    public virtual Staff Staff { get; set; }
+    public Customer Customer { get; set; }
 
     public PaymentMethod PaymentMethod { get; set; }
     public List<OrderHistory> OrderHistories { get; set; }
+    public List<StaffOrder> StaffOrders { get; set; }
+    //public LaundryStoreOrder LaundryStoreOrder { get; set; }
 
     #endregion Relationship
 

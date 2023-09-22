@@ -33,19 +33,23 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
 
     public DbSet<TodoItem> TodoItems => Set<TodoItem>();
 
-    //public DbSet<ApplicationUser> ApplicationUsers => Set<ApplicationUser>();
 
-    //public DbSet<Building> Buildings => Set<Building>();
-    //public DbSet<Customer> Customers => Set<Customer>();
-    //public DbSet<LaundryStore> LaundryStores => Set<LaundryStore>();
-    //public DbSet<Order> Orders => Set<Order>();
-    //public DbSet<OrderHistory> OrderHistory => Set<OrderHistory>();
-    //public DbSet<PaymentMethod> PaymentMethods => Set<PaymentMethod>();
-    //public DbSet<Staff_Trip> Staff_Trips => Set<Staff_Trip>();
-    //public DbSet<Staff> Staffs => Set<Staff>();
+    public DbSet<TimeSchedule> TimeSchedules => Set<TimeSchedule>();
+    public DbSet<ApplicationUser> ApplicationUsers => Set<ApplicationUser>();
+    public DbSet<LaundryStoreOrder> LaundryStoreOrders => Set<LaundryStoreOrder>();
+    public DbSet<StaffOrder> StaffOrders => Set<StaffOrder>();
+    public DbSet<Building> Buildings => Set<Building>();
+    public DbSet<Customer> Customers => Set<Customer>();
+    public DbSet<LaundryStore> LaundryStores => Set<LaundryStore>();
+    public DbSet<Order> Orders => Set<Order>();
+    public DbSet<OrderHistory> OrdersHistory => Set<OrderHistory>();
+    public DbSet<PaymentMethod> PaymentMethods => Set<PaymentMethod>();
+    public DbSet<Staff_Trip> Staff_Trips => Set<Staff_Trip>();
+    public DbSet<Staff> Staffs => Set<Staff>();
 
-    //public DbSet<Transaction> Transactions => Set<Transaction>();
-    //public DbSet<Wallet> Wallets => Set<Wallet>();
+
+    public DbSet<Transaction> Transactions => Set<Transaction>();
+    public DbSet<Wallet> Wallets => Set<Wallet>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

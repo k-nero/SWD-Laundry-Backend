@@ -6,8 +6,8 @@ using SWD_Laundry_Backend.Domain.Enums;
 namespace SWD_Laundry_Backend.Application.PaymentMethods.Commands.CreatePaymentMethod;
 public class CreatePaymentMethodCommand : IRequest<int>
 {
-    public string Name { get; set; }
-    public string Description { get; set; }
+    public string? Name { get; set; }
+    public string? Description { get; set; }
 }
 
 public class CreatePaymentMethodCommandHandler : IRequestHandler<CreatePaymentMethodCommand, int>

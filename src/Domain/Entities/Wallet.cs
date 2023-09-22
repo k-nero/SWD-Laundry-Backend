@@ -1,4 +1,6 @@
-﻿namespace SWD_Laundry_Backend.Domain.Entities;
+﻿using SWD_Laundry_Backend.Domain.IdentityModel;
+
+namespace SWD_Laundry_Backend.Domain.Entities;
 #nullable disable
 
 public class Wallet : BaseAuditableEntity
@@ -8,9 +10,8 @@ public class Wallet : BaseAuditableEntity
     #region Relationship
 
     public List<Transaction> Transactions { get; set; }
-    public Customer Customer { get; set; }
-    public LaundryStore LaundryStore { get; set; }
-    public Staff Staff { get; set; }
+
+    public ApplicationUser ApplicationUser { get; set; }
 
     #endregion Relationship
 }

@@ -1,23 +1,22 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using SWD_Laundry_Backend.Domain.Entities.Validation;
 
 namespace SWD_Laundry_Backend.Domain.Entities;
-#nullable disable
 
-public class OrderHistory : BaseAuditableEntity
+public class LaundryStoreOrder : BaseAuditableEntity
+#nullable disable
 {
+    public bool IsDone { get; set; }
+
     #region Relationship
 
     [ForeignKey("Order")]
     public int OrderID { get; set; }
 
+    [ForeignKey("LaundryStore")]
+    public int LaundryStoreID { get; set; }
+
+    public LaundryStore LaundryStore { get; set; }
     public Order Order { get; set; }
 
     #endregion Relationship
-
-    #region Special attributes
-
-    public OrderStatus Status { get; set;}
-
-    #endregion Special attributes
 }

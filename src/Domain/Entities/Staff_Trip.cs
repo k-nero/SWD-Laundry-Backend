@@ -29,7 +29,7 @@ public class Staff_Trip : BaseAuditableEntity
 
     #region Special Attribute
 
-    public Status TripStatus { get; set; }
+    public OrderStatus TripStatus { get; set; }
 
     #endregion Special Attribute
 }

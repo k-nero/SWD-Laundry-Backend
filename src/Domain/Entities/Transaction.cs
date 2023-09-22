@@ -32,7 +32,7 @@ public class Transaction : BaseAuditableEntity
 
     public AllowedTransactionType TransactionType { get; set; }
 
-    public Status Status { get; set; }
+    public OrderStatus Status { get; set; }
 
     #endregion Special Attribute
 }

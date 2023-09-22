@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using SWD_Laundry_Backend.Domain.Entities.Validation;
 using SWD_Laundry_Backend.Domain.IdentityModel;
 
 namespace SWD_Laundry_Backend.Domain.Entities;
@@ -8,7 +7,7 @@ namespace SWD_Laundry_Backend.Domain.Entities;
 
 public class Customer : BaseAuditableEntity
 {
-   //public string Name { get; set; }
+    //public string Name { get; set; }
     //public string Address { get; set; }
 
     #region Relationship
@@ -16,16 +15,13 @@ public class Customer : BaseAuditableEntity
     [ForeignKey("Building")]
     public int BuildingID { get; set; }
 
-    [ForeignKey("Wallet")]
-    public int WalletID { get; set; }
-
     [ForeignKey("ApplicationUser")]
     public string ApplicationUserID { get; set; }
 
     public Building Building { get; set; }
-    public Wallet Wallet { get; set; }
+
     public ApplicationUser ApplicationUser { get; set; }
-    //public virtual List<Order> Order { get; set; }
+    public virtual List<Order> Order { get; set; }
 
     #endregion Relationship
 

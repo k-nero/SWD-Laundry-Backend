@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using SWD_Laundry_Backend.Domain.Entities.Validation;
 
 namespace SWD_Laundry_Backend.Domain.Entities;
 #nullable disable

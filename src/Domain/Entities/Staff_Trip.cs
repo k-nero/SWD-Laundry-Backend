@@ -1,7 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
-using SWD_Laundry_Backend.Domain.Entities.Validation;
-
 namespace SWD_Laundry_Backend.Domain.Entities;
 
 #nullable disable

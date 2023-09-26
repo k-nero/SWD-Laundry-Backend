@@ -12,8 +12,8 @@ using SWD_Laundry_Backend.Infrastructure.Persistence;
 namespace SWD_Laundry_Backend.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230919183842_UpdateDatabase3")]
-    partial class UpdateDatabase3
+    [Migration("20230920073700_UpdateDatabase4")]
+    partial class UpdateDatabase4
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -164,6 +164,21 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     b.HasIndex("SubjectId", "SessionId", "Type");
 
                     b.ToTable("PersistedGrants", (string)null);
+                });
+
+            modelBuilder.Entity("LaundryStoreService", b =>
+                {
+                    b.Property<int>("LaundryStoresId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ServicesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("LaundryStoresId", "ServicesId");
+
+                    b.HasIndex("ServicesId");
+
+                    b.ToTable("LaundryStoreService");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -473,9 +488,6 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     b.Property<int>("PaymentMethodID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ServiceId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("ShipDate")
                         .HasColumnType("datetime2");
 
@@ -492,8 +504,6 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     b.HasIndex("LaundryStoreId");
 
                     b.HasIndex("PaymentMethodID");
-
-                    b.HasIndex("ServiceId");
 
                     b.HasIndex("StaffId");
 
@@ -530,7 +540,7 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
 
                     b.HasIndex("OrderID");
 
-                    b.ToTable("OrderHistory");
+                    b.ToTable("OrdersHistory");
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.PaymentMethod", b =>
@@ -556,8 +566,8 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PaymentType")
-                        .HasColumnType("int");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -589,9 +599,6 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -942,6 +949,21 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("LaundryStoreService", b =>
+                {
+                    b.HasOne("SWD_Laundry_Backend.Domain.Entities.LaundryStore", null)
+                        .WithMany()
+                        .HasForeignKey("LaundryStoresId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SWD_Laundry_Backend.Domain.Entities.Service", null)
+                        .WithMany()
+                        .HasForeignKey("ServicesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -1044,7 +1066,7 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("SWD_Laundry_Backend.Domain.Entities.LaundryStore", "LaundryStore")
-                        .WithMany("Orders")
+                        .WithMany()
                         .HasForeignKey("LaundryStoreId");
 
                     b.HasOne("SWD_Laundry_Backend.Domain.Entities.PaymentMethod", "PaymentMethod")
@@ -1052,10 +1074,6 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                         .HasForeignKey("PaymentMethodID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("SWD_Laundry_Backend.Domain.Entities.Service", "Service")
-                        .WithMany("Order")
-                        .HasForeignKey("ServiceId");
 
                     b.HasOne("SWD_Laundry_Backend.Domain.Entities.Staff", "Staff")
                         .WithMany("Order")
@@ -1066,8 +1084,6 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     b.Navigation("LaundryStore");
 
                     b.Navigation("PaymentMethod");
-
-                    b.Navigation("Service");
 
                     b.Navigation("Staff");
                 });
@@ -1179,11 +1195,6 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     b.Navigation("Staff_Trips");
                 });
 
-            modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.LaundryStore", b =>
-                {
-                    b.Navigation("Orders");
-                });
-
             modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.Order", b =>
                 {
                     b.Navigation("OrderHistories");
@@ -1192,11 +1203,6 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
             modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.PaymentMethod", b =>
                 {
                     b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.Service", b =>
-                {
-                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.Staff", b =>

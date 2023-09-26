@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SWD_Laundry_Backend.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateDatabase3 : Migration
+    public partial class UpdateDatabase4 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -114,7 +114,7 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PaymentType = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -153,7 +153,6 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Price = table.Column<double>(type: "float", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -483,6 +482,30 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LaundryStoreService",
+                columns: table => new
+                {
+                    LaundryStoresId = table.Column<int>(type: "int", nullable: false),
+                    ServicesId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LaundryStoreService", x => new { x.LaundryStoresId, x.ServicesId });
+                    table.ForeignKey(
+                        name: "FK_LaundryStoreService_LaundryStores_LaundryStoresId",
+                        column: x => x.LaundryStoresId,
+                        principalTable: "LaundryStores",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_LaundryStoreService_Service_ServicesId",
+                        column: x => x.ServicesId,
+                        principalTable: "Service",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
@@ -496,7 +519,6 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     TotalPrice = table.Column<double>(type: "float", nullable: false),
                     PaymentMethodID = table.Column<int>(type: "int", nullable: false),
                     CustomerID = table.Column<int>(type: "int", nullable: false),
-                    ServiceId = table.Column<int>(type: "int", nullable: true),
                     LaundryStoreId = table.Column<int>(type: "int", nullable: true),
                     StaffId = table.Column<int>(type: "int", nullable: true),
                     OrderType = table.Column<int>(type: "int", nullable: false),
@@ -525,11 +547,6 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                         principalTable: "PaymentMethods",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Orders_Service_ServiceId",
-                        column: x => x.ServiceId,
-                        principalTable: "Service",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Orders_Staffs_StaffId",
                         column: x => x.StaffId,
@@ -577,7 +594,7 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderHistory",
+                name: "OrdersHistory",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -591,9 +608,9 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderHistory", x => x.Id);
+                    table.PrimaryKey("PK_OrdersHistory", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderHistory_Orders_OrderID",
+                        name: "FK_OrdersHistory_Orders_OrderID",
                         column: x => x.OrderID,
                         principalTable: "Orders",
                         principalColumn: "Id",
@@ -683,9 +700,9 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderHistory_OrderID",
-                table: "OrderHistory",
-                column: "OrderID");
+                name: "IX_LaundryStoreService_ServicesId",
+                table: "LaundryStoreService",
+                column: "ServicesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_CustomerID",
@@ -703,14 +720,14 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 column: "PaymentMethodID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_ServiceId",
-                table: "Orders",
-                column: "ServiceId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Orders_StaffId",
                 table: "Orders",
                 column: "StaffId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrdersHistory_OrderID",
+                table: "OrdersHistory",
+                column: "OrderID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PersistedGrants_ConsumedTime",
@@ -795,7 +812,10 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 name: "Keys");
 
             migrationBuilder.DropTable(
-                name: "OrderHistory");
+                name: "LaundryStoreService");
+
+            migrationBuilder.DropTable(
+                name: "OrdersHistory");
 
             migrationBuilder.DropTable(
                 name: "PersistedGrants");
@@ -811,6 +831,9 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Service");
 
             migrationBuilder.DropTable(
                 name: "Orders");
@@ -829,9 +852,6 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "PaymentMethods");
-
-            migrationBuilder.DropTable(
-                name: "Service");
 
             migrationBuilder.DropTable(
                 name: "Staffs");

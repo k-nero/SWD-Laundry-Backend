@@ -26,7 +26,7 @@ public class LaundryStore : BaseAuditableEntity
     public Wallet Wallet { get; set; }
 
 
-    public virtual List<Order> Orders { get; set; }
+    public virtual List<Service> Services  { get; set; }
 
     #endregion Relationship
 }

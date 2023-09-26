@@ -11,11 +11,11 @@ public class Service : BaseAuditableEntity
 {
     public string Name { get; set; }
     public string Description { get; set; }
-    public double Price { get; set; }
+    //public double Price { get; set; }
 
     #region Relationship
 
-    public List<Order> Order { get; set; }
+    public List<LaundryStore> LaundryStores{ get; set; }
 
     #endregion Relationship
 }

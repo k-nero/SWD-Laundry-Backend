@@ -34,7 +34,7 @@ public class Order : BaseAuditableEntity
     //public int ServiceID { get; set; }
 
     ////===========================
-    public Service Service { get; set; }
+    //public Service Service { get; set; }
 
     public virtual LaundryStore LaundryStore { get; set; }
     public virtual Customer Customer { get; set; }

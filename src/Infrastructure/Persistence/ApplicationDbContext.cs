@@ -39,7 +39,7 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
     public DbSet<Customer> Customers => Set<Customer>();
     public DbSet<LaundryStore> LaundryStores => Set<LaundryStore>();
     public DbSet<Order> Orders => Set<Order>();
-    public DbSet<OrderHistory> OrderHistory => Set<OrderHistory>();
+    public DbSet<OrderHistory> OrdersHistory => Set<OrderHistory>();
     public DbSet<PaymentMethod> PaymentMethods => Set<PaymentMethod>();
     public DbSet<Staff_Trip> Staff_Trips => Set<Staff_Trip>();
     public DbSet<Staff> Staffs => Set<Staff>();

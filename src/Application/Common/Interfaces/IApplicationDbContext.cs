@@ -1,7 +1,6 @@
 ﻿using SWD_Laundry_Backend.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using SWD_Laundry_Backend.Domain.Common;
-using SWD_Laundry_Backend.Domain.IdentityModel;
 
 namespace SWD_Laundry_Backend.Application.Common.Interfaces;
 
@@ -10,6 +9,7 @@ public interface IApplicationDbContext
     DbSet<TodoList> TodoLists { get; }
 
     DbSet<TodoItem> TodoItems { get; }
+
     DbSet<Customer> Customers { get; }
     DbSet<Building> Buildings { get; }
     DbSet<ApplicationUser> ApplicationUsers { get; }
@@ -22,6 +22,7 @@ public interface IApplicationDbContext
     DbSet<Transaction> Transactions { get; }
     DbSet<Wallet> Wallets { get; }
     
+
 
     DbSet<T> Get<T>() where T : BaseAuditableEntity;
 

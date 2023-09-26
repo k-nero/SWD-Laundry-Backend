@@ -4,6 +4,7 @@ using SWD_Laundry_Backend.Application.Common.Interfaces;
 using SWD_Laundry_Backend.Application.Common.Mappings;
 using SWD_Laundry_Backend.Application.Common.Models;
 using MediatR;
+using SWD_Laundry_Backend.Domain.Entities;
 
 namespace SWD_Laundry_Backend.Application.TodoItems.Queries.GetTodoItemsWithPagination;
 
@@ -25,10 +26,9 @@ public class GetTodoItemsWithPaginationQueryHandler : IRequestHandler<GetTodoIte
         _mapper = mapper;
     }
 
-    public void Test()
-    {
-        var test1 = _context.Orders.Where(c => c.LaundryStore.Id == 1).ToList();
-    }
+
+
+
 
     public async Task<PaginatedList<TodoItemBriefDto>> Handle(GetTodoItemsWithPaginationQuery request, CancellationToken cancellationToken)
     {

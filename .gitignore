@@ -236,3 +236,4 @@ _Pvt_Extensions
 /SWD_Laundry_Backend.ndproj
 /.mfractor
 src/WebUI/ClientApp/package-lock.json
+/src/WebUI/appsettings.json

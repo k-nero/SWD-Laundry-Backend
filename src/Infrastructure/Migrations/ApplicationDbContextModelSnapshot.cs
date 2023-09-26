@@ -375,17 +375,11 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("WalletID")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserID");
 
                     b.HasIndex("BuildingID");
-
-                    b.HasIndex("WalletID")
-                        .IsUnique();
 
                     b.ToTable("Customers");
                 });
@@ -428,17 +422,49 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
-                    b.Property<int>("WalletID")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserID");
 
-                    b.HasIndex("WalletID")
-                        .IsUnique();
-
                     b.ToTable("LaundryStores");
+                });
+
+            modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.LaundryStoreOrder", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDone")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("LaundryStoreID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LaundryStoreID");
+
+                    b.HasIndex("OrderID");
+
+                    b.ToTable("LaundryStoreOrders");
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.Order", b =>
@@ -473,9 +499,6 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("LaundryStoreId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
@@ -485,10 +508,14 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     b.Property<int>("PaymentMethodID")
                         .HasColumnType("int");
 
+<<<<<<< HEAD
                     b.Property<DateTime>("ShipDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("StaffId")
+=======
+                    b.Property<int>("TimeFrame")
+>>>>>>> 9f42d83778e45289a900b887f80bd5e36a7b42f1
                         .HasColumnType("int");
 
                     b.Property<double>("TotalPrice")
@@ -498,12 +525,13 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
 
                     b.HasIndex("CustomerID");
 
-                    b.HasIndex("LaundryStoreId");
-
                     b.HasIndex("PaymentMethodID");
 
+<<<<<<< HEAD
                     b.HasIndex("StaffId");
 
+=======
+>>>>>>> 9f42d83778e45289a900b887f80bd5e36a7b42f1
                     b.ToTable("Orders");
                 });
 
@@ -571,6 +599,7 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     b.ToTable("PaymentMethods");
                 });
 
+<<<<<<< HEAD
             modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.Service", b =>
                 {
                     b.Property<int>("Id")
@@ -602,6 +631,8 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     b.ToTable("Service");
                 });
 
+=======
+>>>>>>> 9f42d83778e45289a900b887f80bd5e36a7b42f1
             modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.Staff", b =>
                 {
                     b.Property<int>("Id")
@@ -609,6 +640,9 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ApplicationUserID")
                         .HasColumnType("nvarchar(450)");
@@ -619,6 +653,9 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("Dob")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
@@ -628,20 +665,52 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     b.Property<double>("Salary")
                         .HasColumnType("float");
 
-                    b.Property<int>("StaffRole")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WalletID")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserID");
 
-                    b.HasIndex("WalletID")
-                        .IsUnique();
-
                     b.ToTable("Staffs");
+                });
+
+            modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.StaffOrder", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDone")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OrderID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderID");
+
+                    b.HasIndex("StaffID");
+
+                    b.ToTable("StaffOrders");
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.Staff_Trip", b =>
@@ -685,8 +754,7 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
 
                     b.HasIndex("StaffID");
 
-                    b.HasIndex("TimeScheduleID")
-                        .IsUnique();
+                    b.HasIndex("TimeScheduleID");
 
                     b.ToTable("Staff_Trips");
                 });
@@ -725,7 +793,7 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TimeSchedule");
+                    b.ToTable("TimeSchedules");
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.TodoItem", b =>
@@ -933,6 +1001,9 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<int>("WalletID")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -942,6 +1013,9 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("WalletID")
+                        .IsUnique();
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -1024,17 +1098,9 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SWD_Laundry_Backend.Domain.Entities.Wallet", "Wallet")
-                        .WithOne("Customer")
-                        .HasForeignKey("SWD_Laundry_Backend.Domain.Entities.Customer", "WalletID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("ApplicationUser");
 
                     b.Navigation("Building");
-
-                    b.Navigation("Wallet");
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.LaundryStore", b =>
@@ -1043,46 +1109,61 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("ApplicationUserID");
 
-                    b.HasOne("SWD_Laundry_Backend.Domain.Entities.Wallet", "Wallet")
-                        .WithOne("LaundryStore")
-                        .HasForeignKey("SWD_Laundry_Backend.Domain.Entities.LaundryStore", "WalletID")
+                    b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.LaundryStoreOrder", b =>
+                {
+                    b.HasOne("SWD_Laundry_Backend.Domain.Entities.LaundryStore", "LaundryStore")
+                        .WithMany()
+                        .HasForeignKey("LaundryStoreID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUser");
+                    b.HasOne("SWD_Laundry_Backend.Domain.Entities.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Wallet");
+                    b.Navigation("LaundryStore");
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.Order", b =>
                 {
                     b.HasOne("SWD_Laundry_Backend.Domain.Entities.Customer", "Customer")
-                        .WithMany()
+                        .WithMany("Order")
                         .HasForeignKey("CustomerID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+<<<<<<< HEAD
                     b.HasOne("SWD_Laundry_Backend.Domain.Entities.LaundryStore", "LaundryStore")
                         .WithMany()
                         .HasForeignKey("LaundryStoreId");
 
+=======
+>>>>>>> 9f42d83778e45289a900b887f80bd5e36a7b42f1
                     b.HasOne("SWD_Laundry_Backend.Domain.Entities.PaymentMethod", "PaymentMethod")
                         .WithMany("Orders")
                         .HasForeignKey("PaymentMethodID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+<<<<<<< HEAD
                     b.HasOne("SWD_Laundry_Backend.Domain.Entities.Staff", "Staff")
                         .WithMany("Order")
                         .HasForeignKey("StaffId");
 
                     b.Navigation("Customer");
 
-                    b.Navigation("LaundryStore");
-
                     b.Navigation("PaymentMethod");
 
+
                     b.Navigation("Staff");
+
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.OrderHistory", b =>
@@ -1102,15 +1183,26 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("ApplicationUserID");
 
-                    b.HasOne("SWD_Laundry_Backend.Domain.Entities.Wallet", "Wallet")
-                        .WithOne("Staff")
-                        .HasForeignKey("SWD_Laundry_Backend.Domain.Entities.Staff", "WalletID")
+                    b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.StaffOrder", b =>
+                {
+                    b.HasOne("SWD_Laundry_Backend.Domain.Entities.Order", "Order")
+                        .WithMany("StaffOrders")
+                        .HasForeignKey("OrderID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUser");
+                    b.HasOne("SWD_Laundry_Backend.Domain.Entities.Staff", "Staff")
+                        .WithMany("StaffOrders")
+                        .HasForeignKey("StaffID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Wallet");
+                    b.Navigation("Order");
+
+                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.Staff_Trip", b =>
@@ -1128,8 +1220,8 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("SWD_Laundry_Backend.Domain.Entities.TimeSchedule", "TimeSchedule")
-                        .WithOne("Staff_Trip")
-                        .HasForeignKey("SWD_Laundry_Backend.Domain.Entities.Staff_Trip", "TimeScheduleID")
+                        .WithMany("Staff_Trip")
+                        .HasForeignKey("TimeScheduleID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1185,6 +1277,17 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     b.Navigation("Wallet");
                 });
 
+            modelBuilder.Entity("SWD_Laundry_Backend.Domain.IdentityModel.ApplicationUser", b =>
+                {
+                    b.HasOne("SWD_Laundry_Backend.Domain.Entities.Wallet", "Wallet")
+                        .WithOne("ApplicationUser")
+                        .HasForeignKey("SWD_Laundry_Backend.Domain.IdentityModel.ApplicationUser", "WalletID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Wallet");
+                });
+
             modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.Building", b =>
                 {
                     b.Navigation("Customers");
@@ -1192,9 +1295,19 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     b.Navigation("Staff_Trips");
                 });
 
+<<<<<<< HEAD
+=======
+            modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.Customer", b =>
+                {
+                    b.Navigation("Order");
+                });
+
+>>>>>>> 9f42d83778e45289a900b887f80bd5e36a7b42f1
             modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.Order", b =>
                 {
                     b.Navigation("OrderHistories");
+
+                    b.Navigation("StaffOrders");
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.PaymentMethod", b =>
@@ -1204,15 +1317,14 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.Staff", b =>
                 {
-                    b.Navigation("Order");
+                    b.Navigation("StaffOrders");
 
                     b.Navigation("Staff_Trips");
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.TimeSchedule", b =>
                 {
-                    b.Navigation("Staff_Trip")
-                        .IsRequired();
+                    b.Navigation("Staff_Trip");
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.TodoList", b =>
@@ -1222,11 +1334,7 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("SWD_Laundry_Backend.Domain.Entities.Wallet", b =>
                 {
-                    b.Navigation("Customer");
-
-                    b.Navigation("LaundryStore");
-
-                    b.Navigation("Staff");
+                    b.Navigation("ApplicationUser");
 
                     b.Navigation("Transactions");
                 });

@@ -22,7 +22,12 @@ public class Order : BaseAuditableEntity
     public int CustomerID { get; set; }
 
     ////===========================
-    public Customer Customer { get; set; }
+
+
+    public virtual LaundryStore LaundryStore { get; set; }
+    public virtual Customer Customer { get; set; }
+    public virtual Staff Staff { get; set; }
+
 
     public PaymentMethod PaymentMethod { get; set; }
     public List<OrderHistory> OrderHistories { get; set; }

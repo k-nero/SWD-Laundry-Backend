@@ -20,5 +20,10 @@ public class LaundryStore : BaseAuditableEntity
 
     public ApplicationUser ApplicationUser { get; set; }
 
+    public Wallet Wallet { get; set; }
+
+
+    public virtual List<Service> Services  { get; set; }
+
     #endregion Relationship
 }

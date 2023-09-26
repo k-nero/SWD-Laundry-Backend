@@ -15,7 +15,6 @@ public class PaymentMethod : BaseAuditableEntity
 
     public string Name { get; set; }
 
-
-    #endregion Special Attributes
+    #endregion
 
 }

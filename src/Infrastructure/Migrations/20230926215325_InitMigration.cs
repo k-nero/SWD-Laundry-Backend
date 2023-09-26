@@ -6,11 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SWD_Laundry_Backend.Infrastructure.Migrations
 {
     /// <inheritdoc />
-<<<<<<<< HEAD:src/Infrastructure/Migrations/20230920073700_UpdateDatabase4.cs
-    public partial class UpdateDatabase4 : Migration
-========
-    public partial class UpdateDatabase5 : Migration
->>>>>>>> 9f42d83778e45289a900b887f80bd5e36a7b42f1:src/Infrastructure/Migrations/20230922043540_UpdateDatabase5.cs
+    public partial class InitMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -124,7 +120,6 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-<<<<<<<< HEAD:src/Infrastructure/Migrations/20230920073700_UpdateDatabase4.cs
                 name: "Service",
                 columns: table => new
                 {
@@ -143,10 +138,7 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TimeSchedule",
-========
                 name: "TimeSchedules",
->>>>>>>> 9f42d83778e45289a900b887f80bd5e36a7b42f1:src/Infrastructure/Migrations/20230922043540_UpdateDatabase5.cs
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -436,6 +428,7 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: false),
                     ApplicationUserID = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    WalletId = table.Column<int>(type: "int", nullable: true),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -448,6 +441,11 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                         name: "FK_LaundryStores_AspNetUsers_ApplicationUserID",
                         column: x => x.ApplicationUserID,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_LaundryStores_Wallets_WalletId",
+                        column: x => x.WalletId,
+                        principalTable: "Wallets",
                         principalColumn: "Id");
                 });
 
@@ -514,11 +512,8 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                     TotalPrice = table.Column<double>(type: "float", nullable: false),
                     PaymentMethodID = table.Column<int>(type: "int", nullable: false),
                     CustomerID = table.Column<int>(type: "int", nullable: false),
-<<<<<<<< HEAD:src/Infrastructure/Migrations/20230920073700_UpdateDatabase4.cs
                     LaundryStoreId = table.Column<int>(type: "int", nullable: true),
                     StaffId = table.Column<int>(type: "int", nullable: true),
-========
->>>>>>>> 9f42d83778e45289a900b887f80bd5e36a7b42f1:src/Infrastructure/Migrations/20230922043540_UpdateDatabase5.cs
                     OrderType = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -535,19 +530,21 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_Orders_LaundryStores_LaundryStoreId",
+                        column: x => x.LaundryStoreId,
+                        principalTable: "LaundryStores",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Orders_PaymentMethods_PaymentMethodID",
                         column: x => x.PaymentMethodID,
                         principalTable: "PaymentMethods",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-<<<<<<<< HEAD:src/Infrastructure/Migrations/20230920073700_UpdateDatabase4.cs
                     table.ForeignKey(
                         name: "FK_Orders_Staffs_StaffId",
                         column: x => x.StaffId,
                         principalTable: "Staffs",
                         principalColumn: "Id");
-========
->>>>>>>> 9f42d83778e45289a900b887f80bd5e36a7b42f1:src/Infrastructure/Migrations/20230922043540_UpdateDatabase5.cs
                 });
 
             migrationBuilder.CreateTable(
@@ -590,8 +587,6 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-<<<<<<<< HEAD:src/Infrastructure/Migrations/20230920073700_UpdateDatabase4.cs
-========
                 name: "LaundryStoreOrders",
                 columns: table => new
                 {
@@ -623,7 +618,6 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
->>>>>>>> 9f42d83778e45289a900b887f80bd5e36a7b42f1:src/Infrastructure/Migrations/20230922043540_UpdateDatabase5.cs
                 name: "OrdersHistory",
                 columns: table => new
                 {
@@ -766,11 +760,9 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 column: "ApplicationUserID");
 
             migrationBuilder.CreateIndex(
-<<<<<<<< HEAD:src/Infrastructure/Migrations/20230920073700_UpdateDatabase4.cs
-                name: "IX_LaundryStores_WalletID",
+                name: "IX_LaundryStores_WalletId",
                 table: "LaundryStores",
-                column: "WalletID",
-                unique: true);
+                column: "WalletId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LaundryStoreService_ServicesId",
@@ -778,11 +770,14 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 column: "ServicesId");
 
             migrationBuilder.CreateIndex(
-========
->>>>>>>> 9f42d83778e45289a900b887f80bd5e36a7b42f1:src/Infrastructure/Migrations/20230922043540_UpdateDatabase5.cs
                 name: "IX_Orders_CustomerID",
                 table: "Orders",
                 column: "CustomerID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_LaundryStoreId",
+                table: "Orders",
+                column: "LaundryStoreId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_PaymentMethodID",
@@ -790,15 +785,9 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 column: "PaymentMethodID");
 
             migrationBuilder.CreateIndex(
-<<<<<<<< HEAD:src/Infrastructure/Migrations/20230920073700_UpdateDatabase4.cs
                 name: "IX_Orders_StaffId",
                 table: "Orders",
                 column: "StaffId");
-========
-                name: "IX_OrdersHistory_OrderID",
-                table: "OrdersHistory",
-                column: "OrderID");
->>>>>>>> 9f42d83778e45289a900b887f80bd5e36a7b42f1:src/Infrastructure/Migrations/20230922043540_UpdateDatabase5.cs
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrdersHistory_OrderID",
@@ -891,11 +880,10 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 name: "Keys");
 
             migrationBuilder.DropTable(
-<<<<<<<< HEAD:src/Infrastructure/Migrations/20230920073700_UpdateDatabase4.cs
-                name: "LaundryStoreService");
-========
                 name: "LaundryStoreOrders");
->>>>>>>> 9f42d83778e45289a900b887f80bd5e36a7b42f1:src/Infrastructure/Migrations/20230922043540_UpdateDatabase5.cs
+
+            migrationBuilder.DropTable(
+                name: "LaundryStoreService");
 
             migrationBuilder.DropTable(
                 name: "OrdersHistory");
@@ -919,20 +907,13 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-<<<<<<<< HEAD:src/Infrastructure/Migrations/20230920073700_UpdateDatabase4.cs
                 name: "Service");
-========
-                name: "LaundryStores");
 
             migrationBuilder.DropTable(
                 name: "TimeSchedules");
->>>>>>>> 9f42d83778e45289a900b887f80bd5e36a7b42f1:src/Infrastructure/Migrations/20230922043540_UpdateDatabase5.cs
 
             migrationBuilder.DropTable(
                 name: "Orders");
-
-            migrationBuilder.DropTable(
-                name: "Staffs");
 
             migrationBuilder.DropTable(
                 name: "TodoLists");
@@ -941,17 +922,19 @@ namespace SWD_Laundry_Backend.Infrastructure.Migrations
                 name: "Customers");
 
             migrationBuilder.DropTable(
+                name: "LaundryStores");
+
+            migrationBuilder.DropTable(
                 name: "PaymentMethods");
 
             migrationBuilder.DropTable(
-<<<<<<<< HEAD:src/Infrastructure/Migrations/20230920073700_UpdateDatabase4.cs
                 name: "Staffs");
-========
-                name: "AspNetUsers");
->>>>>>>> 9f42d83778e45289a900b887f80bd5e36a7b42f1:src/Infrastructure/Migrations/20230922043540_UpdateDatabase5.cs
 
             migrationBuilder.DropTable(
                 name: "Buildings");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Wallets");

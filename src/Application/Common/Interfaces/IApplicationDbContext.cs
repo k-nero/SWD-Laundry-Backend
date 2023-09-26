@@ -1,6 +1,7 @@
 ﻿using SWD_Laundry_Backend.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using SWD_Laundry_Backend.Domain.Common;
+using SWD_Laundry_Backend.Domain.IdentityModel;
 
 namespace SWD_Laundry_Backend.Application.Common.Interfaces;
 

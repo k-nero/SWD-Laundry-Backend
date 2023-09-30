@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using SWD_Laundry_Backend.Core.Config;
 using SWD_Laundry_Backend.Extensions;
 
 namespace SWD_Laundry_Backend;
@@ -15,10 +16,13 @@ public class Program
         builder.Environment.EnvironmentName = Environments.Development;
         // Add services to the container.
 
-        builder.Configuration.AddJsonFile("appsettings.json", false, true)
+        SystemSettingModel.Configs = builder.Configuration.AddJsonFile("appsettings.json", false, true)
                 .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", false, true)
                 .AddUserSecrets<Program>(true, false)
                 .Build();
+
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 
         builder.Host.UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
                    .ReadFrom.Configuration(hostingContext.Configuration)
@@ -40,7 +44,7 @@ public class Program
         {
             options.AppendTrailingSlash = true;
         }  );
-
+        _ = builder.Services.AddSystemSetting(builder.Configuration.GetSection("SystemSetting").Get<SystemSettingModel>());
         builder.Services.Configure<DataProtectionTokenProviderOptions>(opt => opt.TokenLifespan = TimeSpan.FromMinutes(30));
         var app = builder.Build();
 
@@ -70,5 +74,15 @@ public class SlugifyParameterTransformer : IOutboundParameterTransformer
     {
         // Slugify value
         return value == null ? null : Regex.Replace(value.ToString(), "([a-z])([A-Z])", "$1-$2").ToLower();
+    }
+}
+
+public static class StartupSystemSetting
+{
+    public static IServiceCollection AddSystemSetting(this IServiceCollection services, SystemSettingModel? systemSettingModel)
+    {
+        SystemSettingModel.Instance = systemSettingModel ?? new SystemSettingModel();
+
+        return services;
     }
 }

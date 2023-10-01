@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels;
 using SWD_Laundry_Backend.Core.Config;
 using SWD_Laundry_Backend.Extensions;
 using SWD_Laundry_Backend.Repository.Infrastructure;
@@ -49,8 +50,16 @@ public class Program
                 x => x.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)
                 );
         });
-
-      
+        builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+        {
+            options.SignIn.RequireConfirmedAccount = false;
+            options.Password.RequireDigit = true;
+            options.Password.RequiredLength = 6;
+            options.Password.RequireNonAlphanumeric = true;
+            options.Password.RequireUppercase = true;
+        })
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
         builder.Services.AddAutoMapperServices();
         builder.Services.AddRouting(options =>
         {

@@ -25,4 +25,8 @@
     <ProjectReference Include="..\SWD-Laundry-Backend.Core\SWD-Laundry-Backend.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interface\" />
+  </ItemGroup>
+
 </Project>

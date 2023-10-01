@@ -1,10 +1,12 @@
 ﻿using System.Reflection;
+using Invedia.DI.Attributes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SWD_Laundry_Backend.Core.Utils;
 using SWD_Laundry_Backend.Repository.Base;
 
 namespace SWD_Laundry_Backend.Repository.Infrastructure;
+
 public sealed partial class AppDbContext : BaseDbContext
 {
     public readonly int CommandTimeoutInSecond = 20 * 60;

@@ -1,10 +1,13 @@
 using System.Text.RegularExpressions;
+using Invedia.DI;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using SWD_Laundry_Backend.Core.Config;
 using SWD_Laundry_Backend.Extensions;
+using SWD_Laundry_Backend.Repository.Infrastructure;
 
 namespace SWD_Laundry_Backend;
 
@@ -39,6 +42,9 @@ public class Program
             options.SwaggerDoc("v1", new OpenApiInfo { Title = "SWD-Laundry-Backend", Version = "v1" });
         });
 
+        builder.Services.AddDbContext<AppDbContext>();
+
+      
         builder.Services.AddAutoMapperServices();
         builder.Services.AddRouting(options =>
         {
@@ -46,6 +52,8 @@ public class Program
         }  );
         _ = builder.Services.AddSystemSetting(builder.Configuration.GetSection("SystemSetting").Get<SystemSettingModel>());
         builder.Services.Configure<DataProtectionTokenProviderOptions>(opt => opt.TokenLifespan = TimeSpan.FromMinutes(30));
+        builder.Services.AddDI();
+        builder.Services.PrintServiceAddedToConsole();
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -64,6 +72,7 @@ public class Program
         app.UseSerilogRequestLogging();
         app.UseAuthorization();
         app.MapControllers();
+
         app.Run();
     }
 }

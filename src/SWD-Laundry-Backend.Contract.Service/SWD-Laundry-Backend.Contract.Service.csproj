@@ -7,4 +7,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SWD-Laundry-Backend.Contract.Repository\SWD-Laundry-Backend.Contract.Repository.csproj" />
+  </ItemGroup>
+
 </Project>

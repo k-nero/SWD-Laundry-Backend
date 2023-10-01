@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using SWD_Laundry_Backend.Contract.Repository.Base_Interface;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
 
@@ -6,7 +7,11 @@ namespace SWD_Laundry_Backend.Repository.Base
 {
     public abstract class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity, new()
     {
-
+        protected readonly DbContext _dbContext;
+        protected BaseRepository(DbContext dbContext)
+        {
+               _dbContext = dbContext;
+        }
 
         public int Add(T entity)
         {

@@ -14,7 +14,7 @@ public class Transaction : BaseEntity
     #region Relationship
 
     [ForeignKey(nameof(Wallet))]
-    public int WalletID { get; set; }
+    public string WalletID { get; set; }
 
     public Wallet Wallet { get; set; }
     public List<Payment> Payments { get; set; }

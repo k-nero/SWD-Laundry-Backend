@@ -18,13 +18,13 @@ public class Order : BaseEntity
     #region Relationship
 
     [ForeignKey("Customer")]
-    public int CustomerID { get; set; }
+    public string CustomerID { get; set; }
 
     [ForeignKey(nameof(LaundryStore))]
-    public int LaundryStoreID { get; set; }
+    public string LaundryStoreID { get; set; }
 
     [ForeignKey(nameof(Staff))]
-    public int StaffID { get; set; }
+    public string StaffID { get; set; }
 
     ////===========================
     public Customer Customer { get; set; } 

@@ -42,7 +42,13 @@ public class Program
             options.SwaggerDoc("v1", new OpenApiInfo { Title = "SWD-Laundry-Backend", Version = "v1" });
         });
 
-        builder.Services.AddDbContext<AppDbContext>();
+        builder.Services.AddDbContext<AppDbContext>(options =>
+        {
+            options.UseSqlServer(
+                connectionString,
+                x => x.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)
+                );
+        });
 
       
         builder.Services.AddAutoMapperServices();
@@ -70,6 +76,8 @@ public class Program
 
         app.UseHttpsRedirection();
         app.UseSerilogRequestLogging();
+        app.UseAuthentication();
+        //app.UseIdentityServer();
         app.UseAuthorization();
         app.MapControllers();
 

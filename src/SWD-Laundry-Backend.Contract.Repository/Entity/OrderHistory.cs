@@ -13,7 +13,7 @@ public class OrderHistory : BaseEntity
     #region Relationship
 
     [ForeignKey("Order")]
-    public int OrderID { get; set; }
+    public string OrderID { get; set; }
 
     public Order Order { get; set; }
 

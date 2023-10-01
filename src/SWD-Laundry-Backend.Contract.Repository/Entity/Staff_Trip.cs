@@ -11,13 +11,13 @@ public class Staff_Trip : BaseEntity
     #region Relationship
 
     [ForeignKey("Staff")]
-    public int StaffID { get; set; }
+    public string StaffID { get; set; }
 
     [ForeignKey("TimeSchedule")]
-    public int TimeScheduleID { get; set; }
+    public string TimeScheduleID { get; set; }
 
     [ForeignKey("Building")]
-    public int BuildingID { get; set; }
+    public string BuildingID { get; set; }
 
     public Building Building { get; set; }
     public Staff Staff { get; set; }

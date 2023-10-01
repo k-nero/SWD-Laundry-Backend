@@ -31,24 +31,28 @@ namespace SWD_Laundry_Backend.Repository.Base
             _dbContext = dbContext;
         }
 
-        public virtual async Task<T> AddAsync(T entity)
+        public virtual async Task<T> AddAsync(T entity, CancellationToken cancellationToken = default)
         {
-            var e = await DbSet.AddAsync(entity);
+            var e = await DbSet.AddAsync(entity, cancellationToken);
             return e.Entity;
         }
 
-        public virtual async Task<int> DeleteAsync(Expression<Func<T, bool>> filter)
+        public virtual async Task<int> DeleteAsync(Expression<Func<T, bool>> filter, CancellationToken cancellationToken = default)
         {
-            var i = await DbSet.Where(filter).ExecuteDeleteAsync();
+            var i = await DbSet.Where(filter).ExecuteDeleteAsync(cancellationToken);
             return i;
         }
 
-        public virtual async Task<IQueryable<T>> GetAsync(Expression<Func<T, bool>>? filter = null, params Expression<Func<T, object>>[]? includes)
+        public virtual async Task<IQueryable<T>> GetAsync(Expression<Func<T, bool>>? filter = null, CancellationToken cancellationToken = default, params Expression<Func<T, object>>[]? includes)
         {
 
             return await Task.Run(() =>
             {
-                var query = DbSet.AsNoTracking().Where(filter);
+                var query = DbSet.AsNoTracking();
+                if(filter != null)
+                {
+                    query = query.Where(filter);
+                }
                 if (includes != null)
                 {
                     query = includes.Aggregate(query, (current, include) => current.Include(include));
@@ -57,19 +61,23 @@ namespace SWD_Laundry_Backend.Repository.Base
             }); ;
         }
 
-        public virtual async Task<T?> GetSingleAsync(Expression<Func<T, bool>>? filter = null, params Expression<Func<T, object>>[]? includes)
+        public virtual async Task<T?> GetSingleAsync(Expression<Func<T, bool>>? filter = null, CancellationToken cancellationToken = default, params Expression<Func<T, object>>[]? includes)
         {
-            var query = DbSet.Where(filter).AsNoTracking();
+            var query = DbSet.AsNoTracking();
+            if(filter != null)
+            {
+                query = query.Where(filter);
+            }
             if (includes != null)
             {
                 query = includes.Aggregate(query, (current, include) => current.Include(include));
             }
-            return await query.FirstOrDefaultAsync();
+            return await query.FirstOrDefaultAsync(cancellationToken);
         }
 
-        public virtual async Task<int> UpdateAsync(Expression<Func<T, bool>> filter, Expression<Func<SetPropertyCalls<T>, SetPropertyCalls<T>>> update)
+        public virtual async Task<int> UpdateAsync(Expression<Func<T, bool>> filter,  Expression<Func<SetPropertyCalls<T>, SetPropertyCalls<T>>> update, CancellationToken cancellationToken = default)
         {
-            int i = await DbSet.Where(filter).ExecuteUpdateAsync(update);
+            int i = await DbSet.Where(filter).ExecuteUpdateAsync(update, cancellationToken);
             return i;
         }
     }

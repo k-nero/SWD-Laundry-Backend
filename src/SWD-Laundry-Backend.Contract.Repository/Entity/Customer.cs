@@ -14,7 +14,7 @@ public class Customer : BaseEntity
     #region Relationship
 
     [ForeignKey("Building")]
-    public int BuildingID { get; set; }
+    public string BuildingID { get; set; }
 
     [ForeignKey("ApplicationUser")]
     public string ApplicationUserID { get; set; }

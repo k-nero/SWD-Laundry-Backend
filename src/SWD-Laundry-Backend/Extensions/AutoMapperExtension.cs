@@ -1,4 +1,6 @@
-﻿namespace SWD_Laundry_Backend.Extensions;
+﻿using SWD_Laundry_Backend.Mapper;
+
+namespace SWD_Laundry_Backend.Extensions;
 
 
 public static class AutoMapperExtension
@@ -7,7 +9,7 @@ public static class AutoMapperExtension
     {
         services.AddAutoMapper(cfg => 
         { 
-
+            cfg.AddProfile<BuildingMapperProfile>();
         });
         return services;
     }

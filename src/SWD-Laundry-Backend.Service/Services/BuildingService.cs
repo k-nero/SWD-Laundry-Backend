@@ -20,14 +20,16 @@ public class BuildingService : Base_Service.Service, IBuidingService
         _mapper = mapper;
     }
 
-    public Task<string> CreateAsync(BuildingModel model, CancellationToken cancellationToken = default)
+    public async Task<string> CreateAsync(BuildingModel model, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+       var id = await _buildingRepository.AddAsync(_mapper.Map<Building>(model), cancellationToken);
+        return id.Id;
     }
 
-    public Task DeleteAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<int> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+       int i = await _buildingRepository.DeleteAsync(x => x.Id == id, cancellationToken: cancellationToken);
+        return i;
     }
 
     public async Task<ICollection<Building>> GetAllAsync(CancellationToken cancellationToken = default)
@@ -36,13 +38,19 @@ public class BuildingService : Base_Service.Service, IBuidingService
        return await buildings.ToListAsync(cancellationToken: cancellationToken);
     }
 
-    public Task<Building> GetByIdAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<Building?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+       var building = await _buildingRepository.GetSingleAsync(x => x.Id == id, cancellationToken: cancellationToken);
+        return building;
     }
 
-    public Task UpdateAsync(string id, BuildingModel model, CancellationToken cancellationToken = default)
+    public async Task<int> UpdateAsync(string id, BuildingModel model, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        int i = await _buildingRepository.UpdateAsync(x => x.Id == id, 
+            x => x.SetProperty(x => x.Name, y => model.Name ?? y.Name)
+            .SetProperty(x => x.Address, y => model.Address ?? y.Address)
+            .SetProperty(x => x.Description, y => model.Description ?? y.Description),
+            cancellationToken: cancellationToken);
+        return i;
     }
 }

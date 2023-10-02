@@ -28,31 +28,7 @@ public class Customer : BaseEntity
 
     #region Special Attribute
 
-    //private string _email;
-
-    //private string _phone;
-
-    //public string Email
-    //{
-    //    get { return _email; }
-    //    set
-    //    {
-    //        _email = new Validate().IsValidEmail(value)
-    //            ? value
-    //            : throw new ArgumentException("Invalid email.");
-    //    }
-    //}
-
-    //public string Phone
-    //{
-    //    get { return _phone; }
-    //    set
-    //    {
-    //        _phone = new Validate().IsValidPhone(value)
-    //            ? value
-    //            : throw new ArgumentException("Invalid phone (must be 9-10 numbers and start with 09 or 01).");
-    //    }
-    //}
+  
 
     #endregion Special Attribute
 }

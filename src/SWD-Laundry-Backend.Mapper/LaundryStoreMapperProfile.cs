@@ -4,10 +4,10 @@ using SWD_Laundry_Backend.Core.Models;
 
 namespace SWD_Laundry_Backend.Mapper;
 
-public class BuildingMapperProfile : Profile
+public class LaundryStoreMapperProfile : Profile
 {
-    public BuildingMapperProfile()
+    public LaundryStoreMapperProfile()
     {
-        CreateMap<BuildingModel, Building>().ReverseMap();
+        CreateMap<LaundryStoreModel, LaundryStore>().ReverseMap();
     }
 }

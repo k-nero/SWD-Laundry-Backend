@@ -183,7 +183,7 @@ namespace SWD_Laundry_Backend.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Buildings");
+                    b.ToTable("Buildings", (string)null);
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.Customer", b =>
@@ -215,7 +215,7 @@ namespace SWD_Laundry_Backend.Repository.Migrations
 
                     b.HasIndex("BuildingID");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels.ApplicationUser", b =>
@@ -332,7 +332,7 @@ namespace SWD_Laundry_Backend.Repository.Migrations
 
                     b.HasIndex("ApplicationUserID");
 
-                    b.ToTable("LaundryStores");
+                    b.ToTable("LaundryStores", (string)null);
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.Order", b =>
@@ -393,7 +393,7 @@ namespace SWD_Laundry_Backend.Repository.Migrations
 
                     b.HasIndex("StaffID");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.OrderHistory", b =>
@@ -435,7 +435,7 @@ namespace SWD_Laundry_Backend.Repository.Migrations
 
                     b.HasIndex("OrderID");
 
-                    b.ToTable("OrderHistories");
+                    b.ToTable("OrderHistories", (string)null);
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.Payment", b =>
@@ -470,7 +470,7 @@ namespace SWD_Laundry_Backend.Repository.Migrations
 
                     b.HasIndex("TransactionId");
 
-                    b.ToTable("Payments");
+                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.Staff_Trip", b =>
@@ -513,7 +513,7 @@ namespace SWD_Laundry_Backend.Repository.Migrations
 
                     b.HasIndex("TimeScheduleID");
 
-                    b.ToTable("Staff_Trips");
+                    b.ToTable("Staff_Trips", (string)null);
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.Transaction", b =>
@@ -552,7 +552,7 @@ namespace SWD_Laundry_Backend.Repository.Migrations
 
                     b.HasIndex("WalletID");
 
-                    b.ToTable("Transaction");
+                    b.ToTable("Transaction", (string)null);
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.Wallet", b =>
@@ -577,7 +577,7 @@ namespace SWD_Laundry_Backend.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Wallets");
+                    b.ToTable("Wallets", (string)null);
                 });
 
             modelBuilder.Entity("Staff", b =>
@@ -604,7 +604,7 @@ namespace SWD_Laundry_Backend.Repository.Migrations
 
                     b.HasIndex("ApplicationUserID");
 
-                    b.ToTable("Staffs");
+                    b.ToTable("Staffs", (string)null);
                 });
 
             modelBuilder.Entity("TimeSchedule", b =>
@@ -638,7 +638,7 @@ namespace SWD_Laundry_Backend.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TimeSchedules");
+                    b.ToTable("TimeSchedules", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

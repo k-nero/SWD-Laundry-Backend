@@ -22,25 +22,32 @@ public class BaseCacheLayer<T> : IBaseCacheLayer<T> where T : BaseEntity, new()
         this.distributedCache = distributedCache;
     }
 
-    public Task AddAsync(T entity, CancellationToken cancellationToken = default)
+    public async Task AddAsync(T entity, CancellationToken cancellationToken = default)
     {
         var key = entity.Id;
         var options = new DistributedCacheEntryOptions()
-            .SetSlidingExpiration(TimeSpan.FromMinutes(5))
+            .SetSlidingExpiration(TimeSpan.FromHours(8))
             .SetAbsoluteExpiration(DateTime.Now.AddHours(24));
         var json = ObjHelper.ToJsonString(entity);
-        return distributedCache.SetStringAsync(key, json, options, cancellationToken);
+        await distributedCache.SetStringAsync(key, json, options, cancellationToken);
+        return;
     }
 
-    public Task<T?> GetSingleAsync(string key, CancellationToken cancellationToken = default)
+    public async Task<T?> GetSingleAsync(string key, CancellationToken cancellationToken = default)
     {
-        var json = distributedCache.GetString(key);
+        var json = await distributedCache.GetStringAsync(key, cancellationToken);
         if (json != null)
         {
             T? entity = JsonConvert.DeserializeObject<T>(json);
-            return Task.FromResult(entity);
+            return entity;
         }
-        return Task.FromResult<T?>(null);
+        return null;
+    }
+
+    public async Task RefreshKeyAsync(string key, CancellationToken cancellationToken = default)
+    {
+        await Task.Run(() => distributedCache.Refresh(key), cancellationToken);
+        return;
     }
 }
 

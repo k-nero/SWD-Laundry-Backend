@@ -3,4 +3,5 @@ public interface IBaseCacheLayer<T> where T : Entity.BaseEntity, new()
 {
     Task<T?> GetSingleAsync(string key, CancellationToken cancellationToken = default);
     Task AddAsync(T entity, CancellationToken cancellationToken = default);
+    Task RefreshKeyAsync(string key, CancellationToken cancellationToken = default);
 }

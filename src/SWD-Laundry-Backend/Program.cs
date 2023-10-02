@@ -63,7 +63,7 @@ public class Program
         builder.Services.AddAutoMapperServices();
         builder.Services.AddRouting(options =>
         {
-            options.AppendTrailingSlash = true;
+            options.AppendTrailingSlash = false;
         }  );
         _ = builder.Services.AddSystemSetting(builder.Configuration.GetSection("SystemSetting").Get<SystemSettingModel>());
         builder.Services.Configure<DataProtectionTokenProviderOptions>(opt => opt.TokenLifespan = TimeSpan.FromMinutes(30));

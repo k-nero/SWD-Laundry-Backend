@@ -10,6 +10,7 @@ public static class AutoMapperExtension
         services.AddAutoMapper(cfg => 
         { 
             cfg.AddProfile<BuildingMapperProfile>();
+            cfg.AddProfile<WalletMapperProfile>();
         });
         return services;
     }

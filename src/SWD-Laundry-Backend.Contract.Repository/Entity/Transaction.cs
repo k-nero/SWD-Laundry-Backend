@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Repository.Enum;
 
 namespace SWD_Laundry_Backend.Contract.Repository.Entity;
@@ -24,8 +23,6 @@ public class Transaction : BaseEntity
     #region Special Attribute
 
     public AllowedTransactionType TransactionType { get; set; }
-
-    //public OrderStatus Status { get; set; }
 
     #endregion Special Attribute
 }

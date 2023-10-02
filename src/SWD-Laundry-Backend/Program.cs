@@ -50,6 +50,11 @@ public class Program
                 x => x.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)
                 );
         });
+        builder.Services.AddMemoryCache();
+        builder.Services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = builder.Configuration.GetConnectionString("RedisConnection");
+        });
         builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
         {
             options.SignIn.RequireConfirmedAccount = false;
@@ -89,7 +94,7 @@ public class Program
         //app.UseIdentityServer();
         app.UseAuthorization();
         app.MapControllers();
-
+        app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
         app.Run();
     }
 }

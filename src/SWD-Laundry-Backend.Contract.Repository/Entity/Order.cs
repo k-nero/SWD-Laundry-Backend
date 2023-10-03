@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using SWD_Laundry_Backend.Contract.Repository.Entity;
-using SWD_Laundry_Backend.Contract.Repository.Enum;
+using SWD_Laundry_Backend.Core.Enum;
 
 namespace SWD_Laundry_Backend.Contract.Repository.Entity;
 #nullable disable
@@ -27,7 +26,8 @@ public class Order : BaseEntity
     public string StaffID { get; set; }
 
     ////===========================
-    public Customer Customer { get; set; } 
+    public Customer Customer { get; set; }
+
     public Staff Staff { get; set; }
     public LaundryStore LaundryStore { get; set; }
 

@@ -49,5 +49,11 @@ public class BaseCacheLayer<T> : IBaseCacheLayer<T> where T : BaseEntity, new()
         await Task.Run(() => distributedCache.Refresh(key), cancellationToken);
         return;
     }
+
+    public async Task RemoveAsync(string key, CancellationToken cancellationToken = default)
+    {
+        await distributedCache.RemoveAsync(key, cancellationToken);
+        return;
+    }
 }
 

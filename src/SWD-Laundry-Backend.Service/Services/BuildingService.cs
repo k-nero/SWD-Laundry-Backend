@@ -40,7 +40,7 @@ public class BuildingService : Base_Service.Service, IBuidingService
 
     public async Task<Building?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
-       var building = await _buildingRepository.GetSingleAsync(x =>  x.Name == "A huge Building" && x.Address.Equals("No") && x.Id == id , cancellationToken: cancellationToken);
+       var building = await _buildingRepository.GetSingleAsync(x => x.Id == id , cancellationToken: cancellationToken);
         return building;
     }
 

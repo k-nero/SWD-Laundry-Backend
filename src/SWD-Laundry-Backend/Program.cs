@@ -1,8 +1,10 @@
 using System.Text.RegularExpressions;
 using Invedia.DI;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels;
@@ -38,11 +40,38 @@ public class Program
         });
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen( options =>
+        builder.Services.AddSwaggerGen(options =>
         {
             options.SwaggerDoc("v1", new OpenApiInfo { Title = "SWD-Laundry-Backend", Version = "v1" });
         });
-
+        builder.Services.AddCors();
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(options =>
+        {
+            options.Authority = builder.Configuration["Jwt:Authority"];
+            options.Audience = builder.Configuration["Jwt:Audience"];
+            options.RequireHttpsMetadata = false;
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateAudience = true,
+                ValidAudience =  builder.Configuration["Jwt:Audience"],
+                ValidIssuer = builder.Configuration["Jwt:Authority"],
+                ValidateIssuer = true,
+                ValidateIssuerSigningKey = true,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
+            };
+        });
+        builder.Services.AddAuthorization(options =>
+        {
+            options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+            options.AddPolicy("Staff", policy => policy.RequireRole("Staff"));
+            options.AddPolicy("Customer", policy => policy.RequireRole("Customer"));
+            options.AddPolicy("LaundryStore", policy => policy.RequireRole("LaundryStore"));
+        });
         builder.Services.AddDbContext<AppDbContext>(options =>
         {
             options.UseSqlServer(
@@ -66,10 +95,11 @@ public class Program
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
         builder.Services.AddAutoMapperServices();
+
         builder.Services.AddRouting(options =>
         {
             options.AppendTrailingSlash = false;
-        }  );
+        });
         _ = builder.Services.AddSystemSetting(builder.Configuration.GetSection("SystemSetting").Get<SystemSettingModel>());
         builder.Services.Configure<DataProtectionTokenProviderOptions>(opt => opt.TokenLifespan = TimeSpan.FromMinutes(30));
         builder.Services.AddDI();
@@ -91,6 +121,7 @@ public class Program
         app.UseHttpsRedirection();
         app.UseSerilogRequestLogging();
         app.UseAuthentication();
+
         //app.UseIdentityServer();
         app.UseAuthorization();
         app.MapControllers();

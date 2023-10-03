@@ -1,6 +1,4 @@
-﻿using SWD_Laundry_Backend.Core.Models;
-
-namespace SWD_Laundry_Backend.Core;
+﻿namespace SWD_Laundry_Backend.Core.Models;
 
 public class PaymentModel
 {

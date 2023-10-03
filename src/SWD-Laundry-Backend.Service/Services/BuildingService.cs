@@ -35,7 +35,7 @@ public class BuildingService : Base_Service.Service, IBuidingService
     public async Task<ICollection<Building>> GetAllAsync(CancellationToken cancellationToken = default)
     {
        var buildings = await _buildingRepository.GetAsync(cancellationToken: cancellationToken);
-       return await buildings.ToListAsync(cancellationToken: cancellationToken);
+       return await buildings.ToListAsync(cancellationToken);
     }
 
     public async Task<Building?> GetByIdAsync(string id, CancellationToken cancellationToken = default)

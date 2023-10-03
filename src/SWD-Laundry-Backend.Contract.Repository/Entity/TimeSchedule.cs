@@ -1,12 +1,10 @@
 ﻿using SWD_Laundry_Backend.Contract.Repository.Entity;
-using SWD_Laundry_Backend.Contract.Repository.Enum;
-
-
+using SWD_Laundry_Backend.Core.Enum;
 
 #nullable disable
 
 public class TimeSchedule : BaseEntity
-{ 
+{
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
 

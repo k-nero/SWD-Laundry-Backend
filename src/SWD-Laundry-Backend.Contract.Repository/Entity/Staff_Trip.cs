@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using SWD_Laundry_Backend.Core.Enum;
 
 namespace SWD_Laundry_Backend.Contract.Repository.Entity;
 

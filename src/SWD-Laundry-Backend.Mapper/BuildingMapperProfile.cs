@@ -8,6 +8,6 @@ public class BuildingMapperProfile : Profile
 {
     public BuildingMapperProfile()
     {
-        CreateMap<BuildingModel, Building>().ReverseMap();
+        CreateMap<BuildingModel, Building>().ForMember(x => x.Id, opt => opt.Ignore()).ReverseMap();
     }
 }

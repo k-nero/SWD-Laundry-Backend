@@ -11,7 +11,7 @@ public class Staff_Trip : BaseEntity
 
     public TripType TripType { get; set; }
 
-
+    ////===========================
     [ForeignKey("Staff")]
     public string StaffID { get; set; }
 
@@ -21,6 +21,7 @@ public class Staff_Trip : BaseEntity
     [ForeignKey("Building")]
     public string BuildingID { get; set; }
 
+    ////===========================
 
     public Building Building { get; set; }
     public Staff Staff { get; set; }

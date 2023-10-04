@@ -12,8 +12,8 @@ using SWD_Laundry_Backend.Repository.Infrastructure;
 namespace SWD_Laundry_Backend.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231002072614_UpdateDatbase7")]
-    partial class UpdateDatbase7
+    [Migration("20231004172440_UpdateStaff")]
+    partial class UpdateStaff
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -519,6 +519,40 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                     b.ToTable("Staff_Trips");
                 });
 
+            modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.TimeSchedule", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("CreatedTime")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("DayOfWeek")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("LastUpdatedTime")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TimeFrame")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TimeSchedules");
+                });
+
             modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.Transaction", b =>
                 {
                     b.Property<string>("Id")
@@ -608,40 +642,6 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                     b.HasIndex("ApplicationUserID");
 
                     b.ToTable("Staffs");
-                });
-
-            modelBuilder.Entity("TimeSchedule", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset?>("CreatedTime")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<int>("DayOfWeek")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastUpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset?>("LastUpdatedTime")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("TimeFrame")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TimeSchedules");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -783,8 +783,8 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                         .WithMany("Staff_Trips")
                         .HasForeignKey("StaffID");
 
-                    b.HasOne("TimeSchedule", "TimeSchedule")
-                        .WithMany("Staff_Trip")
+                    b.HasOne("SWD_Laundry_Backend.Contract.Repository.Entity.TimeSchedule", "TimeSchedule")
+                        .WithMany()
                         .HasForeignKey("TimeScheduleID");
 
                     b.Navigation("Building");
@@ -851,11 +851,6 @@ namespace SWD_Laundry_Backend.Repository.Migrations
             modelBuilder.Entity("Staff", b =>
                 {
                     b.Navigation("Staff_Trips");
-                });
-
-            modelBuilder.Entity("TimeSchedule", b =>
-                {
-                    b.Navigation("Staff_Trip");
                 });
 #pragma warning restore 612, 618
         }

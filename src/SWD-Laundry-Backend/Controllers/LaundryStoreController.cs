@@ -9,9 +9,9 @@ namespace SWD_Laundry_Backend.Controllers;
 [ApiController]
 public class LaundryStoreController : ApiControllerBase
 {
-    private readonly LaundryStoreService _service;
+    private readonly ILaundryStoreService _service;
 
-    public LaundryStoreController(LaundryStoreService service)
+    public LaundryStoreController(ILaundryStoreService service)
     {
         _service = service;
     }
@@ -20,7 +20,7 @@ public class LaundryStoreController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> ViewLaundryStoreList()
     {
         try
         {
@@ -38,7 +38,7 @@ public class LaundryStoreController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> GetById(string id)
+    public async Task<IActionResult> ViewLaundryStoreInformation(string id)
     {
         try
         {
@@ -79,7 +79,7 @@ public class LaundryStoreController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Update(string id, LaundryStoreModel model)
+    public async Task<IActionResult> EditLaundryStoreInformation(string id, LaundryStoreModel model)
     {
         try
         {

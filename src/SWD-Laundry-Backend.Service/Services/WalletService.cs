@@ -8,14 +8,13 @@ using SWD_Laundry_Backend.Core.Models;
 
 namespace SWD_Laundry_Backend.Service.Services;
 
-//[ScopedDependency(ServiceType = typeof(IWalletService))]
-
+[ScopedDependency(ServiceType = typeof(IWalletService))]
 public class WalletService : Base_Service.Service, IWalletService
 {
     private readonly IWalletRepository _repository;
-    private readonly AutoMapper.Mapper _mapper;
+    private readonly IMapper _mapper;
 
-    public WalletService(IWalletRepository repository, AutoMapper.Mapper mapper)
+    public WalletService(IWalletRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;

@@ -1,4 +1,4 @@
-﻿
+﻿using AutoMapper;
 using Invedia.DI.Attributes;
 using Microsoft.EntityFrameworkCore;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
@@ -9,13 +9,13 @@ using SWD_Laundry_Backend.Core.Models;
 
 namespace SWD_Laundry_Backend.Service.Services;
 
-//[ScopedDependency(ServiceType = typeof(ILaundryStoreService))]
+[ScopedDependency(ServiceType = typeof(ILaundryStoreService))]
 public class LaundryStoreService : Base_Service.Service, ILaundryStoreService
 {
     private readonly ILaundryStoreRepository _repository;
-    private readonly AutoMapper.Mapper _mapper;
+    private readonly IMapper _mapper;
 
-    public LaundryStoreService(ILaundryStoreRepository repository, AutoMapper.Mapper mapper)
+    public LaundryStoreService(ILaundryStoreRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
@@ -26,6 +26,11 @@ public class LaundryStoreService : Base_Service.Service, ILaundryStoreService
         var query = await _repository.AddAsync(_mapper.Map<LaundryStore>(model), cancellationToken);
         var objectId = query.Id;
         return objectId;
+    }
+
+    public Task<int> DeleteAsync(string id, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<ICollection<LaundryStore>> GetAllAsync(CancellationToken cancellationToken = default)

@@ -8,6 +8,6 @@ public class OrderHistoryMapperProfile : Profile
 {
     public OrderHistoryMapperProfile()
     {
-        CreateMap<OrderHistoryModel, OrderHistory>().ReverseMap();
+        CreateMap<OrderHistoryModel, OrderHistory>().ForMember(x => x.Id, opt => opt.Ignore()).ReverseMap();
     }
 }

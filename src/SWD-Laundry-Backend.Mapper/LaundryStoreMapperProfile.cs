@@ -8,6 +8,6 @@ public class LaundryStoreMapperProfile : Profile
 {
     public LaundryStoreMapperProfile()
     {
-        CreateMap<LaundryStoreModel, LaundryStore>().ReverseMap();
+        CreateMap<LaundryStoreModel, LaundryStore>().ForMember(x => x.Id, opt => opt.Ignore()).ReverseMap();
     }
 }

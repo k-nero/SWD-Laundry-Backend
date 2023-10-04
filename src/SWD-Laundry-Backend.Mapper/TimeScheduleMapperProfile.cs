@@ -8,6 +8,6 @@ public class TimeScheduleMapperProfile : Profile
 {
     public TimeScheduleMapperProfile()
     {
-        CreateMap<TimeScheduleModel, LaundryStore>().ReverseMap();
+        CreateMap<TimeScheduleModel, LaundryStore>().ForMember(x => x.Id, opt => opt.Ignore()).ReverseMap();
     }
 }

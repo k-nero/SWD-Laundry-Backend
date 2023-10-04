@@ -12,7 +12,7 @@ public class TimeSchedule : BaseEntity
 
     public DayOfWeek DayOfWeek { get; set; }
     public TimeFrame TimeFrame { get; set; }
-    public List<Staff_Trip> Staff_Trip { get; set; }
+    //public List<Staff_Trip> Staff_Trip { get; set; }
 
     #endregion Special Attribute
 }

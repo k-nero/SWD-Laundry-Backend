@@ -9,7 +9,8 @@ public class Staff_Trip : BaseEntity
 {
     public int TripCollect { get; set; } = 0;
 
-    #region Relationship
+    public TripType TripType { get; set; }
+
 
     [ForeignKey("Staff")]
     public string StaffID { get; set; }
@@ -20,15 +21,8 @@ public class Staff_Trip : BaseEntity
     [ForeignKey("Building")]
     public string BuildingID { get; set; }
 
+
     public Building Building { get; set; }
     public Staff Staff { get; set; }
-    public LaundryStore TimeSchedule { get; set; }
-
-    #endregion Relationship
-
-    #region Special Attribute
-
-    public TripType TripType { get; set; }
-
-    #endregion Special Attribute
+    public TimeSchedule TimeSchedule { get; set; }
 }

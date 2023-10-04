@@ -1,6 +1,6 @@
-﻿using SWD_Laundry_Backend.Contract.Repository.Entity;
+﻿
 using SWD_Laundry_Backend.Core.Enum;
-
+namespace SWD_Laundry_Backend.Contract.Repository.Entity;
 #nullable disable
 
 public class TimeSchedule : BaseEntity

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels;
 
 namespace SWD_Laundry_Backend.Contract.Repository.Entity;
@@ -21,7 +20,7 @@ public class LaundryStore : BaseEntity
 
     public ApplicationUser ApplicationUser { get; set; }
 
-    public List<Order> Orders{ get; set; }
+    public List<Order> Orders { get; set; }
 
     #endregion Relationship
 }

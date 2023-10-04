@@ -10,6 +10,4 @@ public class WalletMapperProfile : Profile
     {
         CreateMap<WalletModel, Wallet>().ReverseMap();
     }
-
 }
-

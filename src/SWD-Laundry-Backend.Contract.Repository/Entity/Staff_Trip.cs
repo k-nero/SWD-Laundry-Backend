@@ -22,7 +22,7 @@ public class Staff_Trip : BaseEntity
 
     public Building Building { get; set; }
     public Staff Staff { get; set; }
-    public TimeSchedule TimeSchedule { get; set; }
+    public LaundryStore TimeSchedule { get; set; }
 
     #endregion Relationship
 

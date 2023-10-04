@@ -4,6 +4,7 @@ using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
 
 namespace SWD_Laundry_Backend.Controllers;
+
 [ApiController]
 public class BuildingController : ApiControllerBase
 {
@@ -29,7 +30,6 @@ public class BuildingController : ApiControllerBase
         {
             return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
         }
-       
     }
 
     [HttpGet("{id}")]
@@ -69,7 +69,6 @@ public class BuildingController : ApiControllerBase
         {
             return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
         }
-       
     }
 
     [HttpPut("{id}")]
@@ -82,7 +81,7 @@ public class BuildingController : ApiControllerBase
         try
         {
             var result = await _buildingService.UpdateAsync(id, model);
-            if(result == 0)
+            if (result == 0)
             {
                 return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
             }
@@ -92,7 +91,6 @@ public class BuildingController : ApiControllerBase
         {
             return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
         }
-      
     }
 
     [HttpDelete("{id}")]
@@ -116,5 +114,4 @@ public class BuildingController : ApiControllerBase
             return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
         }
     }
-
 }

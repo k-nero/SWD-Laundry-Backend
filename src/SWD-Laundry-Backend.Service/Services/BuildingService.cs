@@ -7,6 +7,7 @@ using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
 
 namespace SWD_Laundry_Backend.Service.Services;
+
 [ScopedDependency(ServiceType = typeof(IBuidingService))]
 public class BuildingService : Base_Service.Service, IBuidingService
 {

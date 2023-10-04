@@ -8,7 +8,6 @@ public interface IBaseRepository<T> where T : Entity.BaseEntity, new()
     Task<IQueryable<T>> GetAsync(Expression<Func<T, bool>>? filter = null, CancellationToken cancellationToken = default, params Expression<Func<T, object>>[]? includes);
     Task<int> UpdateAsync(Expression<Func<T, bool>> filter, Expression<Func<SetPropertyCalls<T>, SetPropertyCalls<T>>> update, CancellationToken cancellationToken = default);
     Task<int> UpdateAsync(T t, CancellationToken cancellationToken = default);
-
     Task<int> DeleteAsync(Expression<Func<T, bool>> filter, CancellationToken cancellationToken = default);
     Task<T> AddAsync(T entity, CancellationToken cancellationToken = default);
 }

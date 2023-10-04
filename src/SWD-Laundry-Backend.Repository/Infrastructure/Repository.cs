@@ -7,7 +7,7 @@ using SWD_Laundry_Backend.Repository.Base;
 namespace SWD_Laundry_Backend.Repository.Infrastructure;
 public class Repository<T> : BaseRepository<T>, IRepository<T>, IBaseRepository<T> where T : BaseEntity, new()
 {
-    public Repository(AppDbContext dbContext) : base(dbContext)
+    public Repository(AppDbContext dbContext, ICacheLayer<T> cacheLayer) : base(dbContext, cacheLayer)
     {
 
     }

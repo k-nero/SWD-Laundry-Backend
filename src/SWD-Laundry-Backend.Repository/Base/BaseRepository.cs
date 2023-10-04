@@ -1,9 +1,9 @@
 using System.Linq.Expressions;
-using AngleSharp.Dom;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using SWD_Laundry_Backend.Contract.Repository.Base_Interface;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
+using SWD_Laundry_Backend.Contract.Repository.Infrastructure;
 using SWD_Laundry_Backend.Core.Utils;
 
 namespace SWD_Laundry_Backend.Repository.Base
@@ -11,6 +11,7 @@ namespace SWD_Laundry_Backend.Repository.Base
     public abstract class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity, new()
     {
         protected readonly DbContext _dbContext;
+        protected readonly ICacheLayer<T> _cacheLayer;
 
         private DbSet<T> _dbSet;
 
@@ -28,9 +29,10 @@ namespace SWD_Laundry_Backend.Repository.Base
             }
         }
 
-        protected BaseRepository(DbContext dbContext)
+        protected BaseRepository(DbContext dbContext, ICacheLayer<T> cacheLayer)
         {
             _dbContext = dbContext;
+            _cacheLayer = cacheLayer;
         }
 
         public virtual async Task<T> AddAsync(T entity, CancellationToken cancellationToken = default)
@@ -107,6 +109,24 @@ namespace SWD_Laundry_Backend.Repository.Base
                 Console.WriteLine(e);
             }
         }
+        protected string? TryGetIdFromFilter(Expression<Func<T, bool>> filter)
+        {
+            try
+            {
+                var body = filter.Body as BinaryExpression;
+                if (body != null)
+                {
+                    var ins = new ExpressionInspect(body);
+                    return ins.Id;
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Can not get id from filter", e);
+            }
+
+        }
 
         /// <summary>
         /// Update entity with all properties
@@ -115,7 +135,6 @@ namespace SWD_Laundry_Backend.Repository.Base
         /// <param name="t"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>Affected rows</returns>
-
         public Task<int> UpdateAsync(T t, CancellationToken cancellationToken = default)
         {
             TryAttach(t);
@@ -123,7 +142,5 @@ namespace SWD_Laundry_Backend.Repository.Base
             _dbContext.Entry(t).State = EntityState.Modified;
             return _dbContext.SaveChangesAsync(cancellationToken);
         }
-
-   
     }
 }

@@ -7,7 +7,7 @@ using SWD_Laundry_Backend.Core.Models;
 
 namespace SWD_Laundry_Backend.Service.Services;
 
-//[ScopedDependency(ServiceType = typeof(ITransactionService))]
+[ScopedDependency(ServiceType = typeof(ITransactionService))]
 public class TransactionService : Base_Service.Service, ITransactionService
 {
     private readonly ITransactionRepository _repository;

@@ -2,16 +2,15 @@
 using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
-using SWD_Laundry_Backend.Service.Services;
 
 namespace SWD_Laundry_Backend.Controllers;
 
 [ApiController]
-public class LaundryStoreController : ApiControllerBase
+public class StaffTripController : ApiControllerBase
 {
-    private readonly ILaundryStoreService _service;
+    private readonly IStaffTripService _service;
 
-    public LaundryStoreController(ILaundryStoreService service)
+    public StaffTripController(IStaffTripService service)
     {
         _service = service;
     }
@@ -20,12 +19,12 @@ public class LaundryStoreController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> ViewLaundryStoreList()
+    public async Task<IActionResult> GetAll()
     {
         try
         {
             var result = await _service.GetAllAsync();
-            return Ok(new BaseResponseModel<ICollection<LaundryStore>?>(StatusCodes.Status200OK, data: result));
+            return Ok(new BaseResponseModel<ICollection<Staff_Trip>?>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {
@@ -38,7 +37,7 @@ public class LaundryStoreController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> ViewLaundryStoreInformation(string id)
+    public async Task<IActionResult> GetById(string id)
     {
         try
         {
@@ -47,7 +46,7 @@ public class LaundryStoreController : ApiControllerBase
             {
                 return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
             }
-            return Ok(new BaseResponseModel<LaundryStore?>(StatusCodes.Status200OK, data: result));
+            return Ok(new BaseResponseModel<Staff_Trip?>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {
@@ -59,7 +58,7 @@ public class LaundryStoreController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Create(LaundryStoreModel model)
+    public async Task<IActionResult> Create(StaffTripModel model)
     {
         try
         {
@@ -79,7 +78,7 @@ public class LaundryStoreController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> EditLaundryStoreInformation(string id, LaundryStoreModel model)
+    public async Task<IActionResult> Update(string id, StaffTripModel model)
     {
         try
         {

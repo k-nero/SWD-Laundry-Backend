@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SWD_Laundry_Backend.Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateDatbase7 : Migration
+    public partial class UpdateStaff : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

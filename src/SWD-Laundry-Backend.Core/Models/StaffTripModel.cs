@@ -5,9 +5,9 @@ namespace SWD_Laundry_Backend.Core.Models;
 public class StaffTripModel
 {
     public int TripCollect { get; set; } = 0;
-    
-    public BuildingModel? Building { get; set; } // Name of the associated building
-    public string? StaffName { get; set; } // Name of the associated staff
-    public TimeScheduleModel? TimeSchedule { get; set; } // Name of the associated time schedule
+
+    public string? BuildingID { get; set; }
+    public string? TimeScheduleID { get; set; }
+    public string? StaffID { get; set; }
     public TripType TripType { get; set; }
 }

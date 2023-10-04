@@ -9,20 +9,16 @@ public class Transaction : BaseEntity
     public string PaymentMethod { get; set; }
     public int Amount { get; set; }
     public string Description { get; set; }
+    public AllowedTransactionType TransactionType { get; set; }
 
-    #region Relationship
-
+    ////===========================
     [ForeignKey(nameof(Wallet))]
     public string WalletID { get; set; }
 
     public Wallet Wallet { get; set; }
-    public List<Payment> Payments { get; set; }
 
-    #endregion Relationship
-
-    #region Special Attribute
-
-    public AllowedTransactionType TransactionType { get; set; }
-
-    #endregion Special Attribute
+    [ForeignKey(nameof(Payment))]
+    public string PaymentID { get; set; }
+    public Payment Payment { get; set; }
+    //public List<Payment> Payments { get; set; }
 }

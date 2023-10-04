@@ -13,14 +13,11 @@ public class LaundryStore : BaseEntity
     public DateTime EndTime { get; set; }
     public bool Status { get; set; }
 
-    #region Relationship
-
+    ////===========================
     [ForeignKey("ApplicationUser")]
     public string ApplicationUserID { get; set; }
 
     public ApplicationUser ApplicationUser { get; set; }
 
-    public List<Order> Orders { get; set; }
-
-    #endregion Relationship
+    //public List<Order> Orders { get; set; }
 }

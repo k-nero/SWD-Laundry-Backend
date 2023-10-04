@@ -20,6 +20,8 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
         builder.Environment.EnvironmentName = Environments.Development;
+        //builder.Environment.EnvironmentName = Environments.Production;
+
         // Add services to the container.
 
         SystemSettingModel.Configs = builder.Configuration.AddJsonFile("appsettings.json", false, true)

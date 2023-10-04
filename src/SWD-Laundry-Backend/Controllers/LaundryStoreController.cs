@@ -2,15 +2,16 @@
 using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
+using SWD_Laundry_Backend.Service.Services;
 
 namespace SWD_Laundry_Backend.Controllers;
 
 [ApiController]
-public class WalletController : ApiControllerBase
+public class LaundryStoreController : ApiControllerBase
 {
-    private readonly IWalletService _service;
+    private readonly LaundryStoreService _service;
 
-    public WalletController(IWalletService service)
+    public LaundryStoreController(LaundryStoreService service)
     {
         _service = service;
     }
@@ -24,7 +25,7 @@ public class WalletController : ApiControllerBase
         try
         {
             var result = await _service.GetAllAsync();
-            return Ok(new BaseResponseModel<ICollection<Wallet>?>(StatusCodes.Status200OK, data: result));
+            return Ok(new BaseResponseModel<ICollection<LaundryStore>?>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {
@@ -46,7 +47,7 @@ public class WalletController : ApiControllerBase
             {
                 return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
             }
-            return Ok(new BaseResponseModel<Wallet?>(StatusCodes.Status200OK, data: result));
+            return Ok(new BaseResponseModel<LaundryStore?>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {
@@ -58,7 +59,7 @@ public class WalletController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Create(WalletModel model)
+    public async Task<IActionResult> Create(LaundryStoreModel model)
     {
         try
         {
@@ -78,7 +79,7 @@ public class WalletController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Update(string id, WalletModel model)
+    public async Task<IActionResult> Update(string id, LaundryStoreModel model)
     {
         try
         {

@@ -5,10 +5,10 @@ using SWD_Laundry_Backend.Repository.Infrastructure;
 
 namespace SWD_Laundry_Backend.Repository.Repository;
 
-[ScopedDependency(ServiceType = typeof(ITimeScheduleRepository))]
-public class TimeScheduleRepository : Repository<TimeSchedule>, ITimeScheduleRepository
+[ScopedDependency(ServiceType = typeof(ITransactionRepository))]
+public class TransactionRepository : Repository<Transaction>, ITransactionRepository
 {
-    public TimeScheduleRepository(AppDbContext dbContext) : base(dbContext)
+    public TransactionRepository(AppDbContext dbContext) : base(dbContext)
     {
     }
 }

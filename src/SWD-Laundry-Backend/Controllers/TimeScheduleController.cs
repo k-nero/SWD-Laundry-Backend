@@ -72,4 +72,26 @@ public class TimeScheduleController : ApiControllerBase
                 (StatusCodes.Status500InternalServerError, e.Message));
         }
     }
+
+    [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesDefaultResponseType]
+    public async Task<IActionResult> Update(string id, TimeScheduleModel model)
+    {
+        try
+        {
+            var result = await _service.UpdateAsync(id, model);
+            if (result == 0)
+            {
+                return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
+            }
+            return Ok(new BaseResponseModel<int>(StatusCodes.Status200OK, data: result));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
+        }
+    }
 }

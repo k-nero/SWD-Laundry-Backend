@@ -8,6 +8,6 @@ public class TransactionMapperProfile : Profile
 {
     public TransactionMapperProfile()
     {
-        CreateMap<TransactionModel, Transaction>().ReverseMap();
+        CreateMap<TransactionModel, Transaction>().ForMember(x => x.Id, opt => opt.Ignore()).ReverseMap();
     }
 }

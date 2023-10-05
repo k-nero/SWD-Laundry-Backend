@@ -9,10 +9,10 @@ public class ObjHelper
         JObject? jObject = obj as JObject;
         if (jObject != null)
         {
-            return jObject.ToString(Formatting.None);
+            return jObject.ToString(Formatting.Indented);
         }
 
-        return JsonConvert.SerializeObject(obj, Formatting.None);
+        return JsonConvert.SerializeObject(obj, Formatting.Indented);
     }
 
     public static T? Clone<T>(T obj)

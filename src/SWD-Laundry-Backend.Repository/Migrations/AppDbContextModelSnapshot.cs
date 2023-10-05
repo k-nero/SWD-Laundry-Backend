@@ -183,7 +183,7 @@ namespace SWD_Laundry_Backend.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Buildings", (string)null);
+                    b.ToTable("Buildings");
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.Customer", b =>
@@ -215,7 +215,7 @@ namespace SWD_Laundry_Backend.Repository.Migrations
 
                     b.HasIndex("BuildingID");
 
-                    b.ToTable("Customers", (string)null);
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels.ApplicationUser", b =>
@@ -332,7 +332,7 @@ namespace SWD_Laundry_Backend.Repository.Migrations
 
                     b.HasIndex("ApplicationUserID");
 
-                    b.ToTable("LaundryStores", (string)null);
+                    b.ToTable("LaundryStores");
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.Order", b =>
@@ -393,7 +393,7 @@ namespace SWD_Laundry_Backend.Repository.Migrations
 
                     b.HasIndex("StaffID");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.OrderHistory", b =>
@@ -435,7 +435,7 @@ namespace SWD_Laundry_Backend.Repository.Migrations
 
                     b.HasIndex("OrderID");
 
-                    b.ToTable("OrderHistories", (string)null);
+                    b.ToTable("OrderHistories");
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.Payment", b =>
@@ -461,16 +461,11 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<string>("TransactionId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
 
-                    b.HasIndex("TransactionId");
-
-                    b.ToTable("Payments", (string)null);
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.Staff_Trip", b =>
@@ -513,101 +508,10 @@ namespace SWD_Laundry_Backend.Repository.Migrations
 
                     b.HasIndex("TimeScheduleID");
 
-                    b.ToTable("Staff_Trips", (string)null);
+                    b.ToTable("Staff_Trips");
                 });
 
-            modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.Transaction", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset?>("CreatedTime")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastUpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset?>("LastUpdatedTime")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("PaymentMethod")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TransactionType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("WalletID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("WalletID");
-
-                    b.ToTable("Transaction", (string)null);
-                });
-
-            modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.Wallet", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<double>("Balance")
-                        .HasColumnType("float");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset?>("CreatedTime")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("LastUpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset?>("LastUpdatedTime")
-                        .HasColumnType("datetimeoffset");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Wallets", (string)null);
-                });
-
-            modelBuilder.Entity("Staff", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ApplicationUserID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset?>("CreatedTime")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("LastUpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset?>("LastUpdatedTime")
-                        .HasColumnType("datetimeoffset");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserID");
-
-                    b.ToTable("Staffs", (string)null);
-                });
-
-            modelBuilder.Entity("TimeSchedule", b =>
+            modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.TimeSchedule", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -638,7 +542,103 @@ namespace SWD_Laundry_Backend.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TimeSchedules", (string)null);
+                    b.ToTable("TimeSchedules");
+                });
+
+            modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.Transaction", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("CreatedTime")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("LastUpdatedTime")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("PaymentID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PaymentMethod")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TransactionType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("WalletID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PaymentID");
+
+                    b.HasIndex("WalletID");
+
+                    b.ToTable("Transaction");
+                });
+
+            modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.Wallet", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<double>("Balance")
+                        .HasColumnType("float");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("CreatedTime")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("LastUpdatedTime")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Wallets");
+                });
+
+            modelBuilder.Entity("Staff", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApplicationUserID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("CreatedTime")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("LastUpdatedTime")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserID");
+
+                    b.ToTable("Staffs");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -699,7 +699,7 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                         .HasForeignKey("ApplicationUserID");
 
                     b.HasOne("SWD_Laundry_Backend.Contract.Repository.Entity.Building", "Building")
-                        .WithMany("Customers")
+                        .WithMany()
                         .HasForeignKey("BuildingID");
 
                     b.Navigation("ApplicationUser");
@@ -728,11 +728,11 @@ namespace SWD_Laundry_Backend.Repository.Migrations
             modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.Order", b =>
                 {
                     b.HasOne("SWD_Laundry_Backend.Contract.Repository.Entity.Customer", "Customer")
-                        .WithMany("Order")
+                        .WithMany()
                         .HasForeignKey("CustomerID");
 
                     b.HasOne("SWD_Laundry_Backend.Contract.Repository.Entity.LaundryStore", "LaundryStore")
-                        .WithMany("Orders")
+                        .WithMany()
                         .HasForeignKey("LaundryStoreID");
 
                     b.HasOne("Staff", "Staff")
@@ -749,7 +749,7 @@ namespace SWD_Laundry_Backend.Repository.Migrations
             modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.OrderHistory", b =>
                 {
                     b.HasOne("SWD_Laundry_Backend.Contract.Repository.Entity.Order", "Order")
-                        .WithMany("OrderHistories")
+                        .WithMany()
                         .HasForeignKey("OrderID");
 
                     b.Navigation("Order");
@@ -758,30 +758,24 @@ namespace SWD_Laundry_Backend.Repository.Migrations
             modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.Payment", b =>
                 {
                     b.HasOne("SWD_Laundry_Backend.Contract.Repository.Entity.Order", "Orders")
-                        .WithMany("Payments")
+                        .WithMany()
                         .HasForeignKey("OrderId");
 
-                    b.HasOne("SWD_Laundry_Backend.Contract.Repository.Entity.Transaction", "Transaction")
-                        .WithMany("Payments")
-                        .HasForeignKey("TransactionId");
-
                     b.Navigation("Orders");
-
-                    b.Navigation("Transaction");
                 });
 
             modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.Staff_Trip", b =>
                 {
                     b.HasOne("SWD_Laundry_Backend.Contract.Repository.Entity.Building", "Building")
-                        .WithMany("Staff_Trips")
+                        .WithMany()
                         .HasForeignKey("BuildingID");
 
                     b.HasOne("Staff", "Staff")
-                        .WithMany("Staff_Trips")
+                        .WithMany()
                         .HasForeignKey("StaffID");
 
-                    b.HasOne("TimeSchedule", "TimeSchedule")
-                        .WithMany("Staff_Trip")
+                    b.HasOne("SWD_Laundry_Backend.Contract.Repository.Entity.TimeSchedule", "TimeSchedule")
+                        .WithMany()
                         .HasForeignKey("TimeScheduleID");
 
                     b.Navigation("Building");
@@ -793,9 +787,15 @@ namespace SWD_Laundry_Backend.Repository.Migrations
 
             modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.Transaction", b =>
                 {
+                    b.HasOne("SWD_Laundry_Backend.Contract.Repository.Entity.Payment", "Payment")
+                        .WithMany()
+                        .HasForeignKey("PaymentID");
+
                     b.HasOne("SWD_Laundry_Backend.Contract.Repository.Entity.Wallet", "Wallet")
-                        .WithMany("Transactions")
+                        .WithMany()
                         .HasForeignKey("WalletID");
+
+                    b.Navigation("Payment");
 
                     b.Navigation("Wallet");
                 });
@@ -809,50 +809,9 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                     b.Navigation("ApplicationUser");
                 });
 
-            modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.Building", b =>
-                {
-                    b.Navigation("Customers");
-
-                    b.Navigation("Staff_Trips");
-                });
-
-            modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.Customer", b =>
-                {
-                    b.Navigation("Order");
-                });
-
-            modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.LaundryStore", b =>
-                {
-                    b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.Order", b =>
-                {
-                    b.Navigation("OrderHistories");
-
-                    b.Navigation("Payments");
-                });
-
-            modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.Transaction", b =>
-                {
-                    b.Navigation("Payments");
-                });
-
             modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.Wallet", b =>
                 {
                     b.Navigation("ApplicationUser");
-
-                    b.Navigation("Transactions");
-                });
-
-            modelBuilder.Entity("Staff", b =>
-                {
-                    b.Navigation("Staff_Trips");
-                });
-
-            modelBuilder.Entity("TimeSchedule", b =>
-                {
-                    b.Navigation("Staff_Trip");
                 });
 #pragma warning restore 612, 618
         }

@@ -8,8 +8,6 @@ public class WalletMapperProfile : Profile
 {
     public WalletMapperProfile()
     {
-        CreateMap<WalletModel, Wallet>().ReverseMap();
+        CreateMap<WalletModel, Wallet>().ForMember(x => x.Id, opt => opt.Ignore()).ReverseMap();
     }
-
 }
-

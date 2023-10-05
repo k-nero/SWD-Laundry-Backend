@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using Invedia.Core.ObjUtils;
 using Invedia.DI.Attributes;
 using Microsoft.EntityFrameworkCore;
-
+using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
@@ -10,7 +9,7 @@ using SWD_Laundry_Backend.Core.Models;
 namespace SWD_Laundry_Backend.Service.Services;
 
 [ScopedDependency(ServiceType = typeof(ITimeScheduleService))]
-internal class TimeScheduleService : Base_Service.Service, ITimeScheduleService
+public class TimeScheduleService : Base_Service.Service, ITimeScheduleService
 {
     private readonly ITimeScheduleRepository _repository;
     private readonly IMapper _mapper;
@@ -36,8 +35,8 @@ internal class TimeScheduleService : Base_Service.Service, ITimeScheduleService
 
     public async Task<ICollection<TimeSchedule>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        var timescheduleList = await _repository.GetAsync( cancellationToken: cancellationToken);
-        return await timescheduleList.ToListAsync(cancellationToken); 
+        var list = await _repository.GetAsync(cancellationToken: cancellationToken);
+        return await list.ToListAsync(cancellationToken);
     }
 
     public async Task<TimeSchedule?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
@@ -55,7 +54,7 @@ internal class TimeScheduleService : Base_Service.Service, ITimeScheduleService
             .SetProperty(x => x.EndTime, model.EndTime)
             .SetProperty(x => x.DayOfWeek, model.DayOfWeek)
             .SetProperty(x => x.TimeFrame, model.TimeFrame)
-            ,cancellationToken);
+            , cancellationToken);
 
         return numberOfRows;
     }

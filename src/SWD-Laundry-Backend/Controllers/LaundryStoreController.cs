@@ -19,7 +19,7 @@ public class LaundryStoreController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> ViewLaundryStoreList()
+    public async Task<IActionResult> GetAll()
     {
         try
         {
@@ -37,7 +37,7 @@ public class LaundryStoreController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> ViewLaundryStoreInformation(string id)
+    public async Task<IActionResult> GetById(string id)
     {
         try
         {
@@ -78,7 +78,7 @@ public class LaundryStoreController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> EditLaundryStoreInformation(string id, LaundryStoreModel model)
+    public async Task<IActionResult> Update(string id, LaundryStoreModel model)
     {
         try
         {

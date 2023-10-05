@@ -28,9 +28,10 @@ public class LaundryStoreService : Base_Service.Service, ILaundryStoreService
         return objectId;
     }
 
-    public Task<int> DeleteAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<int> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var numberOfRows = await _repository.DeleteAsync(x => x.Id == id, cancellationToken: cancellationToken);
+        return numberOfRows;
     }
 
     public async Task<ICollection<LaundryStore>> GetAllAsync(CancellationToken cancellationToken = default)

@@ -43,7 +43,7 @@ public class LaundryStoreService : Base_Service.Service, ILaundryStoreService
     public async Task<LaundryStore?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
         var query = await _repository.GetAsync(c => c.Id == id, cancellationToken, x => x.ApplicationUser);
-        var obj = await query.FirstOrDefaultAsync();
+        var obj = await query.FirstOrDefaultAsync(cancellationToken: cancellationToken);
         return obj;
     }
 

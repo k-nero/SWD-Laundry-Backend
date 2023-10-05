@@ -1,15 +1,12 @@
 ﻿namespace SWD_Laundry_Backend.Core.ValueObject;
 public record EnumObject
-{
-    private string _key;
-    private int _value;
-    private string _v;
+{ 
 
     public EnumObject(string key, int value, string v)
     {
-        _key = key;
-        _value = value;
-        _v = v;
+        name = key;
+        value = value;
+        displayName = v;
     }
 
     public string name { get; set; }

@@ -7,6 +7,7 @@ namespace SWD_Laundry_Backend.Contract.Service.Interface;
 public interface IWalletService :
     ICreateAble<WalletModel, string>,
     IGetAble<Wallet, string>,
+    IDeleteAble<string>,
     IUpdateAble<WalletModel, string>
 {
 }

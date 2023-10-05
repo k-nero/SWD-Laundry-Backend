@@ -1,8 +1,8 @@
 ﻿namespace SWD_Laundry_Backend.Core.Enum;
 public enum AllowedTransactionType
 {
-    Deposit = 1,
-    Withdraw = 2,
-    Debt = 3,
-    Paid = 4
+    Deposit = 0,
+    Withdraw = 1,
+    Debt = 2,
+    Paid = 3
 }

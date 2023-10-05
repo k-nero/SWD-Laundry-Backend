@@ -1,8 +1,11 @@
-﻿namespace SWD_Laundry_Backend.Core.Models;
+﻿using SWD_Laundry_Backend.Core.Utils;
+
+namespace SWD_Laundry_Backend.Core.Models;
 public class BaseResponseModel<T>
 {
     public T? Data { get; set; }
     public object? AdditionalData { get; set; }
+    public object EnumData { get; set; } = CoreHelper.GetAllEnums();
     public string? Message { get; set; }
     public int StatusCode { get; set; }
 

@@ -8,8 +8,8 @@ using TimeZoneConverter;
 namespace SWD_Laundry_Backend.Core.Utils;
 public static class CoreHelper
 {
-    private static IHttpContextAccessor? _contextAccessor;
-    public static HttpContext CurrentHttpContext => Current;
+    private static readonly IHttpContextAccessor? _contextAccessor;
+    public static HttpContext? CurrentHttpContext => Current;
 
     public static TimeZoneInfo SystemTimeZoneInfo => GetTimeZoneInfo(Formattings.TimeZone);
 
@@ -45,6 +45,6 @@ public static class CoreHelper
             .Where(t => t.IsEnum)
             .ToDictionary(t => t.Name, t =>
                 System.Enum.GetNames(t)
-                    .Zip(System.Enum.GetValues(t).Cast<int>(), (Key, Value) => new EnumObject(Key, value: Value, ToSentenceCase(Key))).ToArray());
+                    .Zip(System.Enum.GetValues(t).Cast<int>(), (Key, Value) => new EnumObject(Key, Value, ToSentenceCase(Key))).ToArray());
     }
 }

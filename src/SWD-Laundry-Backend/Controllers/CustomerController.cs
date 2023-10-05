@@ -7,11 +7,11 @@ using SWD_Laundry_Backend.Service.Services;
 namespace SWD_Laundry_Backend.Controllers;
 
 [ApiController]
-public class TimeScheduleController : ApiControllerBase
+public class CustomerController : ApiControllerBase
 {
-    private readonly ITimeScheduleService _service;
+    private readonly ICustomerService _service;
 
-    public TimeScheduleController(ITimeScheduleService service)
+    public CustomerController(ICustomerService service)
     {
         _service = service;
     }
@@ -25,7 +25,7 @@ public class TimeScheduleController : ApiControllerBase
         try
         {
             var result = await _service.GetAllAsync();
-            return Ok(new BaseResponseModel<ICollection<TimeSchedule>?>(StatusCodes.Status200OK, data: result));
+            return Ok(new BaseResponseModel<ICollection<Customer>?>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {
@@ -47,7 +47,7 @@ public class TimeScheduleController : ApiControllerBase
             {
                 return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
             }
-            return Ok(new BaseResponseModel<TimeSchedule?>(StatusCodes.Status200OK, data: result));
+            return Ok(new BaseResponseModel<Customer?>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {
@@ -59,18 +59,16 @@ public class TimeScheduleController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Create(TimeScheduleModel model)
+    public async Task<IActionResult> Create(CustomerModel model)
     {
         try
         {
             var result = await _service.CreateAsync(model);
-            return Ok(new BaseResponseModel<string>
-                (StatusCodes.Status201Created, data: result));
+            return Ok(new BaseResponseModel<string>(StatusCodes.Status201Created, data: result));
         }
         catch (Exception e)
         {
-            return BadRequest(new BaseResponseModel<string>
-                (StatusCodes.Status500InternalServerError, e.Message));
+            return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
         }
     }
 
@@ -79,7 +77,7 @@ public class TimeScheduleController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Update(string id, TimeScheduleModel model)
+    public async Task<IActionResult> Update(string id, CustomerModel model)
     {
         try
         {

@@ -2,11 +2,11 @@
 public record EnumObject
 { 
 
-    public EnumObject(string key, int value, string v)
+    public EnumObject(string _key, int _value, string _displayName)
     {
-        name = key;
-        value = value;
-        displayName = v;
+        name = _key;
+        value = _value;
+        displayName = _displayName;
     }
 
     public string name { get; set; }

@@ -11,5 +11,4 @@ public class Staff : BaseEntity
 
     public ApplicationUser ApplicationUser { get; set; }
 
-    //public List<Staff_Trip> Staff_Trips { get; set; }
 }

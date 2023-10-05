@@ -4,10 +4,10 @@ using SWD_Laundry_Backend.Core.Models;
 
 namespace SWD_Laundry_Backend.Contract.Service.Interface;
 
-public interface ILaundryStoreService :
-    ICreateAble<LaundryStoreModel, string>,
-    IGetAble<LaundryStore, string>,
-    IUpdateAble<LaundryStoreModel, string>,
+public interface IPaymentService :
+    ICreateAble<PaymentModel, string>,
+    IGetAble<Payment, string>,
+    IUpdateAble<PaymentModel, string>,
     IDeleteAble<string>
 {
 }

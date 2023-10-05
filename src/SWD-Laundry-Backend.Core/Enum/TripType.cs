@@ -1,7 +1,11 @@
-﻿namespace SWD_Laundry_Backend.Core.Enum;
+﻿using Newtonsoft.Json;
+using SWD_Laundry_Backend.Core.Utils;
 
+namespace SWD_Laundry_Backend.Core.Enum;
+
+//[JsonConverter(typeof(EnumConverter<TripType>))]
 public enum TripType
 {
-    Collect_From_Customer = 0,
-    Delivery_To_Customer = 1,
+    CollectFromCustomer = 0,
+    DeliveryToCustomer = 1,
 }

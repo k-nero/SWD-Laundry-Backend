@@ -56,7 +56,7 @@ public class StaffTripService : Base_Service.Service, IStaffTripService
             cancellationToken: cancellationToken,
             includes: items);
 
-        var obj = await query.FirstOrDefaultAsync();
+        var obj = await query.FirstOrDefaultAsync(cancellationToken: cancellationToken);
         return obj;
     }
 

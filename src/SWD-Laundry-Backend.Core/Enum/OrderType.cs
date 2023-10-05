@@ -1,6 +1,6 @@
 ﻿namespace SWD_Laundry_Backend.Core.Enum;
 public enum OrderType
 {
-    OneWay = 1,
-    TwoWay = 2
+    OneWay = 0,
+    TwoWay = 1
 }

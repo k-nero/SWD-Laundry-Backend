@@ -36,13 +36,13 @@ public class LaundryStoreService : Base_Service.Service, ILaundryStoreService
 
     public async Task<ICollection<LaundryStore>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        var list = await _repository.GetAsync(cancellationToken: cancellationToken);
+        var list = await _repository.GetAsync(cancellationToken: cancellationToken, includes: x => x.ApplicationUser);
         return await list.ToListAsync(cancellationToken);
     }
 
     public async Task<LaundryStore?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
-        var query = await _repository.GetAsync(c => c.Id == id, cancellationToken);
+        var query = await _repository.GetAsync(c => c.Id == id, cancellationToken, x => x.ApplicationUser);
         var obj = await query.FirstOrDefaultAsync();
         return obj;
     }

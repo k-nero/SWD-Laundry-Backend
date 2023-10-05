@@ -27,6 +27,12 @@ public class WalletService : Base_Service.Service, IWalletService
         return objectId;
     }
 
+    public async Task<int> DeleteAsync(string id, CancellationToken cancellationToken = default)
+    {
+        int i = await _repository.DeleteAsync(x => x.Id == id, cancellationToken: cancellationToken);
+        return i;
+    }
+
     public async Task<ICollection<Wallet>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         var list = await _repository.GetAsync(cancellationToken: cancellationToken);

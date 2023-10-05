@@ -94,4 +94,26 @@ public class StaffTripController : ApiControllerBase
             return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
         }
     }
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesDefaultResponseType]
+    public async Task<IActionResult> Delete(string id)
+    {
+        try
+        {
+            var result = await _service.DeleteAsync(id);
+            if (result == 0)
+            {
+                return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
+            }
+            return Ok(new BaseResponseModel<int>(StatusCodes.Status200OK, data: result));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
+        }
+    }
 }

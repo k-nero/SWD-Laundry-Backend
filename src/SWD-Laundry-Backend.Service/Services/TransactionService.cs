@@ -27,6 +27,12 @@ public class TransactionService : Base_Service.Service, ITransactionService
         return objectId;
     }
 
+    public async Task<int> DeleteAsync(string id, CancellationToken cancellationToken = default)
+    {
+        var numberOfRows = await _repository.DeleteAsync(x => x.Id == id, cancellationToken: cancellationToken);
+        return numberOfRows;
+    }
+
     public async Task<ICollection<Transaction>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         var list = await _repository.GetAsync(cancellationToken: cancellationToken);

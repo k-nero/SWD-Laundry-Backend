@@ -1,17 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
+using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
-using SWD_Laundry_Backend.Service.Services;
+using SWD_Laundry_Backend.Service.Base_Service;
 
 namespace SWD_Laundry_Backend.Controllers;
 
 [ApiController]
-public class TimeScheduleController : ApiControllerBase
+public class PaymentController : ApiControllerBase
 {
-    private readonly ITimeScheduleService _service;
+    private readonly IPaymentService _service;
 
-    public TimeScheduleController(ITimeScheduleService service)
+    public PaymentController(IPaymentService service)
     {
         _service = service;
     }
@@ -25,7 +26,7 @@ public class TimeScheduleController : ApiControllerBase
         try
         {
             var result = await _service.GetAllAsync();
-            return Ok(new BaseResponseModel<ICollection<TimeSchedule>?>(StatusCodes.Status200OK, data: result));
+            return Ok(new BaseResponseModel<ICollection<Payment>?>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {
@@ -47,7 +48,7 @@ public class TimeScheduleController : ApiControllerBase
             {
                 return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
             }
-            return Ok(new BaseResponseModel<TimeSchedule?>(StatusCodes.Status200OK, data: result));
+            return Ok(new BaseResponseModel<Payment?>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {
@@ -59,7 +60,7 @@ public class TimeScheduleController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Create(TimeScheduleModel model)
+    public async Task<IActionResult> Create(PaymentModel model)
     {
         try
         {
@@ -79,7 +80,7 @@ public class TimeScheduleController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Update(string id, TimeScheduleModel model)
+    public async Task<IActionResult> Update(string id, PaymentModel model)
     {
         try
         {

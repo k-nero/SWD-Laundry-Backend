@@ -48,11 +48,12 @@ public class OrderService : IOrderService
         return await list.ToListAsync(cancellationToken);
     }
 
-    public async Task<ICollection<Order>> GetAllByStaffAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<ICollection<Order>> GetAllByStaffTripAsync(DateTime startTime, DateTime endTime, CancellationToken cancellationToken = default)
     {
         var list = await _repository
-            .GetAsync(c => c.StaffID == id,
-            cancellationToken: cancellationToken);
+       .GetAsync(c => c.OrderDate >= startTime &&
+       c.OrderDate <= endTime,
+       cancellationToken: cancellationToken);
 
         return await list.ToListAsync(cancellationToken);
     }
@@ -89,6 +90,16 @@ public class OrderService : IOrderService
             .SetProperty(x => x.StaffID, model.StaffId)
             .SetProperty(x => x.LaundryStoreID, model.LaundryStoreId)
             , cancellationToken);
+
+        return numberOfRows;
+    }
+
+    public async Task<int> UpdateByStaffTripAsync(string staffId, CancellationToken cancellationToken = default)
+    {
+        var numberOfRows = await _repository.UpdateAsync(x => x.StaffID == staffId,
+            x => x
+            .SetProperty(x => x.StaffID, staffId),
+            cancellationToken);
 
         return numberOfRows;
     }

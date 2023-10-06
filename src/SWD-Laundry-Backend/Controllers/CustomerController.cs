@@ -10,10 +10,12 @@ namespace SWD_Laundry_Backend.Controllers;
 public class CustomerController : ApiControllerBase
 {
     private readonly ICustomerService _service;
+    private readonly IOrderHistoryService _service2;
 
-    public CustomerController(ICustomerService service)
+    public CustomerController(ICustomerService service, IOrderHistoryService service2)
     {
         _service = service;
+        _service2 = service2;
     }
 
     [HttpGet]
@@ -48,6 +50,23 @@ public class CustomerController : ApiControllerBase
                 return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
             }
             return Ok(new BaseResponseModel<Customer?>(StatusCodes.Status200OK, data: result));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
+        }
+    }
+
+    [HttpGet("orders/{customerId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesDefaultResponseType]
+    public async Task<IActionResult> GetOrders(string customerId)
+    {
+        try
+        {
+            var result = await _service2.GetAllByCustomerAsync(customerId);
+            return Ok(new BaseResponseModel<ICollection<OrderHistory>?>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {

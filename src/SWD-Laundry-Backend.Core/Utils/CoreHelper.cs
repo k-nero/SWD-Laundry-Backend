@@ -47,4 +47,17 @@ public static class CoreHelper
                 System.Enum.GetNames(t)
                     .Zip(System.Enum.GetValues(t).Cast<int>(), (Key, Value) => new EnumObject(Key, Value, ToSentenceCase(Key))).ToArray());
     }
+
+    public static string CreateRandomPassword(int PasswordLength)
+    {
+        string _allowedChars = "0123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ!@#$%^&*()-_=+<,>.";
+        Random randNum = new Random();
+        char[] chars = new char[PasswordLength];
+        int allowedCharCount = _allowedChars.Length;
+        for (int i = 0; i < PasswordLength; i++)
+        {
+            chars[i] = _allowedChars[(int)((_allowedChars.Length) * randNum.NextDouble())];
+        }
+        return new string(chars);
+    }
 }

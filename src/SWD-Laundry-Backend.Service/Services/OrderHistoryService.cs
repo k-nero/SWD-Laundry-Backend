@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
+using SWD_Laundry_Backend.Core.Enum;
 using SWD_Laundry_Backend.Core.Models;
 
 namespace SWD_Laundry_Backend.Service.Services;
@@ -56,6 +57,17 @@ public class OrderHistoryService : IOrderHistoryService
     .SetProperty(x => x.DeliveryStatus, model.DeliveryStatus)
     .SetProperty(x => x.LaundryStatus, model.LaundryStatus)
 
+    , cancellationToken);
+
+        return numberOfRows;
+    }
+
+    public async Task<int> UpdateByLaundryStoreAsync(string orderHistoryId, LaundryStatus laundryStatus, CancellationToken cancellationToken = default)
+    {
+        var numberOfRows = await _repository
+            .UpdateAsync(x => x.Id == orderHistoryId,
+    x => x
+    .SetProperty(x => x.LaundryStatus, laundryStatus)
     , cancellationToken);
 
         return numberOfRows;

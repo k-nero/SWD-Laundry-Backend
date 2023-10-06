@@ -7,9 +7,9 @@ namespace SWD_Laundry_Backend.Contract.Repository.Entity;
 public class Transaction : BaseEntity
 {
     public PaymentType PaymentType { get; set; }
+    public AllowedTransactionType TransactionType { get; set; }
     public double Amount { get; set; }
     public string? Description { get; set; }
-    public AllowedTransactionType TransactionType { get; set; }
 
     ////===========================
     [ForeignKey(nameof(Wallet))]

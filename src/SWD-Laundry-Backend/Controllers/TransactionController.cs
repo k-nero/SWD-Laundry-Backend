@@ -1,23 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Service.Interface;
-using SWD_Laundry_Backend.Core.Enum;
 using SWD_Laundry_Backend.Core.Models;
+using SWD_Laundry_Backend.Service.Services;
 
 namespace SWD_Laundry_Backend.Controllers;
 
 [ApiController]
-public class LaundryStoreController : ApiControllerBase
+public class TransactionController : ApiControllerBase
 {
-    private readonly ILaundryStoreService _service;
-    private readonly IOrderService _service2;
-    private readonly IOrderHistoryService _service3;
+    private readonly ITransactionService _service;
 
-    public LaundryStoreController(ILaundryStoreService service, IOrderService service2, IOrderHistoryService service3)
+    public TransactionController(ITransactionService service)
     {
         _service = service;
-        _service2 = service2;
-        _service3 = service3;
     }
 
     [HttpGet]
@@ -29,7 +25,7 @@ public class LaundryStoreController : ApiControllerBase
         try
         {
             var result = await _service.GetAllAsync();
-            return Ok(new BaseResponseModel<ICollection<LaundryStore>?>(StatusCodes.Status200OK, data: result));
+            return Ok(new BaseResponseModel<ICollection<Transaction>?>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {
@@ -51,7 +47,7 @@ public class LaundryStoreController : ApiControllerBase
             {
                 return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
             }
-            return Ok(new BaseResponseModel<LaundryStore?>(StatusCodes.Status200OK, data: result));
+            return Ok(new BaseResponseModel<Transaction?>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {
@@ -63,18 +59,16 @@ public class LaundryStoreController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Create(LaundryStoreModel model)
+    public async Task<IActionResult> Create(TransactionModel model)
     {
         try
         {
             var result = await _service.CreateAsync(model);
-            return Ok(new BaseResponseModel<string>
-                (StatusCodes.Status201Created, data: result));
+            return Ok(new BaseResponseModel<string>(StatusCodes.Status201Created, data: result));
         }
         catch (Exception e)
         {
-            return BadRequest(new BaseResponseModel<string>
-                (StatusCodes.Status500InternalServerError, e.Message));
+            return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
         }
     }
 
@@ -83,7 +77,7 @@ public class LaundryStoreController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Update(string id, LaundryStoreModel model)
+    public async Task<IActionResult> Update(string id, TransactionModel model)
     {
         try
         {
@@ -114,40 +108,6 @@ public class LaundryStoreController : ApiControllerBase
             {
                 return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
             }
-            return Ok(new BaseResponseModel<int>(StatusCodes.Status200OK, data: result));
-        }
-        catch (Exception e)
-        {
-            return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
-        }
-    }
-
-    [HttpGet("orders/{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesDefaultResponseType]
-    public async Task<IActionResult> ViewOrders(string id)
-    {
-        try
-        {
-            var result = await _service2.GetAllByLaundryStoreAsync(id);
-            return Ok(new BaseResponseModel<ICollection<Order>?>(StatusCodes.Status200OK, data: result));
-        }
-        catch (Exception e)
-        {
-            return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
-        }
-    }
-
-    [HttpPut("order/{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesDefaultResponseType]
-    public async Task<IActionResult> UpdateOrderHistory(string id, LaundryStatus laundryStatus)
-    {
-        try
-        {
-            var result = await _service3.UpdateByLaundryStoreAsync(id, laundryStatus);
             return Ok(new BaseResponseModel<int>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)

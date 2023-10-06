@@ -10,4 +10,9 @@ public interface IOrderService :
     IUpdateAble<OrderModel, string>,
     IDeleteAble<string>
 {
+    Task<ICollection<Order>> GetAllByLaundryStoreAsync(string id, CancellationToken cancellationToken = default);
+
+    Task<ICollection<Order>> GetAllByStaffAsync(string id, CancellationToken cancellationToken = default);
+
+    Task<ICollection<Order>> GetAllByCustomerAsync(string id, CancellationToken cancellationToken = default);
 }

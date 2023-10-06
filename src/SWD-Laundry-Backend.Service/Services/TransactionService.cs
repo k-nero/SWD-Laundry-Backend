@@ -52,7 +52,7 @@ public class TransactionService : Base_Service.Service, ITransactionService
             x => x
             .SetProperty(x => x.Amount, model.Amount)
             .SetProperty(x => x.TransactionType, model.TransactionType)
-            .SetProperty(x => x.PaymentMethod, model.PaymentMethod)
+            .SetProperty(x => x.PaymentType, model.PaymentType)
             .SetProperty(x => x.Description, model.Description)
             , cancellationToken);
 

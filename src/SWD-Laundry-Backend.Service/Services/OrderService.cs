@@ -39,6 +39,33 @@ public class OrderService : IOrderService
         return await list.ToListAsync(cancellationToken);
     }
 
+    public async Task<ICollection<Order>> GetAllByLaundryStoreAsync(string id, CancellationToken cancellationToken = default)
+    {
+        var list = await _repository
+            .GetAsync(c => c.LaundryStoreID == id,
+            cancellationToken: cancellationToken);
+
+        return await list.ToListAsync(cancellationToken);
+    }
+
+    public async Task<ICollection<Order>> GetAllByStaffAsync(string id, CancellationToken cancellationToken = default)
+    {
+        var list = await _repository
+            .GetAsync(c => c.StaffID == id,
+            cancellationToken: cancellationToken);
+
+        return await list.ToListAsync(cancellationToken);
+    }
+
+    public async Task<ICollection<Order>> GetAllByCustomerAsync(string id, CancellationToken cancellationToken = default)
+    {
+        var list = await _repository
+            .GetAsync(c => c.CustomerID == id,
+            cancellationToken: cancellationToken);
+
+        return await list.ToListAsync(cancellationToken);
+    }
+
     public async Task<Order?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
         var query = await _repository.GetAsync(c => c.Id == id, cancellationToken);

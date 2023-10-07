@@ -34,13 +34,20 @@ public class StaffService : IStaffService
 
     public async Task<ICollection<Staff>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        var list = await _repository.GetAsync(cancellationToken: cancellationToken);
+        var list = await _repository
+            .GetAsync(null,
+            cancellationToken: cancellationToken,
+            c => c.ApplicationUser);
         return await list.ToListAsync(cancellationToken);
     }
 
     public async Task<Staff?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
-        var query = await _repository.GetAsync(c => c.Id == id, cancellationToken);
+        var query = await _repository
+            .GetAsync(c => c.Id == id,
+            cancellationToken,
+            c => c.ApplicationUser);
+
         var obj = await query.FirstOrDefaultAsync(cancellationToken: cancellationToken);
         return obj;
     }

@@ -14,7 +14,7 @@ public class ApplicationUser : IdentityUser
     #region Relationship
 
     [ForeignKey("Wallet")]
-    public string WalletID { get; set; }
+    public string? WalletID { get; set; }
 
 
     public Wallet Wallet { get; set; }

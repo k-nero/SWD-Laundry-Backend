@@ -82,11 +82,11 @@ public class Program
 
         builder.Services.AddCors();
 
-        builder.Services.AddSingleton(FirebaseApp.Create(new AppOptions()
-        {
-            Credential = await GoogleCredential.FromFileAsync(builder.Configuration["Firebase:Credential"], cancellationToken: default),
-            ServiceAccountId = builder.Configuration["Firebase:ServiceAccountId"],
-        }));
+        //builder.Services.AddSingleton(FirebaseApp.Create(new AppOptions()
+        //{
+        //    Credential = await GoogleCredential.FromFileAsync(builder.Configuration["Firebase:Credential"], cancellationToken: default),
+        //    ServiceAccountId = builder.Configuration["Firebase:ServiceAccountId"],
+        //}));
         
         builder.Services.AddDbContext<AppDbContext>(options =>
         {

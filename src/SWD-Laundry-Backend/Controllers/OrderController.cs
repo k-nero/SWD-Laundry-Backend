@@ -6,6 +6,7 @@ using SWD_Laundry_Backend.Core.Models;
 namespace SWD_Laundry_Backend.Controllers;
 
 [ApiController]
+[Route("api/v1/[controller]")]
 public class OrderController : ApiControllerBase
 {
     private readonly IOrderService _service;

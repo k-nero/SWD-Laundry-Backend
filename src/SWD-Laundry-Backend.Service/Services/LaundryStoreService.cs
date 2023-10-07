@@ -36,7 +36,8 @@ public class LaundryStoreService : Base_Service.Service, ILaundryStoreService
 
     public async Task<ICollection<LaundryStore>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        var list = await _repository.GetAsync(cancellationToken: cancellationToken, includes: x => x.ApplicationUser);
+        var list = await _repository.GetAsync(null,cancellationToken: cancellationToken, c => c.ApplicationUser);
+       var test = await list.ToListAsync(cancellationToken: cancellationToken);
         return await list.ToListAsync(cancellationToken);
     }
 

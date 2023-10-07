@@ -8,6 +8,7 @@ namespace SWD_Laundry_Backend.Controllers;
 
 [Authorize(Roles = "Admin, Staff")]
 [ApiController]
+[Route("api/v1/[controller]")]
 public class BuildingController : ApiControllerBase
 {
     private readonly IBuidingService _buildingService;

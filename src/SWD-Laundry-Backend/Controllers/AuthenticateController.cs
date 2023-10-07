@@ -12,6 +12,7 @@ using SWD_Laundry_Backend.Core.Utils;
 
 namespace SWD_Laundry_Backend.Controllers;
 [ApiController]
+[Route("api/v1/[controller]")]
 public class AuthenticateController : ApiControllerBase
 {
     private readonly FirebaseApp _firebaseApp;
@@ -25,7 +26,7 @@ public class AuthenticateController : ApiControllerBase
     }
 
     [AllowAnonymous]
-    [HttpPost("login")]
+    [HttpPost()]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]

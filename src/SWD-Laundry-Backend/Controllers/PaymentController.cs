@@ -8,6 +8,7 @@ using SWD_Laundry_Backend.Service.Base_Service;
 namespace SWD_Laundry_Backend.Controllers;
 
 [ApiController]
+[Route("api/v1/[controller]")]
 public class PaymentController : ApiControllerBase
 {
     private readonly IPaymentService _service;

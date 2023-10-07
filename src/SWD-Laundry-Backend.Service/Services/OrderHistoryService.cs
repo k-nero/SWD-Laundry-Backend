@@ -40,6 +40,26 @@ public class OrderHistoryService : IOrderHistoryService
         return await list.ToListAsync(cancellationToken);
     }
 
+    public async Task<ICollection<OrderHistory>> GetAllByCustomerAsync(string customerId, CancellationToken cancellationToken = default)
+    {
+        var list = await _repository
+            .GetAsync(c => c.Order.CustomerID == customerId,
+            cancellationToken: cancellationToken,
+            c => c.Order);
+
+        return await list.ToListAsync(cancellationToken);
+    }
+
+    public async Task<ICollection<OrderHistory>> GetAllByLaundryStoreAsync(string laundryStoreId, CancellationToken cancellationToken = default)
+    {
+        var list = await _repository
+            .GetAsync(c => c.Order.LaundryStoreID == laundryStoreId,
+            cancellationToken: cancellationToken,
+            c => c.Order);
+
+        return await list.ToListAsync(cancellationToken);
+    }
+
     public async Task<OrderHistory?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
         var query = await _repository.GetAsync(c => c.Id == id, cancellationToken);

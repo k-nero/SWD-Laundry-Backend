@@ -12,7 +12,9 @@ public interface IOrderService :
 {
     Task<ICollection<Order>> GetAllByLaundryStoreAsync(string id, CancellationToken cancellationToken = default);
 
-    Task<ICollection<Order>> GetAllByStaffAsync(string id, CancellationToken cancellationToken = default);
+    Task<ICollection<Order>> GetAllByStaffTripAsync(DateTime startTime, DateTime endTime, CancellationToken cancellationToken = default);
 
     Task<ICollection<Order>> GetAllByCustomerAsync(string id, CancellationToken cancellationToken = default);
+
+    Task<int> UpdateByStaffTripAsync(string staffId, CancellationToken cancellationToken = default);
 }

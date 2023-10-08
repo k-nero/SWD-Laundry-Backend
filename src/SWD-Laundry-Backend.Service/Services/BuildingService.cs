@@ -1,10 +1,14 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
 using Invedia.DI.Attributes;
 using Microsoft.EntityFrameworkCore;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
+using SWD_Laundry_Backend.Core.Models.Common;
+using SWD_Laundry_Backend.Core.Utils;
+
 
 namespace SWD_Laundry_Backend.Service.Services;
 
@@ -43,6 +47,14 @@ public class BuildingService : Base_Service.Service, IBuidingService
     {
        var building = await _buildingRepository.GetSingleAsync(x => x.Id == id , cancellationToken: cancellationToken);
         return building;
+    }
+
+    public async Task<PaginatedList<Building>> GetPaginatedAsync(short pg, short size, Expression<Func<Building, object>>? orderBy = null, CancellationToken cancellationToken = default)
+    {
+        var buildings = await _buildingRepository.GetAsync(cancellationToken: cancellationToken);
+        buildings = orderBy != null ? buildings.OrderBy(orderBy) : buildings.OrderBy(x => x.Name);
+        var result = await buildings.PaginatedListAsync(pg, size);
+        return result;
     }
 
     public async Task<int> UpdateAsync(string id, BuildingModel model, CancellationToken cancellationToken = default)

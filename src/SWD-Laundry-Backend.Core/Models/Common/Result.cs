@@ -1,4 +1,4 @@
-﻿namespace SWD_Laundry_Backend.Core.Models;
+﻿namespace SWD_Laundry_Backend.Core.Models.Common;
 public class Result
 {
     internal Result(bool succeeded, IEnumerable<string> errors)

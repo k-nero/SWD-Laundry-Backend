@@ -6,13 +6,14 @@ using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
+using SWD_Laundry_Backend.Core.Models.Common;
 
 namespace SWD_Laundry_Backend.Service.Services;
 
 [ScopedDependency(ServiceType = typeof(IStaffTripService))]
 public class StaffTripService : Base_Service.Service, IStaffTripService
 {
-    private readonly Expression<Func<Staff_Trip, object>>[]? items =
+    private readonly Expression<Func<Staff_Trip, object>>[]? _items =
         {
             p => p.Staff,
             p => p.Building,
@@ -45,19 +46,20 @@ public class StaffTripService : Base_Service.Service, IStaffTripService
     {
         var list = await _repository.GetAsync(
             cancellationToken: cancellationToken,
-            includes: items);
+            includes: _items);
         return await list.ToListAsync(cancellationToken);
     }
 
     public async Task<Staff_Trip?> GetByIdAsync(string staffId, CancellationToken cancellationToken = default)
     {
-        var query = await _repository.GetAsync(
-            c => c.StaffID == staffId,
-            cancellationToken: cancellationToken,
-            includes: items);
+        var entity = await _repository.GetSingleAsync(c => c.Id == id, cancellationToken, _items);
+        return entity;
+    }
 
-        var obj = await query.FirstOrDefaultAsync(cancellationToken: cancellationToken);
-        return obj;
+
+    public Task<PaginatedList<Staff_Trip>> GetPaginatedAsync(short pg, short size, Expression<Func<Staff_Trip, object>>? orderBy = null, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<int> UpdateAsync(string id, StaffTripModel model, CancellationToken cancellationToken = default)

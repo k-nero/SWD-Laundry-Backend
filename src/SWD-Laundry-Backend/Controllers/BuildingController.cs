@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
+using SWD_Laundry_Backend.Core.Models.Common;
 
 namespace SWD_Laundry_Backend.Controllers;
 
@@ -23,12 +24,20 @@ public class BuildingController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> Get(short pg , short size, string? orderName)
     {
         try
         {
-            var result = await _buildingService.GetAllAsync();
-            return Ok(new BaseResponseModel<ICollection<Building>?>(StatusCodes.Status200OK, data: result));
+            if(pg <= 0 || size <= 0)
+            {
+                var result = await _buildingService.GetAllAsync();
+                return Ok(new BaseResponseModel<ICollection<Building>?>(StatusCodes.Status200OK, data: result));
+            }
+            else
+            {
+                var pgresult = await _buildingService.GetPaginatedAsync(pg, size);
+                return Ok(new BaseResponseModel<PaginatedList<Building>?>(StatusCodes.Status200OK, data: pgresult));
+            }
         }
         catch (Exception e)
         {

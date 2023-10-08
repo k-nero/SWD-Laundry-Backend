@@ -1,5 +1,5 @@
 ﻿using SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels;
-using SWD_Laundry_Backend.Core.Models;
+using SWD_Laundry_Backend.Core.Models.Common;
 
 namespace SWD_Laundry_Backend.Contract.Service.Base_Service_Interface;
 public interface IBaseIdentityService

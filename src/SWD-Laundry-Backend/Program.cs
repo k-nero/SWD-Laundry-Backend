@@ -1,6 +1,10 @@
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using FirebaseAdmin;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Google;
 using Google.Apis.Auth.OAuth2;
 using Invedia.DI;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -16,8 +20,10 @@ using Newtonsoft.Json;
 using Serilog;
 using SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels;
 using SWD_Laundry_Backend.Core.Config;
+using SWD_Laundry_Backend.Core.Validator;
 using SWD_Laundry_Backend.Extensions;
 using SWD_Laundry_Backend.Repository.Infrastructure;
+using SWD_Laundry_Backend.Service.Base_Service;
 
 
 namespace SWD_Laundry_Backend;
@@ -45,6 +51,20 @@ public class Program
                    .ReadFrom.Configuration(hostingContext.Configuration)
                               .Enrich.FromLogContext()
                                          .WriteTo.Console());
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAll", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            });
+        });
+        builder.Services.AddValidatorsFromAssemblyContaining<BuildingValidator>();
+        builder.Services.AddFluentValidationAutoValidation(options =>
+        {
+           
+        });
         builder.Services.AddControllers(options =>
         {
             options.Conventions.Add(new RouteTokenTransformerConvention(new SlugifyParameterTransformer()));
@@ -54,6 +74,8 @@ public class Program
         });
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddHealthChecks();
         builder.Services.AddSwaggerGen(options =>
         {
             options.SwaggerDoc("v1", new OpenApiInfo { Title = "SWD-Laundry-Backend", Version = "v1" });
@@ -80,8 +102,6 @@ public class Program
                 { jwtSecurityScheme, Array.Empty<string>() }
             });
         });
-
-        builder.Services.AddCors();
 
 
         builder.Services.AddSingleton(FirebaseApp.Create(new AppOptions()

@@ -1,10 +1,12 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
 using Invedia.DI.Attributes;
 using Microsoft.EntityFrameworkCore;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
+using SWD_Laundry_Backend.Core.Models.Common;
 
 namespace SWD_Laundry_Backend.Service.Services;
 
@@ -41,9 +43,14 @@ public class WalletService : Base_Service.Service, IWalletService
 
     public async Task<Wallet?> GetByIdAsync(string userId, CancellationToken cancellationToken = default)
     {
-        var query = await _repository.GetAsync(c => c.ApplicationUser.Id == userId, cancellationToken, c => c.ApplicationUser);
-        var obj = await query.FirstOrDefaultAsync(cancellationToken: cancellationToken);
-        return obj;
+        var entity = await _repository.GetSingleAsync(c => c.Id == id, cancellationToken);
+        return entity;
+    }
+
+    public Task<PaginatedList<Wallet>> GetPaginatedAsync(short pg, short size, Expression<Func<Wallet, object>>? orderBy = null, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+
     }
 
     public async Task<int> UpdateAsync(string id, WalletModel model, CancellationToken cancellationToken = default)

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
 using Invedia.DI.Attributes;
 using Microsoft.EntityFrameworkCore;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
@@ -48,10 +49,11 @@ public class BuildingService : Base_Service.Service, IBuidingService
         return building;
     }
 
-    public async Task<PaginatedList<Building>> GetPaginatedAsync(short pg, short size, CancellationToken cancellationToken = default)
+    public async Task<PaginatedList<Building>> GetPaginatedAsync(short pg, short size, Expression<Func<Building, object>>? orderBy = null, CancellationToken cancellationToken = default)
     {
         var buildings = await _buildingRepository.GetAsync(cancellationToken: cancellationToken);
-        var result =  await buildings.PaginatedListAsync(pg, size);
+        buildings = orderBy != null ? buildings.OrderBy(orderBy) : buildings.OrderBy(x => x.Name);
+        var result = await buildings.PaginatedListAsync(pg, size);
         return result;
     }
 

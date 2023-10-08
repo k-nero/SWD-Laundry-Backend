@@ -23,7 +23,7 @@ public class BuildingController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> GetPagination(short pg , short size)
+    public async Task<IActionResult> Get(short pg , short size, string? orderName)
     {
         try
         {

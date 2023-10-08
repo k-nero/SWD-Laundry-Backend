@@ -13,7 +13,7 @@ namespace SWD_Laundry_Backend.Service.Services;
 [ScopedDependency(ServiceType = typeof(IStaffTripService))]
 public class StaffTripService : Base_Service.Service, IStaffTripService
 {
-    private readonly Expression<Func<Staff_Trip, object>>[]? items =
+    private readonly Expression<Func<Staff_Trip, object>>[]? _items =
         {
             p => p.Staff,
             p => p.Building,
@@ -46,7 +46,7 @@ public class StaffTripService : Base_Service.Service, IStaffTripService
     {
         var list = await _repository.GetAsync(
             cancellationToken: cancellationToken,
-            includes: items);
+            includes: _items);
         return await list.ToListAsync(cancellationToken);
     }
 
@@ -55,13 +55,13 @@ public class StaffTripService : Base_Service.Service, IStaffTripService
         var query = await _repository.GetAsync(
             c => c.Id == id,
             cancellationToken: cancellationToken,
-            includes: items);
+            includes: _items);
 
         var obj = await query.FirstOrDefaultAsync(cancellationToken: cancellationToken);
         return obj;
     }
 
-    public Task<PaginatedList<Staff_Trip>> GetPaginatedAsync(short pg, short size, CancellationToken cancellationToken = default)
+    public Task<PaginatedList<Staff_Trip>> GetPaginatedAsync(short pg, short size, Expression<Func<Staff_Trip, object>>? orderBy = null, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

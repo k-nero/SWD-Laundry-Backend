@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
 using Invedia.DI.Attributes;
 using Microsoft.EntityFrameworkCore;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
@@ -47,7 +48,7 @@ public class WalletService : Base_Service.Service, IWalletService
         return obj;
     }
 
-    public Task<PaginatedList<Wallet>> GetPaginatedAsync(short pg, short size, CancellationToken cancellationToken = default)
+    public Task<PaginatedList<Wallet>> GetPaginatedAsync(short pg, short size, Expression<Func<Wallet, object>>? orderBy = null, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

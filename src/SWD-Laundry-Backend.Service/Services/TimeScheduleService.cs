@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
 using Invedia.DI.Attributes;
 using Microsoft.EntityFrameworkCore;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
@@ -47,7 +48,7 @@ public class TimeScheduleService : Base_Service.Service, ITimeScheduleService
         return obj;
     }
 
-    public Task<PaginatedList<TimeSchedule>> GetPaginatedAsync(short pg, short size, CancellationToken cancellationToken = default)
+    public Task<PaginatedList<TimeSchedule>> GetPaginatedAsync(short pg, short size, Expression<Func<TimeSchedule, object>>? orderBy = null, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

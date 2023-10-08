@@ -10,4 +10,5 @@ public interface IStaffTripService :
     IUpdateAble<StaffTripModel, string>, 
     IDeleteAble<string>
 {
+    Task<int> UpdateCollectAsync(string id, double tripCollect, CancellationToken cancellationToken = default);
 }

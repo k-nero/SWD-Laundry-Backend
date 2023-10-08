@@ -1,4 +1,5 @@
-﻿using SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels;
 
 namespace SWD_Laundry_Backend.Contract.Repository.Entity;
 #nullable disable

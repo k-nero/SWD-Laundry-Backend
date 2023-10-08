@@ -8,6 +8,7 @@ using SWD_Laundry_Backend.Service.Services;
 namespace SWD_Laundry_Backend.Controllers;
 
 [ApiController]
+[Route("api/v1/[controller]")]
 public class TimeScheduleController : ApiControllerBase
 {
     private readonly ITimeScheduleService _service;
@@ -21,12 +22,12 @@ public class TimeScheduleController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> Get(short pg, short size, string? orderName)
     {
         try
         {
-            var result = await _service.GetAllAsync();
-            return Ok(new BaseResponseModel<ICollection<TimeSchedule>?>(StatusCodes.Status200OK, data: result));
+            var result = await _service.GetPaginatedAsync(pg, size);
+            return Ok(new BaseResponseModel<PaginatedList<TimeSchedule>?>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {

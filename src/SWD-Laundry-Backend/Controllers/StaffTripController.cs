@@ -1,35 +1,39 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Service.Interface;
+using SWD_Laundry_Backend.Core.Enum;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
 
 namespace SWD_Laundry_Backend.Controllers;
 
 [ApiController]
+[Route("api/v1/[controller]")]
 public class StaffTripController : ApiControllerBase
 {
     private readonly IStaffTripService _service;
     private readonly IOrderService _service2;
     private readonly ITimeScheduleService _service3;
+    private readonly IOrderHistoryService _service4;
 
-    public StaffTripController(IStaffTripService service, IOrderService service2, ITimeScheduleService service3)
+    public StaffTripController(IStaffTripService service, IOrderService service2, ITimeScheduleService service3, IOrderHistoryService service4)
     {
         _service = service;
         _service2 = service2;
         _service3 = service3;
+        _service4 = service4;
     }
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> Get(short pg, short size, string? orderName)
     {
         try
         {
-            var result = await _service.GetAllAsync();
-            return Ok(new BaseResponseModel<ICollection<Staff_Trip>?>(StatusCodes.Status200OK, data: result));
+            var result = await _service.GetPaginatedAsync(pg, size);
+            return Ok(new BaseResponseModel<PaginatedList<Staff_Trip>?>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {
@@ -70,16 +74,16 @@ public class StaffTripController : ApiControllerBase
         }
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{staffId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> GetById(string id)
+    public async Task<IActionResult> GetByStaffId(string staffId)
     {
         try
         {
-            var result = await _service.GetByIdAsync(id);
+            var result = await _service.GetByIdAsync(staffId);
             if (result == null)
             {
                 return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
@@ -121,6 +125,50 @@ public class StaffTripController : ApiControllerBase
         try
         {
             var result = await _service.UpdateAsync(id, model);
+            if (result == 0)
+            {
+                return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
+            }
+            return Ok(new BaseResponseModel<int>(StatusCodes.Status200OK, data: result));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
+        }
+    }
+
+    [HttpPut("tripCollect/{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesDefaultResponseType]
+    public async Task<IActionResult> UpdateCollect(string id, double tripCollect)
+    {
+        try
+        {
+            var result = await _service.UpdateCollectAsync(id, tripCollect);
+            if (result == 0)
+            {
+                return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
+            }
+            return Ok(new BaseResponseModel<int>(StatusCodes.Status200OK, data: result));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
+        }
+    }
+
+    [HttpPut("order/{orderId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesDefaultResponseType]
+    public async Task<IActionResult> UpdateOrder(string orderId, DeliveryStatus deliveryStatus)
+    {
+        try
+        {
+            var result = await _service4.UpdateByStaffTripAsync(orderId, deliveryStatus);
             if (result == 0)
             {
                 return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));

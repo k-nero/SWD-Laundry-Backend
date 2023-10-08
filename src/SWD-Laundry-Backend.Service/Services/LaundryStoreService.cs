@@ -7,6 +7,7 @@ using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
+using SWD_Laundry_Backend.Core.Utils;
 
 namespace SWD_Laundry_Backend.Service.Services;
 
@@ -37,7 +38,8 @@ public class LaundryStoreService : Base_Service.Service, ILaundryStoreService
 
     public async Task<ICollection<LaundryStore>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        var list = await _repository.GetAsync(cancellationToken: cancellationToken, includes: x => x.ApplicationUser);
+        var list = await _repository.GetAsync(null,cancellationToken: cancellationToken, c => c.ApplicationUser);
+       var test = await list.ToListAsync(cancellationToken: cancellationToken);
         return await list.ToListAsync(cancellationToken);
     }
 
@@ -47,9 +49,15 @@ public class LaundryStoreService : Base_Service.Service, ILaundryStoreService
         return customer;
     }
 
-    public Task<PaginatedList<LaundryStore>> GetPaginatedAsync(short pg, short size, Expression<Func<LaundryStore, object>>? orderBy = null, CancellationToken cancellationToken = default)
+    public async Task<PaginatedList<LaundryStore>> GetPaginatedAsync(short pg, short size, Expression<Func<LaundryStore, object>>? orderBy = null, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var list = await _repository
+.GetAsync(cancellationToken: cancellationToken);
+        list = orderBy != null ?
+            list.OrderBy(orderBy) :
+            list.OrderBy(x => x.Name);
+        var result = await list.PaginatedListAsync(pg, size);
+        return result;
     }
 
     public async Task<int> UpdateAsync(string id, LaundryStoreModel model, CancellationToken cancellationToken = default)

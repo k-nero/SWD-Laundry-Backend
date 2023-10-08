@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SWD_Laundry_Backend.Repository.Infrastructure;
 
@@ -11,9 +12,11 @@ using SWD_Laundry_Backend.Repository.Infrastructure;
 namespace SWD_Laundry_Backend.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231007065717_UpdateWallet1")]
+    partial class UpdateWallet1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -289,9 +292,7 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("WalletID")
-                        .IsUnique()
-                        .HasFilter("[WalletID] IS NOT NULL");
+                    b.HasIndex("WalletID");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -597,6 +598,9 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<double>("Balance")
                         .HasColumnType("float");
 
@@ -613,6 +617,8 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Wallets");
                 });
@@ -713,8 +719,8 @@ namespace SWD_Laundry_Backend.Repository.Migrations
             modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels.ApplicationUser", b =>
                 {
                     b.HasOne("SWD_Laundry_Backend.Contract.Repository.Entity.Wallet", "Wallet")
-                        .WithOne("ApplicationUser")
-                        .HasForeignKey("SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels.ApplicationUser", "WalletID");
+                        .WithMany()
+                        .HasForeignKey("WalletID");
 
                     b.Navigation("Wallet");
                 });
@@ -803,17 +809,21 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                     b.Navigation("Wallet");
                 });
 
+            modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.Wallet", b =>
+                {
+                    b.HasOne("SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.Navigation("ApplicationUser");
+                });
+
             modelBuilder.Entity("Staff", b =>
                 {
                     b.HasOne("SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserID");
 
-                    b.Navigation("ApplicationUser");
-                });
-
-            modelBuilder.Entity("SWD_Laundry_Backend.Contract.Repository.Entity.Wallet", b =>
-                {
                     b.Navigation("ApplicationUser");
                 });
 #pragma warning restore 612, 618

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SWD_Laundry_Backend.Repository.Infrastructure;
 
@@ -11,9 +12,11 @@ using SWD_Laundry_Backend.Repository.Infrastructure;
 namespace SWD_Laundry_Backend.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231007053901_UpdateApplicationUser")]
+    partial class UpdateApplicationUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -277,6 +280,7 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("WalletID")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -290,8 +294,7 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.HasIndex("WalletID")
-                        .IsUnique()
-                        .HasFilter("[WalletID] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -714,7 +717,9 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                 {
                     b.HasOne("SWD_Laundry_Backend.Contract.Repository.Entity.Wallet", "Wallet")
                         .WithOne("ApplicationUser")
-                        .HasForeignKey("SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels.ApplicationUser", "WalletID");
+                        .HasForeignKey("SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels.ApplicationUser", "WalletID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Wallet");
                 });

@@ -60,7 +60,8 @@ public class BuildingService : Base_Service.Service, IBuidingService
     public async Task<int> UpdateAsync(string id, BuildingModel model, CancellationToken cancellationToken = default)
     {
         int i = await _buildingRepository.UpdateAsync(x => x.Id == id, 
-            x => x.SetProperty(x => x.Name, y => model.Name ?? y.Name)
+            x => x
+            .SetProperty(x => x.Name, y => model.Name ?? y.Name)
             .SetProperty(x => x.Address, y => model.Address ?? y.Address)
             .SetProperty(x => x.Description, y => model.Description ?? y.Description),
             cancellationToken: cancellationToken);

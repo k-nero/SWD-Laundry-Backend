@@ -28,12 +28,12 @@ public class StaffTripController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> Get(short pg, short size, string? orderName)
     {
         try
         {
-            var result = await _service.GetAllAsync();
-            return Ok(new BaseResponseModel<ICollection<Staff_Trip>?>(StatusCodes.Status200OK, data: result));
+            var result = await _service.GetPaginatedAsync(pg, size);
+            return Ok(new BaseResponseModel<PaginatedList<Staff_Trip>?>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {

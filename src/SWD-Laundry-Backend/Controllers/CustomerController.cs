@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Drawing;
+using Microsoft.AspNetCore.Mvc;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
@@ -24,12 +25,20 @@ public class CustomerController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> Get(short pg, short size, string? orderName)
     {
         try
         {
-            var result = await _service.GetAllAsync();
-            return Ok(new BaseResponseModel<ICollection<Customer>?>(StatusCodes.Status200OK, data: result));
+            if (pg <= 0 || size <= 0)
+            {
+                var result = await _service.GetAllAsync();
+                return Ok(new BaseResponseModel<ICollection<Customer>?>(StatusCodes.Status200OK, data: result));
+            }
+            else
+            {
+                var pgresult = await _service.GetPaginatedAsync(pg, size);
+                return Ok(new BaseResponseModel<PaginatedList<Customer>?>(StatusCodes.Status200OK, data: pgresult));
+            }
         }
         catch (Exception e)
         {
@@ -63,12 +72,12 @@ public class CustomerController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> GetOrders(string customerId)
+    public async Task<IActionResult> GetOrders(string customerId, short pg, short size, string? orderName)
     {
         try
         {
-            var result = await _service2.GetAllByCustomerAsync(customerId);
-            return Ok(new BaseResponseModel<ICollection<OrderHistory>?>(StatusCodes.Status200OK, data: result));
+            var result = await _service2.GetByCustomerAsync(customerId, pg, size);
+            return Ok(new BaseResponseModel<PaginatedList<OrderHistory>?>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {

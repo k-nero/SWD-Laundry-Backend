@@ -22,12 +22,12 @@ public class TimeScheduleController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> Get(short pg, short size, string? orderName)
     {
         try
         {
-            var result = await _service.GetAllAsync();
-            return Ok(new BaseResponseModel<ICollection<TimeSchedule>?>(StatusCodes.Status200OK, data: result));
+            var result = await _service.GetPaginatedAsync(pg, size);
+            return Ok(new BaseResponseModel<PaginatedList<TimeSchedule>?>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {

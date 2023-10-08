@@ -2,11 +2,14 @@
 using AutoMapper;
 using Invedia.DI.Attributes;
 using Microsoft.EntityFrameworkCore;
+
+//using StackExchange.Redis;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
+using SWD_Laundry_Backend.Core.Utils;
 
 namespace SWD_Laundry_Backend.Service.Services;
 
@@ -60,15 +63,6 @@ public class OrderService : IOrderService
         return await list.ToListAsync(cancellationToken);
     }
 
-    public async Task<ICollection<Order>> GetAllByCustomerAsync(string id, CancellationToken cancellationToken = default)
-    {
-        var list = await _repository
-            .GetAsync(c => c.CustomerID == id,
-            cancellationToken: cancellationToken);
-
-        return await list.ToListAsync(cancellationToken);
-    }
-
     public async Task<Order?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
         var entity = await _repository.GetSingleAsync(c => c.Id == id, cancellationToken);
@@ -105,8 +99,14 @@ public class OrderService : IOrderService
         return numberOfRows;
     }
 
-    public Task<PaginatedList<Order>> GetPaginatedAsync(short pg, short size, Expression<Func<Order, object>>? orderBy = null, CancellationToken cancellationToken = default)
+    public async Task<PaginatedList<Order>> GetPaginatedAsync(short pg, short size, Expression<Func<Order, object>>? orderBy = null, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var list = await _repository
+    .GetAsync(cancellationToken: cancellationToken);
+        list = orderBy != null ?
+            list.OrderBy(orderBy) :
+            list.OrderBy(x => x.OrderDate);
+        var result = await list.PaginatedListAsync(pg, size);
+        return result;
     }
 }

@@ -24,12 +24,12 @@ public class WalletController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> Get(short pg, short size, string? orderName)
     {
         try
         {
-            var result = await _service.GetAllAsync();
-            return Ok(new BaseResponseModel<ICollection<Wallet>?>(StatusCodes.Status200OK, data: result));
+            var result = await _service.GetPaginatedAsync(pg, size);
+            return Ok(new BaseResponseModel<PaginatedList<Wallet>?>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {
@@ -101,7 +101,7 @@ public class WalletController : ApiControllerBase
                 Amount = model.Balance,
                 Description = $"Deposit: {model.Balance} into WalletId: {userId}",
                 PaymentID = null
-            }); 
+            });
 
             return Ok(new BaseResponseModel<int>(StatusCodes.Status200OK, data: result, additionalData: result2));
         }

@@ -7,6 +7,7 @@ using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
+using SWD_Laundry_Backend.Core.Utils;
 
 namespace SWD_Laundry_Backend.Service.Services;
 
@@ -51,9 +52,14 @@ public class CustomerService : ICustomerService
         return customer;
     }
 
-    public Task<PaginatedList<Customer>> GetPaginatedAsync(short pg, short size, Expression<Func<Customer, object>>? orderBy = null, CancellationToken cancellationToken = default)
+    public async Task<PaginatedList<Customer>> GetPaginatedAsync(short pg, short size, Expression<Func<Customer, object>>? orderBy = null, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var list = await _repository.GetAsync(cancellationToken: cancellationToken);
+        list = orderBy != null ? 
+            list.OrderBy(orderBy) :
+            list.OrderBy(x => x.ApplicationUserID);
+        var result = await list.PaginatedListAsync(pg, size);
+        return result;
 
     }
 

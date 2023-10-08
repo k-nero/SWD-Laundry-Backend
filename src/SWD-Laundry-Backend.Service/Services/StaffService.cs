@@ -42,9 +42,8 @@ public class StaffService : IStaffService
 
     public async Task<Staff?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
-        var query = await _repository.GetAsync(c => c.Id == id, cancellationToken);
-        var obj = await query.FirstOrDefaultAsync(cancellationToken: cancellationToken);
-        return obj;
+        var entity = await _repository.GetSingleAsync(c => c.Id == id, cancellationToken);
+        return entity;
     }
 
     public Task<PaginatedList<Staff>> GetPaginatedAsync(short pg, short size, Expression<Func<Staff, object>>? orderBy = null, CancellationToken cancellationToken = default)

@@ -43,9 +43,8 @@ public class LaundryStoreService : Base_Service.Service, ILaundryStoreService
 
     public async Task<LaundryStore?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
-        var query = await _repository.GetAsync(c => c.Id == id, cancellationToken, x => x.ApplicationUser);
-        var obj = await query.FirstOrDefaultAsync(cancellationToken: cancellationToken);
-        return obj;
+        var customer = await _repository.GetSingleAsync(c => c.Id == id, cancellationToken, x => x.ApplicationUser);
+        return customer;
     }
 
     public Task<PaginatedList<LaundryStore>> GetPaginatedAsync(short pg, short size, Expression<Func<LaundryStore, object>>? orderBy = null, CancellationToken cancellationToken = default)

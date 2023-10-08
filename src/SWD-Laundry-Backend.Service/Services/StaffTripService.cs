@@ -52,13 +52,8 @@ public class StaffTripService : Base_Service.Service, IStaffTripService
 
     public async Task<Staff_Trip?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
-        var query = await _repository.GetAsync(
-            c => c.Id == id,
-            cancellationToken: cancellationToken,
-            includes: _items);
-
-        var obj = await query.FirstOrDefaultAsync(cancellationToken: cancellationToken);
-        return obj;
+        var entity = await _repository.GetSingleAsync(c => c.Id == id, cancellationToken, _items);
+        return entity;
     }
 
     public Task<PaginatedList<Staff_Trip>> GetPaginatedAsync(short pg, short size, Expression<Func<Staff_Trip, object>>? orderBy = null, CancellationToken cancellationToken = default)

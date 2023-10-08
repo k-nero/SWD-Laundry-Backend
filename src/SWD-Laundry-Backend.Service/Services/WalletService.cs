@@ -43,9 +43,8 @@ public class WalletService : Base_Service.Service, IWalletService
 
     public async Task<Wallet?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
-        var query = await _repository.GetAsync(c => c.Id == id, cancellationToken);
-        var obj = await query.FirstOrDefaultAsync(cancellationToken: cancellationToken);
-        return obj;
+        var entity = await _repository.GetSingleAsync(c => c.Id == id, cancellationToken);
+        return entity;
     }
 
     public Task<PaginatedList<Wallet>> GetPaginatedAsync(short pg, short size, Expression<Func<Wallet, object>>? orderBy = null, CancellationToken cancellationToken = default)

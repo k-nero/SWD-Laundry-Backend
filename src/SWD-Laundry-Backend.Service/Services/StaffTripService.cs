@@ -6,6 +6,7 @@ using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
+using SWD_Laundry_Backend.Core.Models.Common;
 
 namespace SWD_Laundry_Backend.Service.Services;
 
@@ -58,6 +59,11 @@ public class StaffTripService : Base_Service.Service, IStaffTripService
 
         var obj = await query.FirstOrDefaultAsync(cancellationToken: cancellationToken);
         return obj;
+    }
+
+    public Task<PaginatedList<Staff_Trip>> GetPaginatedAsync(short pg, short size, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<int> UpdateAsync(string id, StaffTripModel model, CancellationToken cancellationToken = default)

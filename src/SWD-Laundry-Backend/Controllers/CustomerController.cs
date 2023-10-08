@@ -2,6 +2,7 @@
 using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
+using SWD_Laundry_Backend.Core.Models.Common;
 using SWD_Laundry_Backend.Service.Services;
 
 namespace SWD_Laundry_Backend.Controllers;
@@ -78,7 +79,7 @@ public class CustomerController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Create(CustomerModel model)
+    public async Task<IActionResult> Create([FromBody]CustomerModel model)
     {
         try
         {
@@ -96,7 +97,7 @@ public class CustomerController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Update(string id, CustomerModel model)
+    public async Task<IActionResult> Update(string id, [FromBody]CustomerModel model)
     {
         try
         {

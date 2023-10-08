@@ -5,6 +5,7 @@ using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
+using SWD_Laundry_Backend.Core.Models.Common;
 
 namespace SWD_Laundry_Backend.Service.Services;
 
@@ -102,5 +103,10 @@ public class OrderService : IOrderService
             cancellationToken);
 
         return numberOfRows;
+    }
+
+    public Task<PaginatedList<Order>> GetPaginatedAsync(short pg, short size, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
     }
 }

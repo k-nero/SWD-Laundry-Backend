@@ -5,6 +5,7 @@ using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
+using SWD_Laundry_Backend.Core.Models.Common;
 
 namespace SWD_Laundry_Backend.Service.Services;
 
@@ -46,6 +47,11 @@ public class CustomerService : ICustomerService
         return obj;
     }
 
+    public Task<PaginatedList<Customer>> GetPaginatedAsync(short pg, short size, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<int> UpdateAsync(string id, CustomerModel model, CancellationToken cancellationToken = default)
     {
         var numberOfRows = await _repository.UpdateAsync(x => x.Id == id,
@@ -56,4 +62,6 @@ public class CustomerService : ICustomerService
 
         return numberOfRows;
     }
+
+   
 }

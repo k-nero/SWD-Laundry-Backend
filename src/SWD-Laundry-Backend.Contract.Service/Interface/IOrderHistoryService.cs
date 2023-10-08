@@ -14,4 +14,5 @@ public interface IOrderHistoryService :
     Task<int> UpdateByLaundryStoreAsync(string id, LaundryStatus laundryStatus, CancellationToken cancellationToken = default);
 
     Task<ICollection<OrderHistory>> GetAllByCustomerAsync(string customerId, CancellationToken cancellationToken = default);
+    Task<int> UpdateByStaffTripAsync(string orderId, DeliveryStatus deliveryStatus, CancellationToken cancellationToken = default);
 }

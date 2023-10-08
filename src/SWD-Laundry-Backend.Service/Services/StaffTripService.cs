@@ -49,10 +49,10 @@ public class StaffTripService : Base_Service.Service, IStaffTripService
         return await list.ToListAsync(cancellationToken);
     }
 
-    public async Task<Staff_Trip?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<Staff_Trip?> GetByIdAsync(string staffId, CancellationToken cancellationToken = default)
     {
         var query = await _repository.GetAsync(
-            c => c.Id == id,
+            c => c.StaffID == staffId,
             cancellationToken: cancellationToken,
             includes: items);
 
@@ -69,6 +69,16 @@ public class StaffTripService : Base_Service.Service, IStaffTripService
             .SetProperty(x => x.TimeScheduleID, model.TimeScheduleID)
             .SetProperty(x => x.BuildingID, model.BuildingID)
             .SetProperty(x => x.StaffID, model.StaffID)
+            , cancellationToken);
+
+        return numberOfRows;
+    }
+
+    public async Task<int> UpdateCollectAsync(string id, double tripCollect, CancellationToken cancellationToken = default)
+    {
+        var numberOfRows = await _repository.UpdateAsync(x => x.Id == id,
+            x => x
+            .SetProperty(x => x.TripCollect, tripCollect)
             , cancellationToken);
 
         return numberOfRows;

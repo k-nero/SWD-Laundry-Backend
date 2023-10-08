@@ -39,9 +39,9 @@ public class WalletService : Base_Service.Service, IWalletService
         return await list.ToListAsync(cancellationToken);
     }
 
-    public async Task<Wallet?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<Wallet?> GetByIdAsync(string userId, CancellationToken cancellationToken = default)
     {
-        var query = await _repository.GetAsync(c => c.Id == id, cancellationToken);
+        var query = await _repository.GetAsync(c => c.ApplicationUser.Id == userId, cancellationToken, c => c.ApplicationUser);
         var obj = await query.FirstOrDefaultAsync(cancellationToken: cancellationToken);
         return obj;
     }

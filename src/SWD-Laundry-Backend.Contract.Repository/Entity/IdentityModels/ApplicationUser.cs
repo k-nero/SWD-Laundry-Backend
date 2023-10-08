@@ -17,7 +17,7 @@ public class ApplicationUser : IdentityUser
     public string? WalletID { get; set; }
 
 
-    public Wallet Wallet { get; set; }
+    public Wallet? Wallet { get; set; }
 
     #endregion Relationship
 }

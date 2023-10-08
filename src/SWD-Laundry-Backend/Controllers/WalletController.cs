@@ -36,16 +36,16 @@ public class WalletController : ApiControllerBase
         }
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{userId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> GetById(string id)
+    public async Task<IActionResult> GetByUserId(string userId)
     {
         try
         {
-            var result = await _service.GetByIdAsync(id);
+            var result = await _service.GetByIdAsync(userId);
             if (result == null)
             {
                 return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
@@ -77,16 +77,16 @@ public class WalletController : ApiControllerBase
         }
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{userId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> DepositWallet(string id, WalletModel model)
+    public async Task<IActionResult> DepositWallet(string userId, WalletModel model)
     {
         try
         {
-            var result = await _service.UpdateAsync(id, model);
+            var result = await _service.UpdateAsync(userId, model);
             if (result == 0)
             {
                 return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
@@ -94,11 +94,11 @@ public class WalletController : ApiControllerBase
 
             var result2 = await _service2.CreateAsync(new TransactionModel()
             {
-                WalletID = id,
+                WalletID = userId,
                 TransactionType = AllowedTransactionType.Deposit,
                 PaymentType = PaymentType.Paypal,
                 Amount = model.Balance,
-                Description = $"Deposit: {model.Balance} into WalletId: {id}",
+                Description = $"Deposit: {model.Balance} into WalletId: {userId}",
                 PaymentID = null
             }); 
 

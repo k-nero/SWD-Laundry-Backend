@@ -92,4 +92,14 @@ public class OrderHistoryService : IOrderHistoryService
 
         return numberOfRows;
     }
+
+    public async Task<int> UpdateByStaffTripAsync(string orderId, DeliveryStatus deliveryStatus, CancellationToken cancellationToken)
+    {
+        var numberOfRows = await _repository
+            .UpdateAsync(x => x.OrderID == orderId,
+           x => x
+           .SetProperty(x => x.DeliveryStatus, deliveryStatus),
+           cancellationToken);
+        return numberOfRows;
+    }
 }

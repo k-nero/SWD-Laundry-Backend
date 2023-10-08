@@ -1,4 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿    using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using FirebaseAdmin;
@@ -90,7 +90,7 @@ public class AuthenticateController : ApiControllerBase
             }
         .Union(userClaims)
         .Union(roleClaims);
-        var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("L@JvKN`}F#6Yj{hAVB7nk*D=2Rdgq6)<"));
+        var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("04edf27f-5a6c-475c-bd8e-d522473ed5d5"));
         var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
         var jwtSecurityToken = new JwtSecurityToken(
             issuer: "https://localhost:7220",

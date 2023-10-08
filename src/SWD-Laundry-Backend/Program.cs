@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -82,12 +83,14 @@ public class Program
 
         builder.Services.AddCors();
 
-        //builder.Services.AddSingleton(FirebaseApp.Create(new AppOptions()
-        //{
-        //    Credential = await GoogleCredential.FromFileAsync(builder.Configuration["Firebase:Credential"], cancellationToken: default),
-        //    ServiceAccountId = builder.Configuration["Firebase:ServiceAccountId"],
-        //}));
-        
+
+        builder.Services.AddSingleton(FirebaseApp.Create(new AppOptions()
+        {
+            Credential = await GoogleCredential.FromFileAsync(builder.Configuration["Firebase:Credential"], cancellationToken: default),
+            ServiceAccountId = builder.Configuration["Firebase:ServiceAccountId"],
+        }));
+
+
         builder.Services.AddDbContext<AppDbContext>(options =>
         {
             options.UseSqlServer(
@@ -127,7 +130,6 @@ public class Program
                 ValidIssuer = builder.Configuration["Jwt:ValidIssuer"],
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecrectKey"]))
             };
-
         });
         builder.Services.AddAuthorization(options =>
         {
@@ -163,6 +165,12 @@ public class Program
         builder.Services.Configure<DataProtectionTokenProviderOptions>(opt => opt.TokenLifespan = TimeSpan.FromMinutes(30));
         builder.Services.AddDI();
         builder.Services.PrintServiceAddedToConsole();
+        builder.Services.AddResponseCompression(options =>
+        {
+            options.EnableForHttps = true;
+            options.Providers.Add<GzipCompressionProvider>();
+            options.Providers.Add<BrotliCompressionProvider>();
+        });
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -177,7 +185,7 @@ public class Program
                 });
             IdentityModelEventSource.ShowPII = true;
         }
-
+        app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
         app.UseHttpsRedirection();
         app.UseSerilogRequestLogging();
         app.UseAuthentication();
@@ -185,8 +193,7 @@ public class Program
         app.UseRouting();
         //app.UseIdentityServer();
         app.UseAuthorization();
-        app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-
+        app.UseResponseCompression();
         app.Run();
     }
 }

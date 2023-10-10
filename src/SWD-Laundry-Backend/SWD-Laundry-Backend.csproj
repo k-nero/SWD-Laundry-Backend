@@ -17,4 +17,6 @@
     <ProjectReference Include="..\SWD-Laundry-Backend.Service\SWD-Laundry-Backend.Service.csproj" />
   </ItemGroup>
 
+  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
+
 </Project>

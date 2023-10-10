@@ -1,10 +1,12 @@
-﻿using Invedia.DI.Attributes;
+﻿using System.Security.Claims;
+using Invedia.DI.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 using SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels;
 using SWD_Laundry_Backend.Contract.Service.Interface;
-using SWD_Laundry_Backend.Core.Models;
+using SWD_Laundry_Backend.Core.Models.Common;
 
 namespace SWD_Laundry_Backend.Service.Services;
 [TransientDependency(ServiceType = typeof(IIdentityService))]
@@ -14,10 +16,7 @@ public class IdentityService : Base_Service.Service, IIdentityService
     private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
     private readonly IAuthorizationService _authorizationService;
 
-    public IdentityService(
-        UserManager<ApplicationUser> userManager,
-        IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
-        IAuthorizationService authorizationService)
+    public IdentityService(UserManager<ApplicationUser> userManager, IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory, IAuthorizationService authorizationService)
     {
         _userManager = userManager;
         _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
@@ -40,7 +39,6 @@ public class IdentityService : Base_Service.Service, IIdentityService
         };
 
         var result = await _userManager.CreateAsync(user, password);
-
         return (result.ToApplicationResult(), user.Id);
     }
 
@@ -79,5 +77,46 @@ public class IdentityService : Base_Service.Service, IIdentityService
         var result = await _userManager.DeleteAsync(user);
 
         return result.ToApplicationResult();
+    }
+
+    public async Task<ApplicationUser?> GetUserByUserNameAsync(string username)
+    {
+        var user = await _userManager.Users.SingleOrDefaultAsync(u => u.UserName == username);
+        return user;
+    }
+
+    public async Task SetVerifiedPhoneNumberAsync(ApplicationUser user, string phoneNumber)
+    {
+        if (user != null)
+        {
+            await _userManager.SetPhoneNumberAsync(user, phoneNumber);
+        }
+        return;
+    }
+
+    public async Task<IList<string>?> GetRolesAsync(ApplicationUser user)
+    {
+       return await _userManager.GetRolesAsync(user);
+    }
+
+    public async Task AddToRoleAsync(ApplicationUser user, string role)
+    {
+       await _userManager.AddToRoleAsync(user, role);
+    }
+
+    public async Task SetUserFullNameAsync(ApplicationUser user, string fullName)
+    {
+        user.Name = fullName;
+        await _userManager.UpdateAsync(user);
+    }
+
+    public async Task<IList<Claim>> GetClaimsAsync(ApplicationUser user)
+    {
+        return await _userManager.GetClaimsAsync(user);
+    }
+
+    public async Task SetVerfiedEmailAsync(ApplicationUser user, string email)
+    {
+        await _userManager.SetEmailAsync(user, email);
     }
 }

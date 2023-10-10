@@ -1,10 +1,12 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
 using Invedia.DI.Attributes;
 using Microsoft.EntityFrameworkCore;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
+using SWD_Laundry_Backend.Core.Models.Common;
 
 namespace SWD_Laundry_Backend.Service.Services;
 
@@ -41,9 +43,13 @@ public class TransactionService : Base_Service.Service, ITransactionService
 
     public async Task<Transaction?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
-        var query = await _repository.GetAsync(c => c.Id == id, cancellationToken);
-        var obj = await query.FirstOrDefaultAsync(cancellationToken: cancellationToken);
-        return obj;
+        var entity = await _repository.GetSingleAsync(c => c.Id == id, cancellationToken);
+        return entity;
+    }
+
+    public Task<PaginatedList<Transaction>> GetPaginatedAsync(short pg, short size, Expression<Func<Transaction, object>>? orderBy = null, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<int> UpdateAsync(string id, TransactionModel model, CancellationToken cancellationToken = default)
@@ -52,7 +58,7 @@ public class TransactionService : Base_Service.Service, ITransactionService
             x => x
             .SetProperty(x => x.Amount, model.Amount)
             .SetProperty(x => x.TransactionType, model.TransactionType)
-            .SetProperty(x => x.PaymentMethod, model.PaymentMethod)
+            .SetProperty(x => x.PaymentType, model.PaymentType)
             .SetProperty(x => x.Description, model.Description)
             , cancellationToken);
 

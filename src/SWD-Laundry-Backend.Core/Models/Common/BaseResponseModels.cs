@@ -1,7 +1,7 @@
 ﻿using SWD_Laundry_Backend.Core.Utils;
 using SWD_Laundry_Backend.Core.ValueObject;
 
-namespace SWD_Laundry_Backend.Core.Models;
+namespace SWD_Laundry_Backend.Core.Models.Common;
 public class BaseResponseModel<T>
 {
     public T? Data { get; set; }
@@ -12,14 +12,14 @@ public class BaseResponseModel<T>
 
     public BaseResponseModel(int statusCode, T? data, object? additionalData = null)
     {
-        this.StatusCode = statusCode;
-        this.Data = data;
-        this.AdditionalData = additionalData;
+        StatusCode = statusCode;
+        Data = data;
+        AdditionalData = additionalData;
     }
 
     public BaseResponseModel(int statusCode, string? message)
     {
-        this.StatusCode = statusCode;
-        this.Message = message;
+        StatusCode = statusCode;
+        Message = message;
     }
 }

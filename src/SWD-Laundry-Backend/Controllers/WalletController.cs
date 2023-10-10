@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Service.Interface;
+using SWD_Laundry_Backend.Core.Enum;
 using SWD_Laundry_Backend.Core.Models;
+using SWD_Laundry_Backend.Core.Models.Common;
 
 namespace SWD_Laundry_Backend.Controllers;
 
@@ -9,22 +11,24 @@ namespace SWD_Laundry_Backend.Controllers;
 public class WalletController : ApiControllerBase
 {
     private readonly IWalletService _service;
+    private readonly ITransactionService _service2;
 
-    public WalletController(IWalletService service)
+    public WalletController(IWalletService service, ITransactionService service2)
     {
         _service = service;
+        _service2 = service2;
     }
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> Get(short pg, short size, string? orderName)
     {
         try
         {
-            var result = await _service.GetAllAsync();
-            return Ok(new BaseResponseModel<ICollection<Wallet>?>(StatusCodes.Status200OK, data: result));
+            var result = await _service.GetPaginatedAsync(pg, size);
+            return Ok(new BaseResponseModel<PaginatedList<Wallet>?>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {
@@ -32,16 +36,16 @@ public class WalletController : ApiControllerBase
         }
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{userId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> GetById(string id)
+    public async Task<IActionResult> GetByUserId(string userId)
     {
         try
         {
-            var result = await _service.GetByIdAsync(id);
+            var result = await _service.GetByIdAsync(userId);
             if (result == null)
             {
                 return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
@@ -73,21 +77,32 @@ public class WalletController : ApiControllerBase
         }
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{userId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Update(string id, WalletModel model)
+    public async Task<IActionResult> DepositWallet(string userId, WalletModel model)
     {
         try
         {
-            var result = await _service.UpdateAsync(id, model );
+            var result = await _service.UpdateAsync(userId, model);
             if (result == 0)
             {
                 return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
             }
-            return Ok(new BaseResponseModel<int>(StatusCodes.Status200OK, data: result));
+
+            var result2 = await _service2.CreateAsync(new TransactionModel()
+            {
+                WalletID = userId,
+                TransactionType = AllowedTransactionType.Deposit,
+                PaymentType = PaymentType.Paypal,
+                Amount = model.Balance,
+                Description = $"Deposit: {model.Balance} into WalletId: {userId}",
+                PaymentID = null
+            });
+
+            return Ok(new BaseResponseModel<int>(StatusCodes.Status200OK, data: result, additionalData: result2));
         }
         catch (Exception e)
         {
@@ -116,6 +131,4 @@ public class WalletController : ApiControllerBase
             return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
         }
     }
-
-
 }

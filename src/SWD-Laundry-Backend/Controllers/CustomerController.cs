@@ -9,7 +9,6 @@ using SWD_Laundry_Backend.Service.Services;
 namespace SWD_Laundry_Backend.Controllers;
 
 [ApiController]
-[Route("api/v1/[controller]")]
 public class CustomerController : ApiControllerBase
 {
     private readonly ICustomerService _service;

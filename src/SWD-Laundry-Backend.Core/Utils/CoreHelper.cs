@@ -45,18 +45,17 @@ public static class CoreHelper
             .Where(t => t.IsEnum)
             .ToDictionary(t => t.Name, t =>
                 System.Enum.GetNames(t)
-                    .Zip(System.Enum.GetValues(t).Cast<int>(), (Key, Value) => new EnumObject(Key, Value, ToSentenceCase(Key))).ToArray());
+                    .Zip(System.Enum.GetValues(t).Cast<int>(), (key, value) => new EnumObject(key, value, ToSentenceCase(key))).ToArray());
     }
 
-    public static string CreateRandomPassword(int PasswordLength)
+    public static string CreateRandomPassword(int passwordLength)
     {
-        string _allowedChars = "0123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ!@#$%^&*()-_=+<,>.";
-        Random randNum = new Random();
-        char[] chars = new char[PasswordLength];
-        int allowedCharCount = _allowedChars.Length;
-        for (int i = 0; i < PasswordLength; i++)
+        string allowedChars = "0123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ!@#$%^&*()-_=+<,>.";
+        var randNum = new Random();
+        char[] chars = new char[passwordLength];
+        for (int i = 0; i < passwordLength; i++)
         {
-            chars[i] = _allowedChars[(int)((_allowedChars.Length) * randNum.NextDouble())];
+            chars[i] = allowedChars[(int)((allowedChars.Length) * randNum.NextDouble())];
         }
         return new string(chars);
     }

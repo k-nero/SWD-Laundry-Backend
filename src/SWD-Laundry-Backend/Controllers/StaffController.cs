@@ -6,7 +6,6 @@ using SWD_Laundry_Backend.Core.Models.Common;
 namespace SWD_Laundry_Backend.Controllers;
 
 [ApiController]
-[Route("api/v1/[controller]")]
 public class StaffController : ApiControllerBase
 {
     private readonly IStaffService _service;

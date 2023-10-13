@@ -54,7 +54,7 @@ public class BuildingService : Base_Service.Service, IBuidingService
     {
         var buildings = await _buildingRepository.GetAsync(cancellationToken: cancellationToken);
         buildings = orderBy != null ? buildings.OrderBy(orderBy) : buildings.OrderBy(x => x.Name);
-        var result = await buildings.PaginatedListAsync(query.Page, query.Limit);
+        var result = await buildings.PaginatedListAsync(query);
         return result;
     }
 

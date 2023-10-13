@@ -79,8 +79,8 @@ public class OrderService : IOrderService
     .GetAsync(cancellationToken: cancellationToken);
         list = orderBy != null ?
             list.OrderBy(orderBy) :
-            list.OrderBy(x => x.OrderDate);
-        var result = await list.PaginatedListAsync(query.Page, query.Limit);
+            list.OrderBy(x => x.CreatedTime);
+        var result = await list.PaginatedListAsync(query);
         return result;
     }
 }

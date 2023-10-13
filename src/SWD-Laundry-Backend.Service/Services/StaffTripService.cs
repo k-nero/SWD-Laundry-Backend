@@ -65,8 +65,8 @@ public class StaffTripService : Base_Service.Service, IStaffTripService
     .GetAsync(cancellationToken: cancellationToken);
         list = orderBy != null ?
             list.OrderBy(orderBy) :
-            list.OrderBy(x => x.TripCollect);
-        var result = await list.PaginatedListAsync(query.Page, query.Limit);
+            list.OrderBy(x => x.CreatedTime);
+        var result = await list.PaginatedListAsync(query);
         return result;
     }
 

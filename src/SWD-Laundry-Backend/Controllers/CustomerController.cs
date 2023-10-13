@@ -21,20 +21,12 @@ public class CustomerController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Get([FromQuery]CustomerQuery query)
+    public async Task<IActionResult> Get([FromQuery] CustomerQuery query)
     {
         try
         {
-            if (query.Page <= 0 || query.Limit <= 0)
-            {
-                var result = await _service.GetAllAsync(query);
-                return Ok(new BaseResponseModel<ICollection<Customer>?>(StatusCodes.Status200OK, data: result));
-            }
-            else
-            {
-                var pgresult = await _service.GetPaginatedAsync(query);
-                return Ok(new BaseResponseModel<PaginatedList<Customer>?>(StatusCodes.Status200OK, data: pgresult));
-            }
+            var pgresult = await _service.GetPaginatedAsync(query);
+            return Ok(new BaseResponseModel<PaginatedList<Customer>?>(StatusCodes.Status200OK, data: pgresult));
         }
         catch (Exception e)
         {
@@ -68,7 +60,7 @@ public class CustomerController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Create([FromBody]CustomerModel model)
+    public async Task<IActionResult> Create([FromBody] CustomerModel model)
     {
         try
         {
@@ -86,7 +78,7 @@ public class CustomerController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Update(string id, [FromBody]CustomerModel model)
+    public async Task<IActionResult> Update(string id, [FromBody] CustomerModel model)
     {
         try
         {

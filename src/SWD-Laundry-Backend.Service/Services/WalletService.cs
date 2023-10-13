@@ -55,8 +55,8 @@ public class WalletService : Base_Service.Service, IWalletService
 .GetAsync(cancellationToken: cancellationToken);
         list = orderBy != null ?
             list.OrderBy(orderBy) :
-            list.OrderBy(x => x.Balance);
-        var result = await list.PaginatedListAsync(query.Page, query.Limit) ;
+            list.OrderBy(x => x.CreatedTime);
+        var result = await list.PaginatedListAsync(query) ;
         return result;
 
     }

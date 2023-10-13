@@ -24,20 +24,12 @@ public class BuildingController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Get([FromQuery]BuildingQuery query)
+    public async Task<IActionResult> Get([FromQuery] BuildingQuery query)
     {
         try
         {
-            if(query.Page <= 0 || query.Limit <= 0)
-            {
-                var result = await _buildingService.GetAllAsync(query);
-                return Ok(new BaseResponseModel<ICollection<Building>?>(StatusCodes.Status200OK, data: result));
-            }
-            else
-            {
-                var pgresult = await _buildingService.GetPaginatedAsync(query);
-                return Ok(new BaseResponseModel<PaginatedList<Building>?>(StatusCodes.Status200OK, data: pgresult));
-            }
+            var pgresult = await _buildingService.GetPaginatedAsync(query);
+            return Ok(new BaseResponseModel<PaginatedList<Building>?>(StatusCodes.Status200OK, data: pgresult));
         }
         catch (Exception e)
         {

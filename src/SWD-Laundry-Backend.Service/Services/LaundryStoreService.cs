@@ -56,7 +56,7 @@ public class LaundryStoreService : Base_Service.Service, ILaundryStoreService
         list = orderBy != null ?
             list.OrderBy(orderBy) :
             list.OrderBy(x => x.Name);
-        var result = await list.PaginatedListAsync(query.Page, query.Limit);
+        var result = await list.PaginatedListAsync(query);
         return result;
     }
 

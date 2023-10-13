@@ -27,16 +27,8 @@ public class StaffTripController : ApiControllerBase
     {
         try
         {
-            if (query.Page <= 0 || query.Limit <= 0)
-            {
-                var result = await _service.GetAllAsync(query);
-                return Ok(new BaseResponseModel<ICollection<Staff_Trip>?>(StatusCodes.Status200OK, data: result));
-            }
-            else
-            {
-                var pgresult = await _service.GetPaginatedAsync(query);
-                return Ok(new BaseResponseModel<PaginatedList<Staff_Trip>?>(StatusCodes.Status200OK, data: pgresult));
-            }
+            var pgresult = await _service.GetPaginatedAsync(query);
+            return Ok(new BaseResponseModel<PaginatedList<Staff_Trip>?>(StatusCodes.Status200OK, data: pgresult));
         }
         catch (Exception e)
         {

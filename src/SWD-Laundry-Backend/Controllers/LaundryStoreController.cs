@@ -23,20 +23,12 @@ public class LaundryStoreController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> GetAll([FromQuery]LaundryStoreQuery query)
+    public async Task<IActionResult> GetAll([FromQuery] LaundryStoreQuery query)
     {
         try
         {
-            if (query.Page <= 0 || query.Limit <= 0)
-            {
-                var result = await _service.GetAllAsync(query);
-                return Ok(new BaseResponseModel<ICollection<LaundryStore>?>(StatusCodes.Status200OK, data: result));
-            }
-            else
-            {
-                var pgresult = await _service.GetPaginatedAsync(query);
-                return Ok(new BaseResponseModel<PaginatedList<LaundryStore>?>(StatusCodes.Status200OK, data: pgresult));
-            }
+            var pgresult = await _service.GetPaginatedAsync(query);
+            return Ok(new BaseResponseModel<PaginatedList<LaundryStore>?>(StatusCodes.Status200OK, data: pgresult));
         }
         catch (Exception e)
         {
@@ -129,5 +121,5 @@ public class LaundryStoreController : ApiControllerBase
         }
     }
 
-   
+
 }

@@ -67,7 +67,7 @@ public class OrderHistoryService : IOrderHistoryService
             c => c.Order, c => c.Order.LaundryStore);
         list = orderBy != null ?
             list.OrderBy(orderBy) :
-            list.OrderBy(x => x.OrderStatus);
+            list.OrderBy(x => x.CreatedTime);
         if(query.LaundryStoreId != null)
         {
             list = list.Where(x => x.Order.LaundryStoreID == query.LaundryStoreId);
@@ -76,7 +76,7 @@ public class OrderHistoryService : IOrderHistoryService
         {
             list = list.Where(x => x.Order.CustomerID == query.CustomerId);
         }
-        var result = await list.PaginatedListAsync(query.Page, query.Limit);
+        var result = await list.PaginatedListAsync(query);
         return result;
     }
 

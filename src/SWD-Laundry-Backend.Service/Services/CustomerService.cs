@@ -58,8 +58,8 @@ public class CustomerService : ICustomerService
         var list = await _repository.GetAsync(cancellationToken: cancellationToken);
         list = orderBy != null ? 
             list.OrderBy(orderBy) :
-            list.OrderBy(x => x.ApplicationUserID);
-        var result = await list.PaginatedListAsync(query.Page, query.Limit);
+            list.OrderBy(x => x.CreatedTime);
+        var result = await list.PaginatedListAsync(query);
         return result;
 
     }
@@ -71,7 +71,6 @@ public class CustomerService : ICustomerService
         .SetProperty(x => x.BuildingID, model.BuildingId)
         .SetProperty(x => x.ApplicationUserID, model.ApplicationUserId)
         , cancellationToken);
-
         return numberOfRows;
     }
 

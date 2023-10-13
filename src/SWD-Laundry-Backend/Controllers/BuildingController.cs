@@ -4,6 +4,7 @@ using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
+using SWD_Laundry_Backend.Core.QueryObject;
 
 namespace SWD_Laundry_Backend.Controllers;
 
@@ -23,18 +24,18 @@ public class BuildingController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Get(short pg , short size, string? orderName)
+    public async Task<IActionResult> Get([FromQuery]BuildingQuery query)
     {
         try
         {
-            if(pg <= 0 || size <= 0)
+            if(query.Page <= 0 || query.Limit <= 0)
             {
-                var result = await _buildingService.GetAllAsync();
+                var result = await _buildingService.GetAllAsync(query);
                 return Ok(new BaseResponseModel<ICollection<Building>?>(StatusCodes.Status200OK, data: result));
             }
             else
             {
-                var pgresult = await _buildingService.GetPaginatedAsync(pg, size);
+                var pgresult = await _buildingService.GetPaginatedAsync(query);
                 return Ok(new BaseResponseModel<PaginatedList<Building>?>(StatusCodes.Status200OK, data: pgresult));
             }
         }

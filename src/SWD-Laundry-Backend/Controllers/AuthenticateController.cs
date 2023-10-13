@@ -1,4 +1,4 @@
-﻿    using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using FirebaseAdmin;
@@ -39,7 +39,7 @@ public class AuthenticateController : ApiControllerBase
             var uid = decodedToken.Uid;
             var user = await _firebaseAuth.GetUserAsync(uid);
             var identity = await _identityService.GetUserByUserNameAsync(user.Email);
-            string customToken = null;
+            object customToken = null;
             if (identity == null)
             {
                 var result = await _identityService.CreateUserAsync(user.Email, CoreHelper.CreateRandomPassword(20));
@@ -61,7 +61,7 @@ public class AuthenticateController : ApiControllerBase
             if (identity != null)
             {
                 customToken = await CreateAccessTokenAsync(identity);
-                return Ok(new { token = customToken });
+                return Ok(customToken);
             }
             return BadRequest();
         }
@@ -72,7 +72,7 @@ public class AuthenticateController : ApiControllerBase
     }
 
     //create access token 
-    private async Task<string> CreateAccessTokenAsync(ApplicationUser user)
+    private async Task<object> CreateAccessTokenAsync(ApplicationUser user)
     {
         var userClaims = await _identityService.GetClaimsAsync(user);
         var roles = await _identityService.GetRolesAsync(user);
@@ -86,7 +86,7 @@ public class AuthenticateController : ApiControllerBase
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim("id", user.Id)
-            }
+        }
         .Union(userClaims)
         .Union(roleClaims);
         var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("04edf27f-5a6c-475c-bd8e-d522473ed5d5"));
@@ -97,6 +97,10 @@ public class AuthenticateController : ApiControllerBase
             claims: claims,
             expires: DateTime.UtcNow.AddMinutes(240),
             signingCredentials: signingCredentials);
-        return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+        var token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+        return new { 
+            accesstoken = token,
+            roles = claims
+        };
     }
 }

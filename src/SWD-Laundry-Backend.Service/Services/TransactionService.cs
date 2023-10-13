@@ -7,6 +7,7 @@ using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
+using SWD_Laundry_Backend.Core.QueryObject;
 
 namespace SWD_Laundry_Backend.Service.Services;
 
@@ -35,7 +36,7 @@ public class TransactionService : Base_Service.Service, ITransactionService
         return numberOfRows;
     }
 
-    public async Task<ICollection<Transaction>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<ICollection<Transaction>> GetAllAsync(TransactionQuery? query, CancellationToken cancellationToken = default)
     {
         var list = await _repository.GetAsync(cancellationToken: cancellationToken);
         return await list.ToListAsync(cancellationToken);
@@ -47,7 +48,7 @@ public class TransactionService : Base_Service.Service, ITransactionService
         return entity;
     }
 
-    public Task<PaginatedList<Transaction>> GetPaginatedAsync(short pg, short size, Expression<Func<Transaction, object>>? orderBy = null, CancellationToken cancellationToken = default)
+    public Task<PaginatedList<Transaction>> GetPaginatedAsync(TransactionQuery query, Expression<Func<Transaction, object>>? orderBy = null, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

@@ -6,6 +6,7 @@ using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
+using SWD_Laundry_Backend.Core.QueryObject;
 using SWD_Laundry_Backend.Core.Utils;
 
 namespace SWD_Laundry_Backend.Service.Services;
@@ -35,7 +36,7 @@ public class StaffService : IStaffService
         return numberOfRows;
     }
 
-    public async Task<ICollection<Staff>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<ICollection<Staff>> GetAllAsync(StaffQuery? query, CancellationToken cancellationToken = default)
     {
         var list = await _repository
             .GetAsync(null,
@@ -51,7 +52,7 @@ public class StaffService : IStaffService
         return entity;
     }
 
-    public async Task<PaginatedList<Staff>> GetPaginatedAsync(short pg, short size, Expression<Func<Staff, object>>? orderBy = null, CancellationToken cancellationToken = default)
+    public async Task<PaginatedList<Staff>> GetPaginatedAsync(StaffQuery query, Expression<Func<Staff, object>>? orderBy = null, CancellationToken cancellationToken = default)
     {
         var list = await _repository
         .GetAsync(null,
@@ -60,7 +61,7 @@ public class StaffService : IStaffService
         list = orderBy != null ?
             list.OrderBy(orderBy) :
             list.OrderBy(x => x.ApplicationUser.Name);
-        var result = await list.PaginatedListAsync(pg, size);
+        var result = await list.PaginatedListAsync(query.Page, query.Limit);
         return result;
 
     }

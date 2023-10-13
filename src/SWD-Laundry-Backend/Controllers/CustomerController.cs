@@ -1,10 +1,9 @@
-﻿using System.Drawing;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
-using SWD_Laundry_Backend.Service.Services;
+using SWD_Laundry_Backend.Core.QueryObject;
 
 namespace SWD_Laundry_Backend.Controllers;
 
@@ -12,30 +11,28 @@ namespace SWD_Laundry_Backend.Controllers;
 public class CustomerController : ApiControllerBase
 {
     private readonly ICustomerService _service;
-    private readonly IOrderHistoryService _service2;
 
-    public CustomerController(ICustomerService service, IOrderHistoryService service2)
+    public CustomerController(ICustomerService service)
     {
         _service = service;
-        _service2 = service2;
     }
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Get(short pg, short size, string? orderName)
+    public async Task<IActionResult> Get([FromQuery]CustomerQuery query)
     {
         try
         {
-            if (pg <= 0 || size <= 0)
+            if (query.Page <= 0 || query.Limit <= 0)
             {
-                var result = await _service.GetAllAsync();
+                var result = await _service.GetAllAsync(query);
                 return Ok(new BaseResponseModel<ICollection<Customer>?>(StatusCodes.Status200OK, data: result));
             }
             else
             {
-                var pgresult = await _service.GetPaginatedAsync(pg, size);
+                var pgresult = await _service.GetPaginatedAsync(query);
                 return Ok(new BaseResponseModel<PaginatedList<Customer>?>(StatusCodes.Status200OK, data: pgresult));
             }
         }
@@ -60,23 +57,6 @@ public class CustomerController : ApiControllerBase
                 return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
             }
             return Ok(new BaseResponseModel<Customer?>(StatusCodes.Status200OK, data: result));
-        }
-        catch (Exception e)
-        {
-            return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
-        }
-    }
-
-    [HttpGet("orders/{customerId}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesDefaultResponseType]
-    public async Task<IActionResult> GetOrders(string customerId, short pg, short size, string? orderName)
-    {
-        try
-        {
-            var result = await _service2.GetByCustomerAsync(customerId, pg, size);
-            return Ok(new BaseResponseModel<PaginatedList<OrderHistory>?>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {

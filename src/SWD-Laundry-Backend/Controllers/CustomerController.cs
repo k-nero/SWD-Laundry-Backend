@@ -1,44 +1,32 @@
-﻿using System.Drawing;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
-using SWD_Laundry_Backend.Service.Services;
+using SWD_Laundry_Backend.Core.QueryObject;
 
 namespace SWD_Laundry_Backend.Controllers;
 
 [ApiController]
-[Route("api/v1/[controller]")]
 public class CustomerController : ApiControllerBase
 {
     private readonly ICustomerService _service;
-    private readonly IOrderHistoryService _service2;
 
-    public CustomerController(ICustomerService service, IOrderHistoryService service2)
+    public CustomerController(ICustomerService service)
     {
         _service = service;
-        _service2 = service2;
     }
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Get(short pg, short size, string? orderName)
+    public async Task<IActionResult> Get([FromQuery] CustomerQuery query)
     {
         try
         {
-            if (pg <= 0 || size <= 0)
-            {
-                var result = await _service.GetAllAsync();
-                return Ok(new BaseResponseModel<ICollection<Customer>?>(StatusCodes.Status200OK, data: result));
-            }
-            else
-            {
-                var pgresult = await _service.GetPaginatedAsync(pg, size);
-                return Ok(new BaseResponseModel<PaginatedList<Customer>?>(StatusCodes.Status200OK, data: pgresult));
-            }
+            var pgresult = await _service.GetPaginatedAsync(query);
+            return Ok(new BaseResponseModel<PaginatedList<Customer>?>(StatusCodes.Status200OK, data: pgresult));
         }
         catch (Exception e)
         {
@@ -68,28 +56,11 @@ public class CustomerController : ApiControllerBase
         }
     }
 
-    [HttpGet("orders/{customerId}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesDefaultResponseType]
-    public async Task<IActionResult> GetOrders(string customerId, short pg, short size, string? orderName)
-    {
-        try
-        {
-            var result = await _service2.GetByCustomerAsync(customerId, pg, size);
-            return Ok(new BaseResponseModel<PaginatedList<OrderHistory>?>(StatusCodes.Status200OK, data: result));
-        }
-        catch (Exception e)
-        {
-            return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
-        }
-    }
-
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Create([FromBody]CustomerModel model)
+    public async Task<IActionResult> Create([FromBody] CustomerModel model)
     {
         try
         {
@@ -107,7 +78,7 @@ public class CustomerController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Update(string id, [FromBody]CustomerModel model)
+    public async Task<IActionResult> Update(string id, [FromBody] CustomerModel model)
     {
         try
         {

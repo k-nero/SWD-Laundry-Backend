@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SWD_Laundry_Backend.Core.QueryObject;
 
 namespace SWD_Laundry_Backend.Core.Models.Common;
 public class PaginatedList<T>
@@ -20,11 +21,12 @@ public class PaginatedList<T>
 
     public bool HasNextPage => PageNumber < TotalPages;
 
-    public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int pageNumber, int pageSize)
+    public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, BaseQuery query)
     {
         var count = await source.CountAsync();
-        var items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
-
-        return new PaginatedList<T>(items, count, pageNumber, pageSize);
+        int page = query.Page <= 0 ? 1 : query.Page;
+        int limit = query.Limit <= 0 ? count : query.Limit;
+        var items = await source.Skip((page - 1) * limit).Take(limit).ToListAsync();
+        return new PaginatedList<T>(items, count, page, limit);
     }
 }

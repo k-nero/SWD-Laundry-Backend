@@ -7,6 +7,7 @@ using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
+using SWD_Laundry_Backend.Core.QueryObject;
 using SWD_Laundry_Backend.Core.Utils;
 
 namespace SWD_Laundry_Backend.Service.Services;
@@ -36,26 +37,26 @@ public class WalletService : Base_Service.Service, IWalletService
         return i;
     }
 
-    public async Task<ICollection<Wallet>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<ICollection<Wallet>> GetAllAsync(WalletQuery? query, CancellationToken cancellationToken = default)
     {
         var list = await _repository.GetAsync(cancellationToken: cancellationToken);
         return await list.ToListAsync(cancellationToken);
     }
 
-    public async Task<Wallet?> GetByIdAsync(string userId, CancellationToken cancellationToken = default)
+    public async Task<Wallet?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
-        var entity = await _repository.GetSingleAsync(c => c.Id == userId, cancellationToken);
+        var entity = await _repository.GetSingleAsync(c => c.Id == id, cancellationToken);
         return entity;
     }
 
-    public async Task<PaginatedList<Wallet>> GetPaginatedAsync(short pg, short size, Expression<Func<Wallet, object>>? orderBy = null, CancellationToken cancellationToken = default)
+    public async Task<PaginatedList<Wallet>> GetPaginatedAsync(WalletQuery query, Expression<Func<Wallet, object>>? orderBy = null, CancellationToken cancellationToken = default)
     {
         var list = await _repository
 .GetAsync(cancellationToken: cancellationToken);
         list = orderBy != null ?
             list.OrderBy(orderBy) :
-            list.OrderBy(x => x.Balance);
-        var result = await list.PaginatedListAsync(pg, size);
+            list.OrderBy(x => x.CreatedTime);
+        var result = await list.PaginatedListAsync(query) ;
         return result;
 
     }

@@ -3,11 +3,11 @@ using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
+using SWD_Laundry_Backend.Core.QueryObject;
 
 namespace SWD_Laundry_Backend.Controllers;
 
 [ApiController]
-[Route("api/v1/[controller]")]
 public class PaymentController : ApiControllerBase
 {
     private readonly IPaymentService _service;
@@ -21,12 +21,12 @@ public class PaymentController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Get(short pg, short size, string? orderName)
+    public async Task<IActionResult> Get([FromQuery]PaymentQuery query)
     {
         try
         {
-            var result = await _service.GetPaginatedAsync(pg, size);
-            return Ok(new BaseResponseModel<PaginatedList<Payment>?>(StatusCodes.Status200OK, data: result));
+            var pgresult = await _service.GetPaginatedAsync(query);
+            return Ok(new BaseResponseModel<PaginatedList<Payment>?>(StatusCodes.Status200OK, data: pgresult));
         }
         catch (Exception e)
         {

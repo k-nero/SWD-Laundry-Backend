@@ -7,6 +7,7 @@ using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
+using SWD_Laundry_Backend.Core.QueryObject;
 
 namespace SWD_Laundry_Backend.Service.Services;
 
@@ -35,7 +36,7 @@ public class TimeScheduleService : Base_Service.Service, ITimeScheduleService
         return numberOfRows;
     }
 
-    public async Task<ICollection<TimeSchedule>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<ICollection<TimeSchedule>> GetAllAsync(TimeScheduleQuery? query, CancellationToken cancellationToken = default)
     {
         var list = await _repository.GetAsync(cancellationToken: cancellationToken);
         return await list.ToListAsync(cancellationToken);
@@ -47,7 +48,7 @@ public class TimeScheduleService : Base_Service.Service, ITimeScheduleService
         return entity;
     }
 
-    public Task<PaginatedList<TimeSchedule>> GetPaginatedAsync(short pg, short size, Expression<Func<TimeSchedule, object>>? orderBy = null, CancellationToken cancellationToken = default)
+    public Task<PaginatedList<TimeSchedule>> GetPaginatedAsync(TimeScheduleQuery query, Expression<Func<TimeSchedule, object>>? orderBy = null, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

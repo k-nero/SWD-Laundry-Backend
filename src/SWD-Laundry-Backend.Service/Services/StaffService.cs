@@ -52,15 +52,12 @@ public class StaffService : IStaffService
         return entity;
     }
 
-    public async Task<PaginatedList<Staff>> GetPaginatedAsync(StaffQuery query, Expression<Func<Staff, object>>? orderBy = null, CancellationToken cancellationToken = default)
+    public async Task<PaginatedList<Staff>> GetPaginatedAsync(StaffQuery query, CancellationToken cancellationToken = default)
     {
-        var list = await _repository
-        .GetAsync(null,
+        var list = await _repository.GetAsync(null,
         cancellationToken: cancellationToken,
         c => c.ApplicationUser);
-        list = orderBy != null ?
-            list.OrderBy(orderBy) :
-            list.OrderBy(x => x.ApplicationUser.Name);
+       
         var result = await list.PaginatedListAsync(query);
         return result;
 

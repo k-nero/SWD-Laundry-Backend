@@ -73,13 +73,9 @@ public class OrderService : IOrderService
     }
 
 
-    public async Task<PaginatedList<Order>> GetPaginatedAsync(OrderQuery query, Expression<Func<Order, object>>? orderBy = null, CancellationToken cancellationToken = default)
+    public async Task<PaginatedList<Order>> GetPaginatedAsync(OrderQuery query, CancellationToken cancellationToken = default)
     {
-        var list = await _repository
-    .GetAsync(cancellationToken: cancellationToken);
-        list = orderBy != null ?
-            list.OrderBy(orderBy) :
-            list.OrderBy(x => x.CreatedTime);
+        var list = await _repository.GetAsync(cancellationToken: cancellationToken);
         var result = await list.PaginatedListAsync(query);
         return result;
     }

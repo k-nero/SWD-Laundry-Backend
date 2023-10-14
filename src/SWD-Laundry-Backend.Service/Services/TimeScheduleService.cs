@@ -48,7 +48,7 @@ public class TimeScheduleService : Base_Service.Service, ITimeScheduleService
         return entity;
     }
 
-    public Task<PaginatedList<TimeSchedule>> GetPaginatedAsync(TimeScheduleQuery query, Expression<Func<TimeSchedule, object>>? orderBy = null, CancellationToken cancellationToken = default)
+    public Task<PaginatedList<TimeSchedule>> GetPaginatedAsync(TimeScheduleQuery query, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

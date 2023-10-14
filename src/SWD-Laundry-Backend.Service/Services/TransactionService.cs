@@ -48,7 +48,7 @@ public class TransactionService : Base_Service.Service, ITransactionService
         return entity;
     }
 
-    public Task<PaginatedList<Transaction>> GetPaginatedAsync(TransactionQuery query, Expression<Func<Transaction, object>>? orderBy = null, CancellationToken cancellationToken = default)
+    public Task<PaginatedList<Transaction>> GetPaginatedAsync(TransactionQuery query, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

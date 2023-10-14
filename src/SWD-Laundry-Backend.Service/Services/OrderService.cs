@@ -9,6 +9,7 @@ using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
+using SWD_Laundry_Backend.Core.QueryObject;
 using SWD_Laundry_Backend.Core.Utils;
 
 namespace SWD_Laundry_Backend.Service.Services;
@@ -38,30 +39,12 @@ public class OrderService : IOrderService
         return numberOfRows;
     }
 
-    public async Task<ICollection<Order>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<ICollection<Order>> GetAllAsync(OrderQuery? query,  CancellationToken cancellationToken = default)
     {
         var list = await _repository.GetAsync(cancellationToken: cancellationToken);
         return await list.ToListAsync(cancellationToken);
     }
 
-    public async Task<ICollection<Order>> GetAllByLaundryStoreAsync(string id, CancellationToken cancellationToken = default)
-    {
-        var list = await _repository
-            .GetAsync(c => c.LaundryStoreID == id,
-            cancellationToken: cancellationToken);
-
-        return await list.ToListAsync(cancellationToken);
-    }
-
-    public async Task<ICollection<Order>> GetAllByStaffTripAsync(DateTime startTime, DateTime endTime, CancellationToken cancellationToken = default)
-    {
-        var list = await _repository
-       .GetAsync(c => c.OrderDate >= startTime &&
-       c.OrderDate <= endTime,
-       cancellationToken: cancellationToken);
-
-        return await list.ToListAsync(cancellationToken);
-    }
 
     public async Task<Order?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
@@ -89,24 +72,11 @@ public class OrderService : IOrderService
         return numberOfRows;
     }
 
-    public async Task<int> UpdateByStaffTripAsync(string staffId, CancellationToken cancellationToken = default)
-    {
-        var numberOfRows = await _repository.UpdateAsync(x => x.StaffID == staffId,
-            x => x
-            .SetProperty(x => x.StaffID, staffId),
-            cancellationToken);
 
-        return numberOfRows;
-    }
-
-    public async Task<PaginatedList<Order>> GetPaginatedAsync(short pg, short size, Expression<Func<Order, object>>? orderBy = null, CancellationToken cancellationToken = default)
+    public async Task<PaginatedList<Order>> GetPaginatedAsync(OrderQuery query, CancellationToken cancellationToken = default)
     {
-        var list = await _repository
-    .GetAsync(cancellationToken: cancellationToken);
-        list = orderBy != null ?
-            list.OrderBy(orderBy) :
-            list.OrderBy(x => x.OrderDate);
-        var result = await list.PaginatedListAsync(pg, size);
+        var list = await _repository.GetAsync(cancellationToken: cancellationToken);
+        var result = await list.PaginatedListAsync(query);
         return result;
     }
 }

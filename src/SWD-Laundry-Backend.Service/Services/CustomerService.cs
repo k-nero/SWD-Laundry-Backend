@@ -7,6 +7,7 @@ using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
+using SWD_Laundry_Backend.Core.QueryObject;
 using SWD_Laundry_Backend.Core.Utils;
 
 namespace SWD_Laundry_Backend.Service.Services;
@@ -36,7 +37,7 @@ public class CustomerService : ICustomerService
         return numberOfRows;
     }
 
-    public async Task<ICollection<Customer>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<ICollection<Customer>> GetAllAsync(CustomerQuery? query, CancellationToken cancellationToken = default)
     {
         var list = await _repository
             .GetAsync(null, cancellationToken: cancellationToken,
@@ -52,13 +53,10 @@ public class CustomerService : ICustomerService
         return customer;
     }
 
-    public async Task<PaginatedList<Customer>> GetPaginatedAsync(short pg, short size, Expression<Func<Customer, object>>? orderBy = null, CancellationToken cancellationToken = default)
+    public async Task<PaginatedList<Customer>> GetPaginatedAsync(CustomerQuery query, CancellationToken cancellationToken = default)
     {
         var list = await _repository.GetAsync(cancellationToken: cancellationToken);
-        list = orderBy != null ? 
-            list.OrderBy(orderBy) :
-            list.OrderBy(x => x.ApplicationUserID);
-        var result = await list.PaginatedListAsync(pg, size);
+        var result = await list.PaginatedListAsync(query);
         return result;
 
     }
@@ -70,7 +68,6 @@ public class CustomerService : ICustomerService
         .SetProperty(x => x.BuildingID, model.BuildingId)
         .SetProperty(x => x.ApplicationUserID, model.ApplicationUserId)
         , cancellationToken);
-
         return numberOfRows;
     }
 

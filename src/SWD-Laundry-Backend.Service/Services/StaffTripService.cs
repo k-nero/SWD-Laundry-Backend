@@ -7,6 +7,7 @@ using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
+using SWD_Laundry_Backend.Core.QueryObject;
 using SWD_Laundry_Backend.Core.Utils;
 
 namespace SWD_Laundry_Backend.Service.Services;
@@ -43,7 +44,7 @@ public class StaffTripService : Base_Service.Service, IStaffTripService
         return numberOfRows;
     }
 
-    public async Task<ICollection<Staff_Trip>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<ICollection<Staff_Trip>> GetAllAsync(StaffTripQuery? query, CancellationToken cancellationToken = default)
     {
         var list = await _repository.GetAsync(
             cancellationToken: cancellationToken,
@@ -51,21 +52,18 @@ public class StaffTripService : Base_Service.Service, IStaffTripService
         return await list.ToListAsync(cancellationToken);
     }
 
-    public async Task<Staff_Trip?> GetByIdAsync(string staffId, CancellationToken cancellationToken = default)
+    public async Task<Staff_Trip?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
-        var entity = await _repository.GetSingleAsync(c => c.Id == staffId, cancellationToken, _items);
+        var entity = await _repository.GetSingleAsync(c => c.Id == id, cancellationToken, _items);
         return entity;
     }
 
 
-    public async Task<PaginatedList<Staff_Trip>> GetPaginatedAsync(short pg, short size, Expression<Func<Staff_Trip, object>>? orderBy = null, CancellationToken cancellationToken = default)
+    public async Task<PaginatedList<Staff_Trip>> GetPaginatedAsync(StaffTripQuery query, CancellationToken cancellationToken = default)
     {
-        var list = await _repository
-    .GetAsync(cancellationToken: cancellationToken);
-        list = orderBy != null ?
-            list.OrderBy(orderBy) :
-            list.OrderBy(x => x.TripCollect);
-        var result = await list.PaginatedListAsync(pg, size);
+        var list = await _repository.GetAsync(cancellationToken: cancellationToken);
+     
+        var result = await list.PaginatedListAsync(query);
         return result;
     }
 
@@ -83,13 +81,4 @@ public class StaffTripService : Base_Service.Service, IStaffTripService
         return numberOfRows;
     }
 
-    public async Task<int> UpdateCollectAsync(string id, double tripCollect, CancellationToken cancellationToken = default)
-    {
-        var numberOfRows = await _repository.UpdateAsync(x => x.Id == id,
-            x => x
-            .SetProperty(x => x.TripCollect, tripCollect)
-            , cancellationToken);
-
-        return numberOfRows;
-    }
 }

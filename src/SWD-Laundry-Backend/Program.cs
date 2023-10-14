@@ -1,10 +1,8 @@
-using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using FirebaseAdmin;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Google;
 using Google.Apis.Auth.OAuth2;
 using Invedia.DI;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -23,7 +21,6 @@ using SWD_Laundry_Backend.Core.Config;
 using SWD_Laundry_Backend.Core.Validator;
 using SWD_Laundry_Backend.Extensions;
 using SWD_Laundry_Backend.Repository.Infrastructure;
-using SWD_Laundry_Backend.Service.Base_Service;
 
 
 namespace SWD_Laundry_Backend;

@@ -7,6 +7,7 @@ using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
+using SWD_Laundry_Backend.Core.QueryObject;
 using SWD_Laundry_Backend.Core.Utils;
 
 namespace SWD_Laundry_Backend.Service.Services;
@@ -36,7 +37,7 @@ public class PaymentService : IPaymentService
         return numberOfRows;
     }
 
-    public async Task<ICollection<Payment>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<ICollection<Payment>> GetAllAsync(PaymentQuery? query, CancellationToken cancellationToken = default)
     {
         var list = await _repository.GetAsync(cancellationToken: cancellationToken);
         return await list.ToListAsync(cancellationToken);
@@ -48,14 +49,10 @@ public class PaymentService : IPaymentService
         return entity;
     }
 
-    public async Task<PaginatedList<Payment>> GetPaginatedAsync(short pg, short size, Expression<Func<Payment, object>>? orderBy = null, CancellationToken cancellationToken = default)
+    public async Task<PaginatedList<Payment>> GetPaginatedAsync(PaymentQuery query, CancellationToken cancellationToken = default)
     {
-        var list = await _repository
-.GetAsync(cancellationToken: cancellationToken);
-        list = orderBy != null ?
-            list.OrderBy(orderBy) :
-            list.OrderBy(x => x.Price);
-        var result = await list.PaginatedListAsync(pg, size);
+        var list = await _repository.GetAsync(cancellationToken: cancellationToken);
+        var result = await list.PaginatedListAsync(query);
         return result;
     }
 

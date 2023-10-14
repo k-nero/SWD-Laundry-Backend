@@ -7,6 +7,7 @@ using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
+using SWD_Laundry_Backend.Core.QueryObject;
 using SWD_Laundry_Backend.Core.Utils;
 
 
@@ -37,7 +38,7 @@ public class BuildingService : Base_Service.Service, IBuidingService
         return i;
     }
 
-    public async Task<ICollection<Building>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<ICollection<Building>> GetAllAsync(BuildingQuery? query, CancellationToken cancellationToken = default)
     {
        var buildings = await _buildingRepository.GetAsync(cancellationToken: cancellationToken);
        return await buildings.ToListAsync(cancellationToken);
@@ -49,11 +50,10 @@ public class BuildingService : Base_Service.Service, IBuidingService
         return building;
     }
 
-    public async Task<PaginatedList<Building>> GetPaginatedAsync(short pg, short size, Expression<Func<Building, object>>? orderBy = null, CancellationToken cancellationToken = default)
+    public async Task<PaginatedList<Building>> GetPaginatedAsync(BuildingQuery query, CancellationToken cancellationToken = default)
     {
         var buildings = await _buildingRepository.GetAsync(cancellationToken: cancellationToken);
-        buildings = orderBy != null ? buildings.OrderBy(orderBy) : buildings.OrderBy(x => x.Name);
-        var result = await buildings.PaginatedListAsync(pg, size);
+        var result = await buildings.PaginatedListAsync(query);
         return result;
     }
 

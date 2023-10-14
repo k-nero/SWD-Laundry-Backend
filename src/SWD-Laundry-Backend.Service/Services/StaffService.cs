@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using AutoMapper;
+﻿using AutoMapper;
 using Invedia.DI.Attributes;
 using Microsoft.EntityFrameworkCore;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
@@ -54,10 +53,7 @@ public class StaffService : IStaffService
 
     public async Task<PaginatedList<Staff>> GetPaginatedAsync(StaffQuery query, CancellationToken cancellationToken = default)
     {
-        var list = await _repository.GetAsync(null,
-        cancellationToken: cancellationToken,
-        c => c.ApplicationUser);
-       
+        var list = await _repository.GetAsync(null, cancellationToken: cancellationToken, c => c.ApplicationUser);
         var result = await list.PaginatedListAsync(query);
         return result;
 

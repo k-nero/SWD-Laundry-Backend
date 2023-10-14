@@ -34,7 +34,11 @@ public class PaginatedList<T>
                 BinaryExpression comparison = Expression.GreaterThanOrEqual(createdTimeProperty, Expression.Constant(startDate, typeof(DateTimeOffset?)));
                 Expression<Func<T, bool>> expression = Expression.Lambda<Func<T, bool>>(comparison, xParam);
                 source = source.Where(expression);
-            }  
+            }
+            else
+            {
+                throw new Exception("Unsupported type: CreatedTime property not found !!!");
+            }
         }
 
         if (query.EndDate != null)
@@ -48,6 +52,10 @@ public class PaginatedList<T>
                 Expression<Func<T, bool>> expression = Expression.Lambda<Func<T, bool>>(comparison, xParam);
                 source = source.Where(expression);
             }
+            else
+            {
+                throw new Exception("Unsupported type: CreatedTime property not found !!!");
+            }
         }
 
         if(query.Sort == null)
@@ -58,6 +66,10 @@ public class PaginatedList<T>
             {
                 Expression<Func<T, DateTimeOffset?>> expression = Expression.Lambda<Func<T, DateTimeOffset?>>(createdTimeProperty, xParam);
                 source = source.OrderByDescending(expression);
+            }
+            else
+            {
+                throw new Exception("Unsupported type: CreatedTime property not found !!!");
             }
         }
 

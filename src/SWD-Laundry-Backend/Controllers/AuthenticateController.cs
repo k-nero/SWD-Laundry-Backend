@@ -11,6 +11,12 @@ using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Utils;
 
 namespace SWD_Laundry_Backend.Controllers;
+
+public readonly struct Token
+{
+    public string AccessToken { get; init; }
+}
+
 [ApiController]
 public class AuthenticateController : ApiControllerBase
 {
@@ -24,18 +30,18 @@ public class AuthenticateController : ApiControllerBase
         _identityService = identityService;
     }
 
+    [HttpPost]
     [AllowAnonymous]
-    [HttpPost()]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Login([FromBody] string token)
+    public async Task<IActionResult> Login([FromBody] Token token)
     {
 
         try
         {
-            var decodedToken = await _firebaseAuth.VerifyIdTokenAsync(token);
+            var decodedToken = await _firebaseAuth.VerifyIdTokenAsync(token.AccessToken);
             var uid = decodedToken.Uid;
             var user = await _firebaseAuth.GetUserAsync(uid);
             var identity = await _identityService.GetUserByUserNameAsync(user.Email);

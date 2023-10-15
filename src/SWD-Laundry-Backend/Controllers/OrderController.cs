@@ -58,8 +58,6 @@ public class OrderController : ApiControllerBase
         }
     }
 
-
-
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -123,16 +121,16 @@ public class OrderController : ApiControllerBase
         }
     }
 
-    [HttpGet("{orderId}/order-history")]
+    [HttpGet("{order-id}/order-history")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> GetOrderHistory(string orderId, [FromQuery] OrderHistoryQuery query)
+    public async Task<IActionResult> GetOrderHistory([FromQuery] OrderHistoryQuery query)
     {
         try
         {
-            var pgresult = await _service2.GetOrderHistoryByOrderIdAsync(orderId, query);
+            var pgresult = await _service2.GetPaginatedAsync(query);
             return Ok(new BaseResponseModel<PaginatedList<OrderHistory>?>(StatusCodes.Status200OK, data: pgresult));
         }
         catch (Exception e)
@@ -146,11 +144,12 @@ public class OrderController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> CreateOrderHistory(string orderId, [FromQuery] OrderHistoryModel model)
+    public async Task<IActionResult> CreateOrderHistory(string orderId, [FromBody] OrderHistoryModel model)
     {
         try
         {
-            var result = await _service2.CreateOrderHistoryByOrderIdAsync(orderId, model);
+            model.OrderId = orderId;
+            var result = await _service2.CreateAsync(model);
             if (result == null)
             {
                 return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));

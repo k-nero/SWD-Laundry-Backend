@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Service.Interface;
+using SWD_Laundry_Backend.Core.Enum;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
 using SWD_Laundry_Backend.Core.QueryObject;
@@ -84,6 +85,7 @@ public class OrderHistoryController : ApiControllerBase
     {
         try
         {
+
             var result = await _service.UpdateAsync(id, model);
             if (result == 0)
             {

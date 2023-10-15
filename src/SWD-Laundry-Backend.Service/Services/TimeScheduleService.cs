@@ -8,6 +8,7 @@ using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
 using SWD_Laundry_Backend.Core.QueryObject;
+using SWD_Laundry_Backend.Core.Utils;
 
 namespace SWD_Laundry_Backend.Service.Services;
 
@@ -48,9 +49,17 @@ public class TimeScheduleService : Base_Service.Service, ITimeScheduleService
         return entity;
     }
 
-    public Task<PaginatedList<TimeSchedule>> GetPaginatedAsync(TimeScheduleQuery query, Expression<Func<TimeSchedule, object>>? orderBy = null, CancellationToken cancellationToken = default)
+    public async Task<PaginatedList<TimeSchedule>> GetPaginatedAsync(TimeScheduleQuery query, Expression<Func<TimeSchedule, object>>? orderBy = null, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var list = await _repository
+    .GetAsync(null
+    , cancellationToken: cancellationToken);
+
+        list = orderBy != null ?
+            list.OrderBy(orderBy) :
+            list.OrderBy(x => x.CreatedTime);
+        var result = await list.PaginatedListAsync(query);
+        return result;
     }
 
     public async Task<int> UpdateAsync(string id, TimeScheduleModel model, CancellationToken cancellationToken = default)

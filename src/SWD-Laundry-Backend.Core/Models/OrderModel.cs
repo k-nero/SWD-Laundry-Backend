@@ -7,7 +7,7 @@ public class OrderModel
     public DateTime OrderDate { get; set; }
     public TimeFrame DeliveryTimeFrame { get; set; }
     public DateTime ExpectedFinishDate { get; set; }
-    public OrderType OrderType { get; set; }
+    //public OrderType OrderType { get; set; }
     public PaymentType PaymentType { get; set; }
     public string? Address { get; set; }
     public short Amount { get; set; }

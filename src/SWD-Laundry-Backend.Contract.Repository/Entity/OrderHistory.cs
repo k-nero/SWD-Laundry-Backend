@@ -6,8 +6,8 @@ namespace SWD_Laundry_Backend.Contract.Repository.Entity;
 
 public class OrderHistory : BaseEntity
 {
-    public string Title { get; set; }
-    public string Message { get; set; }
+    //public string Title { get; set; }
+    //public string Message { get; set; }
 
     public OrderStatus OrderStatus { get; set; }
     public DeliveryStatus DeliveryStatus { get; set; }

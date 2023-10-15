@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
+using SWD_Laundry_Backend.Core.Enum;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
 using SWD_Laundry_Backend.Core.QueryObject;
@@ -82,10 +83,12 @@ public class OrderHistoryService : IOrderHistoryService
 
     public async Task<int> UpdateAsync(string id, OrderHistoryModel model, CancellationToken cancellationToken = default)
     {
+        if (model.DeliveryStatus == DeliveryStatus.Delivered)
+        {
+            model.LaundryStatus = LaundryStatus.Received;
+        }
         var numberOfRows = await _repository.UpdateAsync(x => x.Id == id,
             x => x
-        .SetProperty(x => x.Message, model.Message)
-        .SetProperty(x => x.Title, model.Title)
         .SetProperty(x => x.OrderStatus, model.OrderStatus)
         .SetProperty(x => x.DeliveryStatus, model.DeliveryStatus)
         .SetProperty(x => x.LaundryStatus, model.LaundryStatus), cancellationToken);

@@ -10,7 +10,7 @@ public class Order : BaseEntity
     public DateTime ExpectedFinishDate { get; set; }
     public TimeFrame DeliveryTimeFrame { get; set; }
 
-    public OrderType OrderType { get; set; }
+    //public OrderType OrderType { get; set; }
     public PaymentType PaymentType { get; set; }
 
     public short Amount { get; set; }

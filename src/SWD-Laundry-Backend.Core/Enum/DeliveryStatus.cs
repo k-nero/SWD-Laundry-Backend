@@ -8,6 +8,7 @@ namespace SWD_Laundry_Backend.Core.Enum;
 public enum DeliveryStatus
 {
     Pending = 0,
-    Delivering = 1,
-    Delivered = 2,
+    Received = 1,
+    Delivering = 2,
+    Delivered = 3,
 }

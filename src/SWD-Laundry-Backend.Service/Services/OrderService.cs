@@ -39,16 +39,17 @@ public class OrderService : IOrderService
         return numberOfRows;
     }
 
-    public async Task<ICollection<Order>> GetAllAsync(OrderQuery? query,  CancellationToken cancellationToken = default)
+    public async Task<ICollection<Order>> GetAllAsync(OrderQuery? query, CancellationToken cancellationToken = default)
     {
         var list = await _repository.GetAsync(cancellationToken: cancellationToken);
         return await list.ToListAsync(cancellationToken);
     }
 
-
     public async Task<Order?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
-        var entity = await _repository.GetSingleAsync(c => c.Id == id, cancellationToken);
+        var entity = await _repository.GetSingleAsync(c => c.Id == id, cancellationToken, c => c.Customer
+    , c => c.Staff
+    , c => c.LaundryStore);
         return entity;
     }
 
@@ -59,7 +60,7 @@ public class OrderService : IOrderService
             .SetProperty(x => x.OrderDate, model.OrderDate)
             .SetProperty(x => x.DeliveryTimeFrame, model.DeliveryTimeFrame)
             .SetProperty(x => x.ExpectedFinishDate, model.ExpectedFinishDate)
-            .SetProperty(x => x.OrderType, model.OrderType)
+
             .SetProperty(x => x.PaymentType, model.PaymentType)
             .SetProperty(x => x.Address, model.Address)
             .SetProperty(x => x.Amount, model.Amount)
@@ -72,11 +73,15 @@ public class OrderService : IOrderService
         return numberOfRows;
     }
 
-
     public async Task<PaginatedList<Order>> GetPaginatedAsync(OrderQuery query, Expression<Func<Order, object>>? orderBy = null, CancellationToken cancellationToken = default)
     {
         var list = await _repository
-    .GetAsync(cancellationToken: cancellationToken);
+    .GetAsync(null 
+    ,cancellationToken: cancellationToken
+    ,c => c.Customer
+    , c => c.Staff
+    , c => c.LaundryStore);
+
         list = orderBy != null ?
             list.OrderBy(orderBy) :
             list.OrderBy(x => x.CreatedTime);

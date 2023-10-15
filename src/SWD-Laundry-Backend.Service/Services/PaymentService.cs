@@ -52,7 +52,7 @@ public class PaymentService : IPaymentService
     public async Task<PaginatedList<Payment>> GetPaginatedAsync(PaymentQuery query, Expression<Func<Payment, object>>? orderBy = null, CancellationToken cancellationToken = default)
     {
         var list = await _repository
-.GetAsync(cancellationToken: cancellationToken);
+        .GetAsync(null, cancellationToken: cancellationToken, c => c.Orders);
         list = orderBy != null ?
             list.OrderBy(orderBy) :
             list.OrderBy(x => x.CreatedTime);

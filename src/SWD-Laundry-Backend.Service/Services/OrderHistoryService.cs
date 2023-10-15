@@ -1,10 +1,10 @@
-﻿using System.Linq.Expressions;
-using AutoMapper;
+﻿using AutoMapper;
 using Invedia.DI.Attributes;
 using Microsoft.EntityFrameworkCore;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
+using SWD_Laundry_Backend.Core.Enum;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
 using SWD_Laundry_Backend.Core.QueryObject;
@@ -26,9 +26,51 @@ public class OrderHistoryService : IOrderHistoryService
 
     public async Task<string> CreateAsync(OrderHistoryModel model, CancellationToken cancellationToken = default)
     {
+        model.OrderStatus = OrderStatus.Processing;
+        if (model.DeliveryStatus == DeliveryStatus.Delivering_Laundry)
+        {
+            model.Title = "Order received";
+            model.Message = "Shipper have collected order, on the wait to delivery.";
+        }
+
+        if (model.DeliveryStatus == DeliveryStatus.Reached_Laundry)
+        {
+            model.Title = "Order reaching laundry store";
+            model.Message = "Order have been taking by laundry store, waiting for processing";
+            model.LaundryStatus = LaundryStatus.Washing;
+        }
+
+        if (model.LaundryStatus == LaundryStatus.Finished)
+        {
+            model.Title = "Laundry store finished order";
+            model.Message = "Order have been finished by laundry store, waiting for shipper";
+            model.DeliveryStatus = DeliveryStatus.Pending;
+        }
+
+        if (model.DeliveryStatus == DeliveryStatus.Delivering_Customer)
+        {
+            model.LaundryStatus = LaundryStatus.Finished;
+            model.Title = "Order received";
+            model.Message = "Shipper have collected order, on the wait to delivery.";
+        }
+
+        if (model.DeliveryStatus == DeliveryStatus.Reached_Customer)
+        {
+            model.LaundryStatus = LaundryStatus.Finished;
+            model.Title = "Order reaching customer's building";
+            model.Message = "Shipper has come, waiting for customer.";
+        }
+        if (model.DeliveryStatus == DeliveryStatus.Delivered)
+        {
+            model.LaundryStatus = LaundryStatus.Finished;
+            model.DeliveryStatus = DeliveryStatus.Reached_Customer;
+            model.Title = "Order finished";
+            model.Message = "Customer have received order.";
+            model.OrderStatus = OrderStatus.Completed;
+        }
+
         var query = await _repository.AddAsync(_mapper.Map<OrderHistory>(model), cancellationToken);
-        var objectId = query.Id;
-        return objectId;
+        return query.Id;
     }
 
     public async Task<int> DeleteAsync(string id, CancellationToken cancellationToken = default)
@@ -55,21 +97,26 @@ public class OrderHistoryService : IOrderHistoryService
 
     public async Task<OrderHistory?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
-        var entity = await _repository.GetSingleAsync(c => c.Id == id, cancellationToken);
+        var entity = await _repository.GetSingleAsync(c => c.Id == id, cancellationToken, c => c.Order);
         return entity;
     }
 
+   
+
     public async Task<PaginatedList<OrderHistory>> GetPaginatedAsync(OrderHistoryQuery query, CancellationToken cancellationToken = default)
     {
-       
         var list = await _repository.GetAsync(null,
             cancellationToken: cancellationToken,
             c => c.Order, c => c.Order.LaundryStore);
-        if(query.LaundryStoreId != null)
+        if (query.OrderId != null)
+        {
+            list = list.Where(x => x.OrderID == query.OrderId);
+        }
+        if (query.LaundryStoreId != null)
         {
             list = list.Where(x => x.Order.LaundryStoreID == query.LaundryStoreId);
         }
-        if(query.CustomerId != null)
+        if (query.CustomerId != null)
         {
             list = list.Where(x => x.Order.CustomerID == query.CustomerId);
         }
@@ -81,8 +128,6 @@ public class OrderHistoryService : IOrderHistoryService
     {
         var numberOfRows = await _repository.UpdateAsync(x => x.Id == id,
             x => x
-        .SetProperty(x => x.Message, model.Message)
-        .SetProperty(x => x.Title, model.Title)
         .SetProperty(x => x.OrderStatus, model.OrderStatus)
         .SetProperty(x => x.DeliveryStatus, model.DeliveryStatus)
         .SetProperty(x => x.LaundryStatus, model.LaundryStatus), cancellationToken);

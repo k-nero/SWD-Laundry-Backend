@@ -8,6 +8,7 @@ using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
 using SWD_Laundry_Backend.Core.QueryObject;
+using SWD_Laundry_Backend.Core.Utils;
 
 namespace SWD_Laundry_Backend.Service.Services;
 
@@ -48,9 +49,16 @@ public class TransactionService : Base_Service.Service, ITransactionService
         return entity;
     }
 
-    public Task<PaginatedList<Transaction>> GetPaginatedAsync(TransactionQuery query, CancellationToken cancellationToken = default)
+
+    public async Task<PaginatedList<Transaction>> GetPaginatedAsync(TransactionQuery query, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var list = await _repository
+        .GetAsync(null
+        , cancellationToken: cancellationToken);
+
+
+        var result = await list.PaginatedListAsync(query);
+        return result;
     }
 
     public async Task<int> UpdateAsync(string id, TransactionModel model, CancellationToken cancellationToken = default)

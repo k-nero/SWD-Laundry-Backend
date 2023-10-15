@@ -9,6 +9,6 @@ namespace SWD_Laundry_Backend.Core.Enum;
 public enum LaundryStatus
 {
     Pending = 0,
-    Cleaning = 1,
+    Washing = 1,
     Finished = 2,
 }

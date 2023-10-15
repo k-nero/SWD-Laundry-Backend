@@ -6,11 +6,6 @@ public class OrderHistoryValidator : AbstractValidator<OrderHistoryModel>
 {
     public OrderHistoryValidator()
     {
-        RuleFor(x => x.Title)
-            .NotEmpty().WithMessage("Title is required when applicable.");
-
-        RuleFor(x => x.Message)
-            .NotEmpty().WithMessage("Message is required when applicable.");
 
         RuleFor(x => x.OrderStatus)
             .IsInEnum().WithMessage("Invalid OrderStatus.");

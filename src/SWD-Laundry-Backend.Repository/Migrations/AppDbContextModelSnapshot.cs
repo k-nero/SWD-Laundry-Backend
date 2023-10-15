@@ -376,9 +376,6 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("OrderType")
-                        .HasColumnType("int");
-
                     b.Property<int>("PaymentType")
                         .HasColumnType("int");
 

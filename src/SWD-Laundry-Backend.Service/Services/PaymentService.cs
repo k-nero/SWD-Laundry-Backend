@@ -51,7 +51,10 @@ public class PaymentService : IPaymentService
 
     public async Task<PaginatedList<Payment>> GetPaginatedAsync(PaymentQuery query, CancellationToken cancellationToken = default)
     {
-        var list = await _repository.GetAsync(cancellationToken: cancellationToken);
+        var list = await _repository
+        .GetAsync(null, cancellationToken: cancellationToken, c => c.Orders);
+
+
         var result = await list.PaginatedListAsync(query);
         return result;
     }

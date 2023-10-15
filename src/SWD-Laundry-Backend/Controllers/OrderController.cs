@@ -11,17 +11,19 @@ namespace SWD_Laundry_Backend.Controllers;
 public class OrderController : ApiControllerBase
 {
     private readonly IOrderService _service;
+    private readonly IOrderHistoryService _service2;
 
-    public OrderController(IOrderService service)
+    public OrderController(IOrderService service, IOrderHistoryService service2)
     {
         _service = service;
+        _service2 = service2;
     }
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Get([FromQuery]OrderQuery query)
+    public async Task<IActionResult> Get([FromQuery] OrderQuery query)
     {
         try
         {
@@ -55,6 +57,8 @@ public class OrderController : ApiControllerBase
             return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
         }
     }
+
+
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -112,6 +116,46 @@ public class OrderController : ApiControllerBase
                 return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
             }
             return Ok(new BaseResponseModel<int>(StatusCodes.Status200OK, data: result));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
+        }
+    }
+
+    [HttpGet("{orderId}/order-history")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesDefaultResponseType]
+    public async Task<IActionResult> GetOrderHistory(string orderId, [FromQuery] OrderHistoryQuery query)
+    {
+        try
+        {
+            var pgresult = await _service2.GetOrderHistoryByOrderIdAsync(orderId, query);
+            return Ok(new BaseResponseModel<PaginatedList<OrderHistory>?>(StatusCodes.Status200OK, data: pgresult));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
+        }
+    }
+
+    [HttpPost("{orderId}/order-history")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesDefaultResponseType]
+    public async Task<IActionResult> CreateOrderHistory(string orderId, [FromQuery] OrderHistoryModel model)
+    {
+        try
+        {
+            var result = await _service2.CreateOrderHistoryByOrderIdAsync(orderId, model);
+            if (result == null)
+            {
+                return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
+            }
+            return Ok(new BaseResponseModel<string>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {

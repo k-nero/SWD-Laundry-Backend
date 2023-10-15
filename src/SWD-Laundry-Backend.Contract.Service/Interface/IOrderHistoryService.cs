@@ -1,6 +1,7 @@
 ﻿using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Service.Base_Service_Interface;
 using SWD_Laundry_Backend.Core.Models;
+using SWD_Laundry_Backend.Core.Models.Common;
 using SWD_Laundry_Backend.Core.QueryObject;
 
 namespace SWD_Laundry_Backend.Contract.Service.Interface;
@@ -11,5 +12,6 @@ public interface IOrderHistoryService :
     IUpdateAble<OrderHistoryModel, string>,
     IDeleteAble<string>
 {
-
+    Task<PaginatedList<OrderHistory>?> GetOrderHistoryByOrderIdAsync(string id, OrderHistoryQuery query, CancellationToken cancellationToken = default);
+    Task<string> CreateOrderHistoryByOrderIdAsync(string id, OrderHistoryModel model, CancellationToken cancellationToken = default);
 }

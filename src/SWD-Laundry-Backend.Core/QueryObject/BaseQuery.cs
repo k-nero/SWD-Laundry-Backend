@@ -13,5 +13,4 @@ public record class BaseQuery
     public DateTime? EndDate { get; init; }
     [FromQuery(Name = "sort")]
     public string? Sort { get; init; }
-
 }

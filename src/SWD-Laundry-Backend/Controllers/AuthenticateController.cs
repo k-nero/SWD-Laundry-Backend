@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels;
 using SWD_Laundry_Backend.Contract.Service.Interface;
+using SWD_Laundry_Backend.Core.Config;
 using SWD_Laundry_Backend.Core.Utils;
 
 namespace SWD_Laundry_Backend.Controllers;
@@ -15,6 +16,12 @@ namespace SWD_Laundry_Backend.Controllers;
 public readonly struct Token
 {
     public string AccessToken { get; init; }
+}
+
+public readonly struct RegisterRole
+{
+    public string Email { get; init; }
+    public string Role { get; init; }
 }
 
 [ApiController]
@@ -79,6 +86,30 @@ public class AuthenticateController : ApiControllerBase
         }
     }
 
+    [HttpPut]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesDefaultResponseType]
+    public async Task<IActionResult> AddToRole([FromBody] RegisterRole reg)
+    {
+        try
+        {
+            var user = await _identityService.GetUserByUserNameAsync(reg.Email);
+            if (user != null)
+            {
+                await _identityService.AddToRoleAsync(user, reg.Role);
+                return Ok();
+            }
+            return BadRequest();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
     //create access token 
     private async Task<object> CreateAccessTokenAsync(ApplicationUser user)
     {
@@ -96,14 +127,13 @@ public class AuthenticateController : ApiControllerBase
         {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim("id", user.Id)
-        }
-        .Union(userClaims)
-        .Union(roleClaims);
-        var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("04edf27f-5a6c-475c-bd8e-d522473ed5d5"));
+        }.Union(userClaims).Union(roleClaims);
+        var key = SystemSettingModel.Configs["Jwt:SecrectKey"];
+        var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
         var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
         var jwtSecurityToken = new JwtSecurityToken(
-            issuer: "https://ec2-13-212-24-193.ap-southeast-1.compute.amazonaws.com",
-            audience: "None",
+            issuer: SystemSettingModel.Configs["Jwt:ValidIssuer"],
+            audience: SystemSettingModel.Configs["Jwt:ValidAudience"],
             claims: claims,
             expires: DateTime.UtcNow.AddMinutes(240),
             signingCredentials: signingCredentials);

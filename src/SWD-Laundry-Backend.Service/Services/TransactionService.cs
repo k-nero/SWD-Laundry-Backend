@@ -51,7 +51,6 @@ public class TransactionService : Base_Service.Service, ITransactionService
 
 
     public Task<PaginatedList<Transaction>> GetPaginatedAsync(TransactionQuery query, CancellationToken cancellationToken = default)
-
     {
         var list = await _repository
         .GetAsync(null

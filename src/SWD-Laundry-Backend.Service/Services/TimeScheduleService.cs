@@ -50,16 +50,13 @@ public class TimeScheduleService : Base_Service.Service, ITimeScheduleService
     }
 
 
-    public Task<PaginatedList<TimeSchedule>> GetPaginatedAsync(TimeScheduleQuery query, CancellationToken cancellationToken = default)
+    public async Task<PaginatedList<TimeSchedule>> GetPaginatedAsync(TimeScheduleQuery query, CancellationToken cancellationToken = default)
 
     {
         var list = await _repository
     .GetAsync(null
     , cancellationToken: cancellationToken);
 
-        list = orderBy != null ?
-            list.OrderBy(orderBy) :
-            list.OrderBy(x => x.CreatedTime);
         var result = await list.PaginatedListAsync(query);
         return result;
     }

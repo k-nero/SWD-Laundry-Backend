@@ -83,9 +83,6 @@ public class OrderService : IOrderService
     , c => c.Staff
     , c => c.LaundryStore);
 
-        list = orderBy != null ?
-            list.OrderBy(orderBy) :
-            list.OrderBy(x => x.CreatedTime);
         var result = await list.PaginatedListAsync(query);
         return result;
     }

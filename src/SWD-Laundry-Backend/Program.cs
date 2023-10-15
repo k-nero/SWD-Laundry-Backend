@@ -200,8 +200,8 @@ public class Program
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
+        //if (app.Environment.IsDevelopment())
+        //{
             app.UseSwagger();
             app.UseSwaggerUI(
                 options =>
@@ -210,7 +210,7 @@ public class Program
                     options.RoutePrefix = "swagger/api/v1";
                 });
             IdentityModelEventSource.ShowPII = true;
-        }
+        //}
         app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
         app.UseHttpsRedirection();
         app.UseSerilogRequestLogging();
@@ -228,8 +228,8 @@ public class SlugifyParameterTransformer : IOutboundParameterTransformer
 {
     public string? TransformOutbound(object value)
     {
-        // Slugify value
-        return value == null ? null : Regex.Replace(value.ToString(), "([a-z])([A-Z])", "$1-$2").ToLower();
+        var name = value.ToString();
+        return name == null ? null : Regex.Replace(name, "([a-z])([A-Z])", "$1-$2").ToLower();
     }
 }
 

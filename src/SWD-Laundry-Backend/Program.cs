@@ -1,3 +1,4 @@
+using System.IO.Compression;
 using System.Text;
 using System.Text.RegularExpressions;
 using FirebaseAdmin;
@@ -30,8 +31,8 @@ public class Program
     public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        builder.Environment.EnvironmentName = Environments.Development;
 
+        //builder.Environment.EnvironmentName = Environments.Development;
         //builder.Environment.EnvironmentName = Environments.Production;
 
         // Add services to the container.
@@ -182,6 +183,14 @@ public class Program
         builder.Services.Configure<DataProtectionTokenProviderOptions>(opt => opt.TokenLifespan = TimeSpan.FromMinutes(30));
         builder.Services.AddDI();
         builder.Services.PrintServiceAddedToConsole();
+        builder.Services.Configure<GzipCompressionProviderOptions>(options =>
+        {
+            options.Level = CompressionLevel.Optimal;
+        });
+        builder.Services.Configure<BrotliCompressionProviderOptions>(options =>
+        {
+            options.Level = CompressionLevel.Optimal;
+        });
         builder.Services.AddResponseCompression(options =>
         {
             options.EnableForHttps = true;

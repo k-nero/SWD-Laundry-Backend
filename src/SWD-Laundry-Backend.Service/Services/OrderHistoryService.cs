@@ -60,15 +60,12 @@ public class OrderHistoryService : IOrderHistoryService
         return entity;
     }
 
-    public async Task<PaginatedList<OrderHistory>> GetPaginatedAsync(OrderHistoryQuery query, Expression<Func<OrderHistory, object>>? orderBy = null, CancellationToken cancellationToken = default)
+    public async Task<PaginatedList<OrderHistory>> GetPaginatedAsync(OrderHistoryQuery query, CancellationToken cancellationToken = default)
     {
        
         var list = await _repository.GetAsync(null,
             cancellationToken: cancellationToken,
             c => c.Order, c => c.Order.LaundryStore);
-        list = orderBy != null ?
-            list.OrderBy(orderBy) :
-            list.OrderBy(x => x.CreatedTime);
         if(query.LaundryStoreId != null)
         {
             list = list.Where(x => x.Order.LaundryStoreID == query.LaundryStoreId);

@@ -49,7 +49,9 @@ public class TransactionService : Base_Service.Service, ITransactionService
         return entity;
     }
 
-    public async Task<PaginatedList<Transaction>> GetPaginatedAsync(TransactionQuery query, Expression<Func<Transaction, object>>? orderBy = null, CancellationToken cancellationToken = default)
+
+    public Task<PaginatedList<Transaction>> GetPaginatedAsync(TransactionQuery query, CancellationToken cancellationToken = default)
+
     {
         var list = await _repository
         .GetAsync(null

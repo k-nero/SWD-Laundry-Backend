@@ -49,7 +49,9 @@ public class TimeScheduleService : Base_Service.Service, ITimeScheduleService
         return entity;
     }
 
-    public async Task<PaginatedList<TimeSchedule>> GetPaginatedAsync(TimeScheduleQuery query, Expression<Func<TimeSchedule, object>>? orderBy = null, CancellationToken cancellationToken = default)
+
+    public Task<PaginatedList<TimeSchedule>> GetPaginatedAsync(TimeScheduleQuery query, CancellationToken cancellationToken = default)
+
     {
         var list = await _repository
     .GetAsync(null

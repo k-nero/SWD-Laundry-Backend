@@ -59,13 +59,10 @@ public class StaffTripService : Base_Service.Service, IStaffTripService
     }
 
 
-    public async Task<PaginatedList<Staff_Trip>> GetPaginatedAsync(StaffTripQuery query, Expression<Func<Staff_Trip, object>>? orderBy = null, CancellationToken cancellationToken = default)
+    public async Task<PaginatedList<Staff_Trip>> GetPaginatedAsync(StaffTripQuery query, CancellationToken cancellationToken = default)
     {
-        var list = await _repository
-    .GetAsync(cancellationToken: cancellationToken);
-        list = orderBy != null ?
-            list.OrderBy(orderBy) :
-            list.OrderBy(x => x.CreatedTime);
+        var list = await _repository.GetAsync(cancellationToken: cancellationToken);
+     
         var result = await list.PaginatedListAsync(query);
         return result;
     }

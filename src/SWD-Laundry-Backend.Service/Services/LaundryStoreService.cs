@@ -50,12 +50,9 @@ public class LaundryStoreService : Base_Service.Service, ILaundryStoreService
         return customer;
     }
 
-    public async Task<PaginatedList<LaundryStore>> GetPaginatedAsync(LaundryStoreQuery query, Expression<Func<LaundryStore, object>>? orderBy = null, CancellationToken cancellationToken = default)
+    public async Task<PaginatedList<LaundryStore>> GetPaginatedAsync(LaundryStoreQuery query, CancellationToken cancellationToken = default)
     {
         var list = await _repository.GetAsync(cancellationToken: cancellationToken);
-        list = orderBy != null ?
-            list.OrderBy(orderBy) :
-            list.OrderBy(x => x.Name);
         var result = await list.PaginatedListAsync(query);
         return result;
     }

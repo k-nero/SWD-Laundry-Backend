@@ -49,8 +49,9 @@ public class PaymentService : IPaymentService
         return entity;
     }
 
-    public async Task<PaginatedList<Payment>> GetPaginatedAsync(PaymentQuery query, Expression<Func<Payment, object>>? orderBy = null, CancellationToken cancellationToken = default)
+    public async Task<PaginatedList<Payment>> GetPaginatedAsync(PaymentQuery query, CancellationToken cancellationToken = default)
     {
+
         var list = await _repository
         .GetAsync(null, cancellationToken: cancellationToken, c => c.Orders);
         list = orderBy != null ?

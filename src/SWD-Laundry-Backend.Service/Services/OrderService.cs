@@ -73,6 +73,7 @@ public class OrderService : IOrderService
         return numberOfRows;
     }
 
+
     public async Task<PaginatedList<Order>> GetPaginatedAsync(OrderQuery query, Expression<Func<Order, object>>? orderBy = null, CancellationToken cancellationToken = default)
     {
         var list = await _repository
@@ -85,6 +86,7 @@ public class OrderService : IOrderService
         list = orderBy != null ?
             list.OrderBy(orderBy) :
             list.OrderBy(x => x.CreatedTime);
+
         var result = await list.PaginatedListAsync(query);
         return result;
     }

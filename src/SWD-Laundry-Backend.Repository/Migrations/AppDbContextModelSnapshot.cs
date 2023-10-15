@@ -574,9 +574,6 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                     b.Property<int>("PaymentType")
                         .HasColumnType("int");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
                     b.Property<int>("TransactionType")
                         .HasColumnType("int");
 

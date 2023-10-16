@@ -84,13 +84,13 @@ public class OrderHistoryService : IOrderHistoryService
     {
         model.OrderId = id;
         model.OrderStatus = OrderStatus.Processing;
-        if (model.DeliveryStatus == DeliveryStatus.Delivering_Laundry)
+        if (model.DeliveryStatus == DeliveryStatus.DeliveringLaundry)
         {
             model.Title = "Order received";
             model.Message = "Shipper have collected order, on the wait to delivery.";
         }
 
-        if (model.DeliveryStatus == DeliveryStatus.Reached_Laundry)
+        if (model.DeliveryStatus == DeliveryStatus.ReachedLaundry)
         {
             model.Title = "Order reaching laundry store";
             model.Message = "Order have been taking by laundry store, waiting for processing";
@@ -104,14 +104,14 @@ public class OrderHistoryService : IOrderHistoryService
             model.DeliveryStatus = DeliveryStatus.Pending;
         }
 
-        if (model.DeliveryStatus == DeliveryStatus.Delivering_Customer)
+        if (model.DeliveryStatus == DeliveryStatus.DeliveringCustomer)
         {
             model.LaundryStatus = LaundryStatus.Finished;
             model.Title = "Order received";
             model.Message = "Shipper have collected order, on the wait to delivery.";
         }
 
-        if (model.DeliveryStatus == DeliveryStatus.Reached_Customer)
+        if (model.DeliveryStatus == DeliveryStatus.ReachedCustomer)
         {
             model.LaundryStatus = LaundryStatus.Finished;
             model.Title = "Order reaching customer's building";
@@ -120,7 +120,7 @@ public class OrderHistoryService : IOrderHistoryService
         if (model.DeliveryStatus == DeliveryStatus.Delivered)
         {
             model.LaundryStatus = LaundryStatus.Finished;
-            model.DeliveryStatus = DeliveryStatus.Reached_Customer;
+            model.DeliveryStatus = DeliveryStatus.ReachedCustomer;
             model.Title = "Order finished";
             model.Message = "Customer have received order.";
             model.OrderStatus = OrderStatus.Completed;

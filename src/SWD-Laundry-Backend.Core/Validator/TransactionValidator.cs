@@ -15,13 +15,13 @@ public class TransactionValidator : AbstractValidator<TransactionModel>
         RuleFor(x => x.Amount)
             .GreaterThan(0).WithMessage("Amount must be greater than 0.");
 
-        RuleFor(x => x.Description)
-            .NotEmpty().WithMessage("Description is required when applicable.");
+        //RuleFor(x => x.Description)
+        //    .NotEmpty().WithMessage("Description is required when applicable.");
 
-        RuleFor(x => x.WalletID)
-            .NotEmpty().WithMessage("WalletID is required when applicable.");
+        //RuleFor(x => x.WalletID)
+        //    .NotEmpty().WithMessage("WalletID is required when applicable.");
 
-        RuleFor(x => x.PaymentID)
-            .NotEmpty().WithMessage("PaymentID is required when applicable.");
+        //RuleFor(x => x.PaymentID)
+        //    .NotEmpty().WithMessage("PaymentID is required when applicable.");
     }
 }

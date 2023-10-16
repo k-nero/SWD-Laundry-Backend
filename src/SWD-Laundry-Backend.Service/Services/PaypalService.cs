@@ -8,7 +8,7 @@ using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Config;
 using SWD_Laundry_Backend.Core.Models;
-using SWD_Laundry_Backend.Core.ValueObject;
+using static SWD_Laundry_Backend.Core.ValueObject.PaypalApiObjectModel;
 using static SWD_Laundry_Backend.Core.ValueObject.PaypalApiObjectModel.PaypalOrder;
 
 namespace SWD_Laundry_Backend.Service.Services;
@@ -117,7 +117,7 @@ public class PaypalService : IPaypalService
         return result;
     }
 
-    private async Task<PaypalApiObjectModel.PaypalAccessTokenResponse?> GetAccessToken()
+    private async Task<PaypalAccessTokenResponse?> GetAccessToken()
     {
         const SecurityProtocolType tls13 = (SecurityProtocolType)12288;
         ServicePointManager.SecurityProtocol = tls13 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
@@ -138,7 +138,7 @@ public class PaypalService : IPaypalService
             });
             var response = await client.PostAsync(paypal_api_url, formContent);
             var responseString = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<PaypalApiObjectModel.PaypalAccessTokenResponse>(responseString);
+            var result = JsonConvert.DeserializeObject<PaypalAccessTokenResponse>(responseString);
             if(result.access_token == null)
             {
                 throw new Exception("There is something wrong, cannot get access token. ClientId " + client_id + " - ClientSecret: " + client_secret + " - Paypal URL: " + paypal_api_url);

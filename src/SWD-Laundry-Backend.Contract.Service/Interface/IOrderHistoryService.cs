@@ -12,6 +12,5 @@ public interface IOrderHistoryService :
     IUpdateAble<OrderHistoryModel, string>,
     IDeleteAble<string>
 {
-    Task<PaginatedList<OrderHistory>?> GetOrderHistoryByOrderIdAsync(string id, OrderHistoryQuery query, CancellationToken cancellationToken = default);
-    Task<string> CreateOrderHistoryByOrderIdAsync(string id, OrderHistoryModel model, CancellationToken cancellationToken = default);
+
 }

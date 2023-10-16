@@ -26,63 +26,6 @@ public class OrderHistoryService : IOrderHistoryService
 
     public async Task<string> CreateAsync(OrderHistoryModel model, CancellationToken cancellationToken = default)
     {
-        var query = await _repository.AddAsync(_mapper.Map<OrderHistory>(model), cancellationToken);
-        var objectId = query.Id;
-        return objectId;
-    }
-
-    public async Task<int> DeleteAsync(string id, CancellationToken cancellationToken = default)
-    {
-        var numberOfRows = await _repository.DeleteAsync(x => x.Id == id, cancellationToken: cancellationToken);
-        return numberOfRows;
-    }
-
-    public async Task<ICollection<OrderHistory>> GetAllAsync(OrderHistoryQuery query, CancellationToken cancellationToken = default)
-    {
-        var list = await _repository.GetAsync(cancellationToken: cancellationToken);
-        if (query.LaundryStoreId != null)
-        {
-            list.Include(x => x.Order).ThenInclude(x => x.LaundryStore);
-            list = list.Where(x => x.Order.LaundryStoreID == query.LaundryStoreId);
-        }
-        if (query.CustomerId != null)
-        {
-            list.Include(x => x.Order).ThenInclude(x => x.Customer);
-            list = list.Where(x => x.Order.CustomerID == query.CustomerId);
-        }
-        return await list.ToListAsync(cancellationToken);
-    }
-
-    public async Task<OrderHistory?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
-    {
-        var entity = await _repository.GetSingleAsync(c => c.Id == id, cancellationToken, c => c.Order);
-        return entity;
-    }
-
-    public async Task<PaginatedList<OrderHistory>?> GetOrderHistoryByOrderIdAsync(string id, OrderHistoryQuery query, CancellationToken cancellationToken = default)
-    {
-        var list = await _repository.GetAsync(null,
-        cancellationToken: cancellationToken,
-    c => c.Order, c => c.Order.LaundryStore);
-        if (query.OrderId != null)
-        {
-            list = list.Where(x => x.OrderID == query.OrderId);
-        }
-        if (query.LaundryStoreId != null)
-        {
-            list = list.Where(x => x.Order.LaundryStoreID == query.LaundryStoreId);
-        }
-        if (query.CustomerId != null)
-        {
-            list = list.Where(x => x.Order.CustomerID == query.CustomerId);
-        }
-        var result = await list.PaginatedListAsync(query);
-        return result;
-    }
-
-    public async Task<string> CreateOrderHistoryByOrderIdAsync(string id, OrderHistoryModel model, CancellationToken cancellationToken = default)
-    {
-        model.OrderId = id;
         model.OrderStatus = OrderStatus.Processing;
         if (model.DeliveryStatus == DeliveryStatus.DeliveringLaundry)
         {
@@ -130,11 +73,39 @@ public class OrderHistoryService : IOrderHistoryService
         return query.Id;
     }
 
+    public async Task<int> DeleteAsync(string id, CancellationToken cancellationToken = default)
+    {
+        var numberOfRows = await _repository.DeleteAsync(x => x.Id == id, cancellationToken: cancellationToken);
+        return numberOfRows;
+    }
+
+    public async Task<ICollection<OrderHistory>> GetAllAsync(OrderHistoryQuery query, CancellationToken cancellationToken = default)
+    {
+        var list = await _repository.GetAsync(cancellationToken: cancellationToken);
+        if (query.LaundryStoreId != null)
+        {
+            list.Include(x => x.Order).ThenInclude(x => x.LaundryStore);
+            list = list.Where(x => x.Order.LaundryStoreID == query.LaundryStoreId);
+        }
+        if (query.CustomerId != null)
+        {
+            list.Include(x => x.Order).ThenInclude(x => x.Customer);
+            list = list.Where(x => x.Order.CustomerID == query.CustomerId);
+        }
+        return await list.ToListAsync(cancellationToken);
+    }
+
+    public async Task<OrderHistory?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
+    {
+        var entity = await _repository.GetSingleAsync(c => c.Id == id, cancellationToken, c => c.Order);
+        return entity;
+    }
+
     public async Task<PaginatedList<OrderHistory>> GetPaginatedAsync(OrderHistoryQuery query, CancellationToken cancellationToken = default)
     {
         var list = await _repository.GetAsync(null,
-            cancellationToken: cancellationToken,
-            c => c.Order, c => c.Order.LaundryStore);
+        cancellationToken: cancellationToken,
+    c => c.Order, c => c.Order.LaundryStore);
         if (query.OrderId != null)
         {
             list = list.Where(x => x.OrderID == query.OrderId);

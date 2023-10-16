@@ -18,7 +18,7 @@ public class CustomerController : ApiControllerBase
         _service = service;
     }
 
-    [HttpGet]
+    [HttpGet("/api/v1/customers")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]

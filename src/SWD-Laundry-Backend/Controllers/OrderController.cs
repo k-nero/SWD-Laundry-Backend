@@ -19,7 +19,7 @@ public class OrderController : ApiControllerBase
         _service2 = service2;
     }
 
-    [HttpGet]
+    [HttpGet("/api/v1/orders")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
@@ -57,6 +57,8 @@ public class OrderController : ApiControllerBase
             return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
         }
     }
+
+
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -121,7 +123,7 @@ public class OrderController : ApiControllerBase
         }
     }
 
-    [HttpGet("{order-id}/order-history")]
+    [HttpGet("{order-id}/order-histories")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -144,7 +146,7 @@ public class OrderController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> CreateOrderHistory(string orderId, [FromBody] OrderHistoryModel model)
+    public async Task<IActionResult> CreateOrderHistory(string orderId, [FromQuery] OrderHistoryModel model)
     {
         try
         {

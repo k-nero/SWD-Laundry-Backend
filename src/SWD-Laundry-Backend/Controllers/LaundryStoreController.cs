@@ -19,7 +19,7 @@ public class LaundryStoreController : ApiControllerBase
 
     }
 
-    [HttpGet]
+    [HttpGet("/api/v1/laundry-stores")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]

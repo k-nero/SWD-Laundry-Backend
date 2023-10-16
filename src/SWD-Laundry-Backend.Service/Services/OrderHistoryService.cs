@@ -101,13 +101,11 @@ public class OrderHistoryService : IOrderHistoryService
         return entity;
     }
 
-   
-
     public async Task<PaginatedList<OrderHistory>> GetPaginatedAsync(OrderHistoryQuery query, CancellationToken cancellationToken = default)
     {
         var list = await _repository.GetAsync(null,
-            cancellationToken: cancellationToken,
-            c => c.Order, c => c.Order.LaundryStore);
+        cancellationToken: cancellationToken,
+    c => c.Order, c => c.Order.LaundryStore);
         if (query.OrderId != null)
         {
             list = list.Where(x => x.OrderID == query.OrderId);

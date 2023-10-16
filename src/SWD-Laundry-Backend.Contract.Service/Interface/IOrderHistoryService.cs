@@ -12,4 +12,5 @@ public interface IOrderHistoryService :
     IUpdateAble<OrderHistoryModel, string>,
     IDeleteAble<string>
 {
+
 }

@@ -19,7 +19,7 @@ public class StaffTripController : ApiControllerBase
 
     }
 
-    [HttpGet]
+    [HttpGet("/api/v1/staff-trips")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]

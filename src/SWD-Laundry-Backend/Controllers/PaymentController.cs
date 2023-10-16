@@ -17,7 +17,7 @@ public class PaymentController : ApiControllerBase
         _service = service;
     }
 
-    [HttpGet]
+    [HttpGet("/api/v1/payments")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]

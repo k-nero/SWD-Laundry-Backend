@@ -19,7 +19,7 @@ public class OrderController : ApiControllerBase
         _service2 = service2;
     }
 
-    [HttpGet]
+    [HttpGet("/api/v1/orders")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
@@ -123,7 +123,7 @@ public class OrderController : ApiControllerBase
         }
     }
 
-    [HttpGet("{orderId}/order-history")]
+    [HttpGet("{orderId}/order-histories")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]

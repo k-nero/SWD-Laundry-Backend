@@ -8,7 +8,7 @@ using SWD_Laundry_Backend.Core.QueryObject;
 
 namespace SWD_Laundry_Backend.Controllers;
 
-[Authorize(Roles = "Admin, Staff")]
+//[Authorize(Roles = "Admin, Staff")]
 [ApiController]
 public class BuildingController : ApiControllerBase
 {
@@ -19,7 +19,7 @@ public class BuildingController : ApiControllerBase
         _buildingService = buildingService;
     }
 
-    [HttpGet]
+    [HttpGet("/api/v1/buildings")]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]

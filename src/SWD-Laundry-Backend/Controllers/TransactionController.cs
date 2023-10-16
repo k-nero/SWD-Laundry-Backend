@@ -18,7 +18,7 @@ public class TransactionController : ApiControllerBase
         _service = service;
     }
 
-    [HttpGet]
+    [HttpGet("/api/v1/transactions")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]

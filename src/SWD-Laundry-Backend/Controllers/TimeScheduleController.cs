@@ -18,7 +18,7 @@ public class TimeScheduleController : ApiControllerBase
         _service = service;
     }
 
-    [HttpGet]
+    [HttpGet("/api/v1/time-schedules")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]

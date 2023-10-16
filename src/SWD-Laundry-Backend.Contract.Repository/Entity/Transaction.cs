@@ -9,6 +9,7 @@ public class Transaction : BaseEntity
     public PaymentType PaymentType { get; set; }
     public AllowedTransactionType TransactionType { get; set; }
     public double Amount { get; set; }
+    public TransactionStatus Status { get; set; }
     public string? Description { get; set; }
 
     ////===========================

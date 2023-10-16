@@ -18,8 +18,7 @@ public class OrderValidator : AbstractValidator<OrderModel>
             .GreaterThan(x => x.OrderDate)
             .WithMessage("ExpectedFinishDate must be greater than OrderDate.");
 
-        RuleFor(x => x.OrderType)
-            .IsInEnum().WithMessage("Invalid OrderType.");
+
 
         RuleFor(x => x.PaymentType)
             .IsInEnum().WithMessage("Invalid PaymentType.");

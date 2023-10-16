@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SWD_Laundry_Backend.Repository.Infrastructure;
 
@@ -11,9 +12,11 @@ using SWD_Laundry_Backend.Repository.Infrastructure;
 namespace SWD_Laundry_Backend.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231014192449_DeleteOrderType")]
+    partial class DeleteOrderType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -419,17 +422,11 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                     b.Property<int>("LaundryStatus")
                         .HasColumnType("int");
 
-                    b.Property<string>("Message")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("OrderID")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("OrderStatus")
                         .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -572,9 +569,6 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("PaymentType")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<int>("TransactionType")

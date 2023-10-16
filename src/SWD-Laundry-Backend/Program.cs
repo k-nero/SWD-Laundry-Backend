@@ -1,3 +1,4 @@
+using System.IO.Compression;
 using System.Text;
 using System.Text.RegularExpressions;
 using FirebaseAdmin;
@@ -30,8 +31,8 @@ public class Program
     public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        builder.Environment.EnvironmentName = Environments.Development;
 
+        //builder.Environment.EnvironmentName = Environments.Development;
         //builder.Environment.EnvironmentName = Environments.Production;
 
         // Add services to the container.
@@ -182,6 +183,14 @@ public class Program
         builder.Services.Configure<DataProtectionTokenProviderOptions>(opt => opt.TokenLifespan = TimeSpan.FromMinutes(30));
         builder.Services.AddDI();
         builder.Services.PrintServiceAddedToConsole();
+        builder.Services.Configure<GzipCompressionProviderOptions>(options =>
+        {
+            options.Level = CompressionLevel.Optimal;
+        });
+        builder.Services.Configure<BrotliCompressionProviderOptions>(options =>
+        {
+            options.Level = CompressionLevel.Optimal;
+        });
         builder.Services.AddResponseCompression(options =>
         {
             options.EnableForHttps = true;
@@ -191,8 +200,8 @@ public class Program
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
+        //if (app.Environment.IsDevelopment())
+        //{
             app.UseSwagger();
             app.UseSwaggerUI(
                 options =>
@@ -201,7 +210,7 @@ public class Program
                     options.RoutePrefix = "swagger/api/v1";
                 });
             IdentityModelEventSource.ShowPII = true;
-        }
+        //}
         app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
         app.UseHttpsRedirection();
         app.UseSerilogRequestLogging();
@@ -219,8 +228,8 @@ public class SlugifyParameterTransformer : IOutboundParameterTransformer
 {
     public string? TransformOutbound(object value)
     {
-        // Slugify value
-        return value == null ? null : Regex.Replace(value.ToString(), "([a-z])([A-Z])", "$1-$2").ToLower();
+        var name = value.ToString();
+        return name == null ? null : Regex.Replace(name, "([a-z])([A-Z])", "$1-$2").ToLower();
     }
 }
 

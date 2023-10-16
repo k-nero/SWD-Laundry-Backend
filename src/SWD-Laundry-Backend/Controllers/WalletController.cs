@@ -20,7 +20,7 @@ public class WalletController : ApiControllerBase
         _service2 = service2;
     }
 
-    [HttpGet]
+    [HttpGet("/api/v1/wallets")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]

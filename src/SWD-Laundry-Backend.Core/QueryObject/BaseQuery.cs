@@ -3,15 +3,14 @@
 namespace SWD_Laundry_Backend.Core.QueryObject;
 public record class BaseQuery
 {
-    [FromQuery(Name = "page")]
+    [BindProperty(Name = "page", SupportsGet = true)]
     public int Page { get; init; }
-    [FromQuery(Name = "limit")]
+    [BindProperty(Name = "limit", SupportsGet = true)]
     public int Limit { get; init; }
-    [FromQuery(Name = "start-date")]
+    [BindProperty(Name = "start-date", SupportsGet = true)]
     public DateTime? StartDate { get; init; }
-    [FromQuery(Name = "end-date")]
+    [BindProperty(Name = "end-date", SupportsGet = true)]
     public DateTime? EndDate { get; init; }
-    [FromQuery(Name = "sort")]
+    [BindProperty(Name = "sort", SupportsGet = true)]
     public string? Sort { get; init; }
-
 }

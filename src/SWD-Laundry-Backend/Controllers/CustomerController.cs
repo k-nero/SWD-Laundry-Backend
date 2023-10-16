@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Service.Interface;
+using SWD_Laundry_Backend.Core.Config;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
 using SWD_Laundry_Backend.Core.QueryObject;
@@ -8,7 +9,7 @@ using SWD_Laundry_Backend.Core.QueryObject;
 namespace SWD_Laundry_Backend.Controllers;
 
 [ApiController]
-public class CustomerController : ApiControllerBase
+public class CustomerController : ApiControllerBase 
 {
     private readonly ICustomerService _service;
 
@@ -17,7 +18,7 @@ public class CustomerController : ApiControllerBase
         _service = service;
     }
 
-    [HttpGet]
+    [HttpGet("/api/v1/customers")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]

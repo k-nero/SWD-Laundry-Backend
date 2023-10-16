@@ -6,7 +6,7 @@ public class LaundryStoreValidator : AbstractValidator<LaundryStoreModel>
 {
     public LaundryStoreValidator()
     {
-        RuleFor(x => x.StoreName)
+        RuleFor(x => x.Name)
             .NotEmpty().WithMessage("StoreName is required.");
 
         RuleFor(x => x.Address)

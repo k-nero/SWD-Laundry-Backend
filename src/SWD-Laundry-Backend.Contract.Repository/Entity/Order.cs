@@ -7,10 +7,10 @@ namespace SWD_Laundry_Backend.Contract.Repository.Entity;
 public class Order : BaseEntity
 {
     public DateTime OrderDate { get; set; }
-    public DateTime ExpectedFinishDate { get; set; }
     public TimeFrame DeliveryTimeFrame { get; set; }
+    public DateTime ExpectedFinishDate { get; set; }
 
-    public OrderType OrderType { get; set; }
+    //public OrderType OrderType { get; set; }
     public PaymentType PaymentType { get; set; }
 
     public short Amount { get; set; }

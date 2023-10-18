@@ -52,7 +52,10 @@ public class LaundryStoreService : Base_Service.Service, ILaundryStoreService
 
     public async Task<PaginatedList<LaundryStore>> GetPaginatedAsync(LaundryStoreQuery query, CancellationToken cancellationToken = default)
     {
-        var list = await _repository.GetAsync(cancellationToken: cancellationToken);
+        var list = await _repository.GetAsync(null
+            ,cancellationToken: cancellationToken
+            , c => c.ApplicationUser
+            , c => c.ApplicationUser.Wallet);
         var result = await list.PaginatedListAsync(query);
         return result;
     }

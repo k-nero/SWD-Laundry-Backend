@@ -119,4 +119,11 @@ public class IdentityService : Base_Service.Service, IIdentityService
     {
         await _userManager.SetEmailAsync(user, email);
     }
+
+    public async Task<int> SetWalletAsync(ApplicationUser user, string walletId)
+    {
+       user.WalletID = walletId;
+       var rs = await _userManager.UpdateAsync(user);
+       return rs.ToApplicationResult().Succeeded ? 1 : 0;
+    }
 }

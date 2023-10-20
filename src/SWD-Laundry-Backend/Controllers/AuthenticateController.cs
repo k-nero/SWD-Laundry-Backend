@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Config;
+using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Utils;
 
 namespace SWD_Laundry_Backend.Controllers;
@@ -30,11 +31,13 @@ public class AuthenticateController : ApiControllerBase
     private readonly FirebaseApp _firebaseApp;
     private readonly IIdentityService _identityService;
     private readonly FirebaseAuth _firebaseAuth = FirebaseAuth.DefaultInstance;
+    private readonly IWalletService _walletService;
 
-    public AuthenticateController(FirebaseApp firebaseApp, IIdentityService identityService)
+    public AuthenticateController(FirebaseApp firebaseApp, IIdentityService identityService, IWalletService walletService)
     {
         _firebaseApp = firebaseApp;
         _identityService = identityService;
+        _walletService = walletService;
     }
 
     [HttpPost]
@@ -71,6 +74,11 @@ public class AuthenticateController : ApiControllerBase
                     {
                         await _identityService.SetUserFullNameAsync(identity, user.DisplayName);
                     }
+                    var walletId = await _walletService.CreateAsync(new WalletModel
+                    {
+                        Balance = 0,
+                    });
+                    await _identityService.SetWalletAsync(identity, walletId);
                 }
             }
             if (identity != null)
@@ -114,6 +122,7 @@ public class AuthenticateController : ApiControllerBase
     private async Task<object> CreateAccessTokenAsync(ApplicationUser user)
     {
         var userClaims = await _identityService.GetClaimsAsync(user);
+        var wallet = await _walletService.GetByIdAsync(user.WalletID);
         var roles = await _identityService.GetRolesAsync(user);
         var roleClaims = new List<Claim>();
         if(roles != null)
@@ -126,7 +135,8 @@ public class AuthenticateController : ApiControllerBase
         var claims = new[]
         {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("id", user.Id)
+                new Claim("id", user.Id),
+                new Claim("wallet", wallet.Balance.ToString()),
         }.Union(userClaims).Union(roleClaims);
         var key = SystemSettingModel.Configs["Jwt:SecrectKey"];
         var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));

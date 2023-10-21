@@ -33,8 +33,11 @@ public class CustomerService : ICustomerService
 
     public async Task<int> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
-        var numberOfRows = await _repository.DeleteAsync(x => x.Id == id, cancellationToken: cancellationToken);
-        return numberOfRows;
+        int i = await _repository.UpdateAsync(x => x.Id == id,
+    x => x
+    .SetProperty(x => x.IsDelete, true),
+    cancellationToken: cancellationToken);
+        return i;
     }
 
     public async Task<ICollection<Customer>> GetAllAsync(CustomerQuery? query, CancellationToken cancellationToken = default)
@@ -60,7 +63,9 @@ public class CustomerService : ICustomerService
 
     public async Task<PaginatedList<Customer>> GetPaginatedAsync(CustomerQuery query, CancellationToken cancellationToken = default)
     {
-        var list = await _repository.GetAsync(null ,cancellationToken: cancellationToken
+        var list = await _repository.GetAsync(
+      c => c.IsDelete == query.IsDeleted
+            ,cancellationToken: cancellationToken
             , x => x.ApplicationUser
             , c => c.ApplicationUser.Wallet
             , c => c.Building);

@@ -13,6 +13,7 @@ namespace SWD_Laundry_Backend.Contract.Repository.Entity
 
         [Key]
         public string Id { get; set; }
+        public bool IsDelete { get; set; } = false;
         public string? CreatedBy { get; set; }
         public string? LastUpdatedBy { get; set; }
         //public string? DeletedBy { get; set; }

@@ -33,7 +33,10 @@ public class WalletService : Base_Service.Service, IWalletService
 
     public async Task<int> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
-        int i = await _repository.DeleteAsync(x => x.Id == id, cancellationToken: cancellationToken);
+        int i = await _repository.UpdateAsync(x => x.Id == id,
+    x => x
+    .SetProperty(x => x.IsDelete, true),
+    cancellationToken: cancellationToken);
         return i;
     }
 
@@ -51,7 +54,9 @@ public class WalletService : Base_Service.Service, IWalletService
 
     public async Task<PaginatedList<Wallet>> GetPaginatedAsync(WalletQuery query, CancellationToken cancellationToken = default)
     {
-        var list = await _repository.GetAsync(cancellationToken: cancellationToken);
+        var list = await _repository.GetAsync(
+      c => c.IsDelete == query.IsDeleted
+            , cancellationToken: cancellationToken);
         var result = await list.PaginatedListAsync(query) ;
         return result;
 

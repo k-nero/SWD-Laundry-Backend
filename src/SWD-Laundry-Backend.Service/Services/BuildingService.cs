@@ -34,7 +34,10 @@ public class BuildingService : Base_Service.Service, IBuidingService
 
     public async Task<int> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
-       int i = await _buildingRepository.DeleteAsync(x => x.Id == id, cancellationToken: cancellationToken);
+        int i = await _buildingRepository.UpdateAsync(x => x.Id == id,
+            x => x
+            .SetProperty(x => x.IsDelete, true),
+            cancellationToken: cancellationToken);
         return i;
     }
 
@@ -52,7 +55,9 @@ public class BuildingService : Base_Service.Service, IBuidingService
 
     public async Task<PaginatedList<Building>> GetPaginatedAsync(BuildingQuery query, CancellationToken cancellationToken = default)
     {
-        var buildings = await _buildingRepository.GetAsync(cancellationToken: cancellationToken);
+        var buildings = await _buildingRepository
+            .GetAsync(c => c.IsDelete == query.IsDeleted
+            ,cancellationToken: cancellationToken);
         var result = await buildings.PaginatedListAsync(query);
         return result;
     }

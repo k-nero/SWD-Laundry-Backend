@@ -13,4 +13,6 @@ public record class BaseQuery
     public DateTime? EndDate { get; init; }
     [BindProperty(Name = "sort", SupportsGet = true)]
     public string? Sort { get; init; }
+    [BindProperty(Name = "is-deleted", SupportsGet = true)]
+    public bool IsDeleted { get; init; } = false;
 }

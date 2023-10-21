@@ -33,8 +33,9 @@ public class LaundryStoreService : Base_Service.Service, ILaundryStoreService
 
     public async Task<int> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
-        var numberOfRows = await _repository.DeleteAsync(x => x.Id == id, cancellationToken: cancellationToken);
-        return numberOfRows;
+        int i = await _repository.DeleteAsync(x => x.Id == id,
+            cancellationToken);
+        return i;
     }
 
     public async Task<ICollection<LaundryStore>> GetAllAsync(LaundryStoreQuery? query, CancellationToken cancellationToken = default)
@@ -52,8 +53,9 @@ public class LaundryStoreService : Base_Service.Service, ILaundryStoreService
 
     public async Task<PaginatedList<LaundryStore>> GetPaginatedAsync(LaundryStoreQuery query, CancellationToken cancellationToken = default)
     {
-        var list = await _repository.GetAsync(null
-            ,cancellationToken: cancellationToken
+        var list = await _repository.GetAsync(
+            c => c.IsDelete == query.IsDeleted
+            , cancellationToken: cancellationToken
             , c => c.ApplicationUser
             , c => c.ApplicationUser.Wallet);
         var result = await list.PaginatedListAsync(query);

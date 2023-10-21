@@ -33,8 +33,9 @@ public class TimeScheduleService : Base_Service.Service, ITimeScheduleService
 
     public async Task<int> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
-        var numberOfRows = await _repository.DeleteAsync(x => x.Id == id, cancellationToken);
-        return numberOfRows;
+        int i = await _repository.DeleteAsync(x => x.Id == id,
+            cancellationToken);
+        return i;
     }
 
     public async Task<ICollection<TimeSchedule>> GetAllAsync(TimeScheduleQuery? query, CancellationToken cancellationToken = default)
@@ -54,7 +55,7 @@ public class TimeScheduleService : Base_Service.Service, ITimeScheduleService
 
     {
         var list = await _repository
-    .GetAsync(null
+    .GetAsync(c => c.IsDelete == query.IsDeleted
     , cancellationToken: cancellationToken);
 
         var result = await list.PaginatedListAsync(query);

@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using AutoMapper;
+﻿using AutoMapper;
 using Invedia.DI.Attributes;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,8 +34,9 @@ public class OrderService : IOrderService
 
     public async Task<int> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
-        var numberOfRows = await _repository.DeleteAsync(x => x.Id == id, cancellationToken: cancellationToken);
-        return numberOfRows;
+        int i = await _repository.DeleteAsync(x => x.Id == id,
+            cancellationToken);
+        return i;
     }
 
     public async Task<ICollection<Order>> GetAllAsync(OrderQuery? query, CancellationToken cancellationToken = default)
@@ -73,13 +73,13 @@ public class OrderService : IOrderService
         return numberOfRows;
     }
 
-
     public async Task<PaginatedList<Order>> GetPaginatedAsync(OrderQuery query, CancellationToken cancellationToken = default)
     {
         var list = await _repository
-    .GetAsync(null 
-    ,cancellationToken: cancellationToken
-    ,c => c.Customer
+        .GetAsync(
+    c => c.IsDelete == query.IsDeleted
+    , cancellationToken: cancellationToken
+    , c => c.Customer
     , c => c.Staff
     , c => c.LaundryStore);
 

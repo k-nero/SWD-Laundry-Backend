@@ -14,9 +14,11 @@ using SWD_Laundry_Backend.Core.Utils;
 
 namespace SWD_Laundry_Backend.Controllers;
 
-public readonly struct Token
+public readonly struct LoginModel
 {
-    public string AccessToken { get; init; }
+    public string? AccessToken { get; init; }
+    public string? UserName { get; init; }
+    public string? Password { get; init; }
 }
 
 public readonly struct RegisterRole
@@ -46,7 +48,7 @@ public class AuthenticateController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Login([FromBody] Token token)
+    public async Task<IActionResult> Login([FromBody] LoginModel token)
     {
 
         try
@@ -124,6 +126,7 @@ public class AuthenticateController : ApiControllerBase
         var userClaims = await _identityService.GetClaimsAsync(user);
         var wallet = await _walletService.GetByIdAsync(user.WalletID);
         var roles = await _identityService.GetRolesAsync(user);
+        user.Wallet = wallet;
         var roleClaims = new List<Claim>();
         if(roles != null)
         {
@@ -135,8 +138,13 @@ public class AuthenticateController : ApiControllerBase
         var claims = new[]
         {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("id", user.Id),
-                new Claim("wallet", wallet.Balance.ToString()),
+                new Claim("Email", user.Email ?? ""),
+                new Claim("UserId", user.Id.ToString()),
+                new Claim("FullName", user.Name ?? ""),
+                new Claim("WalletBalance", user.Wallet.Balance.ToString()),
+                new Claim("PhoneNumber", user.PhoneNumber ?? ""),
+                new Claim("AvatarUrl", user.ImageUrl ?? ""),
+                new Claim("Username", user.UserName ?? ""),
         }.Union(userClaims).Union(roleClaims);
         var key = SystemSettingModel.Configs["Jwt:SecrectKey"];
         var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));

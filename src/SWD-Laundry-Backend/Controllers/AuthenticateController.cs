@@ -76,6 +76,10 @@ public class AuthenticateController : ApiControllerBase
                     {
                         await _identityService.SetUserFullNameAsync(identity, user.DisplayName);
                     }
+                    if (!user.PhotoUrl.IsNullOrEmpty())
+                    {
+                        await _identityService.SetUserAvatarUrlAsync(identity, user.PhotoUrl);
+                    }
                     var walletId = await _walletService.CreateAsync(new WalletModel
                     {
                         Balance = 0,

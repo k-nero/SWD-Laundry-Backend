@@ -14,13 +14,6 @@ using SWD_Laundry_Backend.Core.Utils;
 
 namespace SWD_Laundry_Backend.Controllers;
 
-public readonly struct LoginModel
-{
-    public string? AccessToken { get; init; }
-    public string? UserName { get; init; }
-    public string? Password { get; init; }
-}
-
 public readonly struct RegisterRole
 {
     public string Email { get; init; }

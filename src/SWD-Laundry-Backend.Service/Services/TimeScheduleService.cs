@@ -33,10 +33,8 @@ public class TimeScheduleService : Base_Service.Service, ITimeScheduleService
 
     public async Task<int> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
-        int i = await _repository.UpdateAsync(x => x.Id == id,
-    x => x
-    .SetProperty(x => x.IsDelete, true),
-    cancellationToken: cancellationToken);
+        int i = await _repository.DeleteAsync(x => x.Id == id,
+            cancellationToken);
         return i;
     }
 

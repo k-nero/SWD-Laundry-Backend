@@ -34,10 +34,8 @@ public class BuildingService : Base_Service.Service, IBuidingService
 
     public async Task<int> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
-        int i = await _buildingRepository.UpdateAsync(x => x.Id == id,
-            x => x
-            .SetProperty(x => x.IsDelete, true),
-            cancellationToken: cancellationToken);
+        int i = await _buildingRepository.DeleteAsync(x => x.Id == id,
+            cancellationToken);
         return i;
     }
 

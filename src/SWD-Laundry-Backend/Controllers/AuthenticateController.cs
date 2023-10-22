@@ -154,13 +154,6 @@ public class AuthenticateController : ApiControllerBase
         var claims = new[]
         {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("Email", user.Email ?? ""),
-                new Claim("UserId", user.Id.ToString()),
-                new Claim("FullName", user.Name ?? ""),
-                new Claim("WalletBalance", user.Wallet.Balance.ToString()),
-                new Claim("PhoneNumber", user.PhoneNumber ?? ""),
-                new Claim("AvatarUrl", user.ImageUrl ?? ""),
-                new Claim("Username", user.UserName ?? ""),
         }.Union(userClaims).Union(roleClaims);
         var key = SystemSettingModel.Configs["Jwt:SecrectKey"];
         var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
@@ -175,7 +168,17 @@ public class AuthenticateController : ApiControllerBase
         return new
         {
             accesstoken = token,
-            role = roles
+            role = roles,
+            user = new
+            {
+                email = user.Email,
+                fullname = user.Name,
+                avatar = user.ImageUrl,
+                wallet = new
+                {
+                    balance = user.Wallet?.Balance
+                }
+            }
         };
     }
 }

@@ -52,8 +52,8 @@ public class Program
         string public_key = "";
         try
         {
-            private_key = File.ReadAllText("private_key.pem");
-            public_key = File.ReadAllText("public_key.pem");
+            private_key = File.ReadAllText("private_ke.pem");
+            public_key = File.ReadAllText("public_ke.pem");
             if(private_key != "" && public_key != "")
             {
                 var private_rsa = RSA.Create();
@@ -68,14 +68,24 @@ public class Program
         }
         catch (Exception e )
         {
-            Console.Error.WriteLine(e);
-            Console.Error.WriteLine("Can't read private_key.pem or public_key.pem");
+            if(builder.Environment.IsDevelopment())
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Error.WriteLine(e);
+                Console.Error.WriteLine("Can't read private_key.pem or public_key.pem");
+            }
         }
         finally
         {
             if(SystemSettingModel.RSAPrivateKey == null || SystemSettingModel.RSAPublicKey == null)
             {
-                Console.WriteLine("Fallback to Hmac HS256 alg");
+                if(builder.Environment.IsDevelopment())
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("Fallback to Hmac HS256 alg");
+                    Console.ResetColor();
+
+                }
             }
         }
       
@@ -214,7 +224,7 @@ public class Program
         _ = builder.Services.AddSystemSetting(builder.Configuration.GetSection("SystemSetting").Get<SystemSettingModel>());
         builder.Services.Configure<DataProtectionTokenProviderOptions>(opt => opt.TokenLifespan = TimeSpan.FromMinutes(30));
         builder.Services.AddDI();
-        builder.Services.PrintServiceAddedToConsole();
+        //builder.Services.PrintServiceAddedToConsole();
         builder.Services.Configure<GzipCompressionProviderOptions>(options =>
         {
             options.Level = CompressionLevel.Optimal;

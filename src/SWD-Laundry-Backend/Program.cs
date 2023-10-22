@@ -1,4 +1,5 @@
 using System.IO.Compression;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using FirebaseAdmin;
@@ -41,6 +42,14 @@ public class Program
                 .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", false, true)
                 .AddUserSecrets<Program>(true, false)
                 .Build();
+
+        var private_key = File.ReadAllText("private_key.pem");
+        var public_key = File.ReadAllText("public_key.pem");
+        var rsa = RSA.Create();
+        rsa.ImportFromPem(private_key);
+        SystemSettingModel.SecurityPrivateKey = new RsaSecurityKey(rsa);
+        rsa.ImportFromPem(private_key);
+        SystemSettingModel.SecurityPublicKey = new RsaSecurityKey(rsa);
 
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -146,7 +155,7 @@ public class Program
                 ValidateAudience = false,
                 ValidAudience = builder.Configuration["Jwt:ValidAudience"],
                 ValidIssuer = builder.Configuration["Jwt:ValidIssuer"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecrectKey"]))
+                IssuerSigningKey = SystemSettingModel.SecurityPublicKey,
             };
         });
         builder.Services.AddAuthorization(options =>

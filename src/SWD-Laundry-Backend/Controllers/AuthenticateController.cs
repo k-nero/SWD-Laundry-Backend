@@ -1,5 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using FirebaseAdmin;
 using FirebaseAdmin.Auth;
@@ -97,7 +99,7 @@ public class AuthenticateController : ApiControllerBase
             }
             if (identity != null)
             {
-                customToken = await CreateAccessTokenAsync(identity);
+                customToken = await CreateRSAAccessTokenAsync(identity);
                 return Ok(customToken);
             }
             return BadRequest();
@@ -157,7 +159,7 @@ public class AuthenticateController : ApiControllerBase
         }.Union(userClaims).Union(roleClaims);
         var key = SystemSettingModel.Configs["Jwt:SecrectKey"];
         var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-        var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
+        var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha512);
         var jwtSecurityToken = new JwtSecurityToken(
             issuer: SystemSettingModel.Configs["Jwt:ValidIssuer"],
             audience: SystemSettingModel.Configs["Jwt:ValidAudience"],
@@ -171,11 +173,62 @@ public class AuthenticateController : ApiControllerBase
             role = roles,
             user = new
             {
+                id = user.Id,
                 email = user.Email,
                 fullname = user.Name,
                 avatar = user.ImageUrl,
                 wallet = new
                 {
+                    id = user.WalletID,
+                    balance = user.Wallet?.Balance
+                }
+            }
+        };
+    }
+
+    private async Task<object> CreateRSAAccessTokenAsync(ApplicationUser user)
+    {
+        var userClaims = await _identityService.GetClaimsAsync(user);
+        Wallet? wallet = null;
+        if (user.WalletID != null)
+        {
+            wallet = await _walletService.GetByIdAsync(user.WalletID);
+        }
+        var roles = await _identityService.GetRolesAsync(user);
+        user.Wallet = wallet;
+        var roleClaims = new List<Claim>();
+        if (roles != null)
+        {
+            for (int i = 0; i < roles.Count; i++)
+            {
+                roleClaims.Add(new Claim("roles", roles[i]));
+            }
+        }
+        var claims = new[]
+        {
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        }.Union(userClaims).Union(roleClaims);
+        var signingCredentials = new SigningCredentials(SystemSettingModel.SecurityPrivateKey, SecurityAlgorithms.RsaSha512);
+        var jwtSecurityToken = new JwtSecurityToken(
+            issuer: SystemSettingModel.Configs["Jwt:ValidIssuer"],
+            audience: SystemSettingModel.Configs["Jwt:ValidAudience"],
+            claims: claims,
+            expires: DateTime.UtcNow.AddMinutes(240),
+            signingCredentials: signingCredentials);
+        var token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+        return new
+        {
+            accesstoken = token,
+            role = roles,
+            user = new
+            {
+                id = user.Id,
+                email = user.Email,
+                fullname = user.Name,
+                avatar = user.ImageUrl,
+                wallet = new
+                {
+                    id = user.WalletID,
                     balance = user.Wallet?.Balance
                 }
             }

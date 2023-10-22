@@ -1,7 +1,4 @@
-﻿using StackExchange.Redis;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace SWD_Laundry_Backend.Core.Models;
+﻿namespace SWD_Laundry_Backend.Core.Models;
 
 public class PaymentModel
 {

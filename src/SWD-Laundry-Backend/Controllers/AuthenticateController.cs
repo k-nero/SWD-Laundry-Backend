@@ -6,6 +6,7 @@ using FirebaseAdmin.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Config;
@@ -46,38 +47,52 @@ public class AuthenticateController : ApiControllerBase
 
         try
         {
-            var decodedToken = await _firebaseAuth.VerifyIdTokenAsync(token.AccessToken);
-            var uid = decodedToken.Uid;
-            var user = await _firebaseAuth.GetUserAsync(uid);
-            var identity = await _identityService.GetUserByUserNameAsync(user.Email);
-            object? customToken = null;
-            if (identity == null)
+            FirebaseToken? decodedToken = null;
+            string uid = "";
+            UserRecord? user = null;
+            ApplicationUser? identity = null;
+            if (!token.AccessToken.IsNullOrEmpty())
             {
-                var result = await _identityService.CreateUserAsync(user.Email, CoreHelper.CreateRandomPassword(20));
-                identity = await _identityService.GetUserByUserNameAsync(user.Email);
-                if(identity != null)
+                decodedToken = await _firebaseAuth.VerifyIdTokenAsync(token.AccessToken);
+                if (decodedToken != null)
                 {
-                    if (!result.Result.Errors.IsNullOrEmpty())
+                    uid = decodedToken.Uid;
+                    user = await _firebaseAuth.GetUserAsync(uid);
+                }
+            }
+            object? customToken = null;
+
+            if (user != null)
+            {
+                identity = await _identityService.GetUserByUserNameAsync(user.Email);
+                if (identity == null)
+                {
+                    var result = await _identityService.CreateUserAsync(user.Email, CoreHelper.CreateRandomPassword(20));
+                    identity = await _identityService.GetUserByUserNameAsync(user.Email);
+                    if (identity != null)
                     {
-                        return BadRequest(result);
+                        if (!result.Result.Errors.IsNullOrEmpty())
+                        {
+                            return BadRequest(result);
+                        }
+                        if (!user.PhoneNumber.IsNullOrEmpty())
+                        {
+                            await _identityService.SetVerifiedPhoneNumberAsync(identity, user.PhoneNumber);
+                        }
+                        if (!user.DisplayName.IsNullOrEmpty())
+                        {
+                            await _identityService.SetUserFullNameAsync(identity, user.DisplayName);
+                        }
+                        if (!user.PhotoUrl.IsNullOrEmpty())
+                        {
+                            await _identityService.SetUserAvatarUrlAsync(identity, user.PhotoUrl);
+                        }
+                        var walletId = await _walletService.CreateAsync(new WalletModel
+                        {
+                            Balance = 0,
+                        });
+                        await _identityService.SetWalletAsync(identity, walletId);
                     }
-                    if (!user.PhoneNumber.IsNullOrEmpty())
-                    {
-                        await _identityService.SetVerifiedPhoneNumberAsync(identity, user.PhoneNumber);
-                    }
-                    if (!user.DisplayName.IsNullOrEmpty())
-                    {
-                        await _identityService.SetUserFullNameAsync(identity, user.DisplayName);
-                    }
-                    if (!user.PhotoUrl.IsNullOrEmpty())
-                    {
-                        await _identityService.SetUserAvatarUrlAsync(identity, user.PhotoUrl);
-                    }
-                    var walletId = await _walletService.CreateAsync(new WalletModel
-                    {
-                        Balance = 0,
-                    });
-                    await _identityService.SetWalletAsync(identity, walletId);
                 }
             }
             if (identity != null)
@@ -121,11 +136,15 @@ public class AuthenticateController : ApiControllerBase
     private async Task<object> CreateAccessTokenAsync(ApplicationUser user)
     {
         var userClaims = await _identityService.GetClaimsAsync(user);
-        var wallet = await _walletService.GetByIdAsync(user.WalletID);
+        Wallet? wallet = null;
+        if (user.WalletID != null)
+        {
+            wallet = await _walletService.GetByIdAsync(user.WalletID);
+        }
         var roles = await _identityService.GetRolesAsync(user);
         user.Wallet = wallet;
         var roleClaims = new List<Claim>();
-        if(roles != null)
+        if (roles != null)
         {
             for (int i = 0; i < roles.Count; i++)
             {
@@ -153,7 +172,8 @@ public class AuthenticateController : ApiControllerBase
             expires: DateTime.UtcNow.AddMinutes(240),
             signingCredentials: signingCredentials);
         var token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-        return new { 
+        return new
+        {
             accesstoken = token,
             role = roles
         };

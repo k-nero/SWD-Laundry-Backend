@@ -86,6 +86,8 @@ public class PaypalService : IPaypalService
         client.DefaultRequestHeaders.Add("Accept-Language", "en_US");
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", access_token.Value.access_token);
         model.Status = Core.Enum.TransactionStatus.Pending;
+        model.PaymentType = Core.Enum.PaymentType.Paypal;
+        model.TransactionType = Core.Enum.AllowedTransactionType.Deposit;
         var transId = await _transactionService.CreateAsync(model, cancellationToken);
 
         var order = new PaypalOrderRequest()

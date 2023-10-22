@@ -75,8 +75,9 @@ public class OrderHistoryService : IOrderHistoryService
 
     public async Task<int> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
-        var numberOfRows = await _repository.DeleteAsync(x => x.Id == id, cancellationToken: cancellationToken);
-        return numberOfRows;
+        int i = await _repository.DeleteAsync(x => x.Id == id,
+            cancellationToken);
+        return i;
     }
 
     public async Task<ICollection<OrderHistory>> GetAllAsync(OrderHistoryQuery query, CancellationToken cancellationToken = default)
@@ -103,7 +104,8 @@ public class OrderHistoryService : IOrderHistoryService
 
     public async Task<PaginatedList<OrderHistory>> GetPaginatedAsync(OrderHistoryQuery query, CancellationToken cancellationToken = default)
     {
-        var list = await _repository.GetAsync(null,
+        var list = await _repository.GetAsync(
+            c => c.IsDelete == query.IsDeleted,
         cancellationToken: cancellationToken,
     c => c.Order, c => c.Order.LaundryStore);
         if (query.OrderId != null)

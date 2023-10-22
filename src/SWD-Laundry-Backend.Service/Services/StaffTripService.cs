@@ -40,8 +40,9 @@ public class StaffTripService : Base_Service.Service, IStaffTripService
 
     public async Task<int> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
-        var numberOfRows = await _repository.DeleteAsync(x => x.Id == id, cancellationToken: cancellationToken);
-        return numberOfRows;
+        int i = await _repository.DeleteAsync(x => x.Id == id,
+            cancellationToken);
+        return i;
     }
 
     public async Task<ICollection<Staff_Trip>> GetAllAsync(StaffTripQuery? query, CancellationToken cancellationToken = default)
@@ -61,7 +62,9 @@ public class StaffTripService : Base_Service.Service, IStaffTripService
 
     public async Task<PaginatedList<Staff_Trip>> GetPaginatedAsync(StaffTripQuery query, CancellationToken cancellationToken = default)
     {
-        var list = await _repository.GetAsync(cancellationToken: cancellationToken);
+        var list = await _repository.GetAsync(
+      c => c.IsDelete == query.IsDeleted
+            , cancellationToken: cancellationToken);
      
         var result = await list.PaginatedListAsync(query);
         return result;

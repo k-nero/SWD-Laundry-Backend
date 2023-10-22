@@ -14,4 +14,6 @@ public interface IIdentityService : IBaseIdentityService
 
     public Task<IList<Claim>> GetClaimsAsync(ApplicationUser user);
     public Task SetVerfiedEmailAsync(ApplicationUser user, string email);
+    public Task<int> SetWalletAsync(ApplicationUser user, string walletId);
+    public Task SetUserAvatarUrlAsync(ApplicationUser identity, string photoUrl);
 }

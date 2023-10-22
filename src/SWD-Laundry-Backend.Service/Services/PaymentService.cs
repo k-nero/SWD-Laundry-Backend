@@ -32,8 +32,9 @@ public class PaymentService : IPaymentService
 
     public async Task<int> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
-        var numberOfRows = await _repository.DeleteAsync(x => x.Id == id, cancellationToken: cancellationToken);
-        return numberOfRows;
+        int i = await _repository.DeleteAsync(x => x.Id == id,
+            cancellationToken);
+        return i;
     }
 
     public async Task<ICollection<Payment>> GetAllAsync(PaymentQuery? query, CancellationToken cancellationToken = default)
@@ -51,7 +52,8 @@ public class PaymentService : IPaymentService
     public async Task<PaginatedList<Payment>> GetPaginatedAsync(PaymentQuery query, CancellationToken cancellationToken = default)
     {
         var list = await _repository
-        .GetAsync(null, cancellationToken: cancellationToken, c => c.Orders);
+        .GetAsync(c => c.IsDelete == query.IsDeleted
+            , cancellationToken: cancellationToken, c => c.Orders);
 
 
         var result = await list.PaginatedListAsync(query);

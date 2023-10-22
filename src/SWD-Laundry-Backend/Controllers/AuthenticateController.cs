@@ -6,17 +6,14 @@ using FirebaseAdmin.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Config;
+using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Utils;
 
 namespace SWD_Laundry_Backend.Controllers;
-
-public readonly struct Token
-{
-    public string AccessToken { get; init; }
-}
 
 public readonly struct RegisterRole
 {
@@ -30,11 +27,13 @@ public class AuthenticateController : ApiControllerBase
     private readonly FirebaseApp _firebaseApp;
     private readonly IIdentityService _identityService;
     private readonly FirebaseAuth _firebaseAuth = FirebaseAuth.DefaultInstance;
+    private readonly IWalletService _walletService;
 
-    public AuthenticateController(FirebaseApp firebaseApp, IIdentityService identityService)
+    public AuthenticateController(FirebaseApp firebaseApp, IIdentityService identityService, IWalletService walletService)
     {
         _firebaseApp = firebaseApp;
         _identityService = identityService;
+        _walletService = walletService;
     }
 
     [HttpPost]
@@ -43,33 +42,56 @@ public class AuthenticateController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Login([FromBody] Token token)
+    public async Task<IActionResult> Login([FromBody] LoginModel token)
     {
 
         try
         {
-            var decodedToken = await _firebaseAuth.VerifyIdTokenAsync(token.AccessToken);
-            var uid = decodedToken.Uid;
-            var user = await _firebaseAuth.GetUserAsync(uid);
-            var identity = await _identityService.GetUserByUserNameAsync(user.Email);
-            object? customToken = null;
-            if (identity == null)
+            FirebaseToken? decodedToken = null;
+            string uid = "";
+            UserRecord? user = null;
+            ApplicationUser? identity = null;
+            if (!token.AccessToken.IsNullOrEmpty())
             {
-                var result = await _identityService.CreateUserAsync(user.Email, CoreHelper.CreateRandomPassword(20));
-                identity = await _identityService.GetUserByUserNameAsync(user.Email);
-                if(identity != null)
+                decodedToken = await _firebaseAuth.VerifyIdTokenAsync(token.AccessToken);
+                if (decodedToken != null)
                 {
-                    if (!result.Result.Errors.IsNullOrEmpty())
+                    uid = decodedToken.Uid;
+                    user = await _firebaseAuth.GetUserAsync(uid);
+                }
+            }
+            object? customToken = null;
+
+            if (user != null)
+            {
+                identity = await _identityService.GetUserByUserNameAsync(user.Email);
+                if (identity == null)
+                {
+                    var result = await _identityService.CreateUserAsync(user.Email, CoreHelper.CreateRandomPassword(20));
+                    identity = await _identityService.GetUserByUserNameAsync(user.Email);
+                    if (identity != null)
                     {
-                        return BadRequest(result);
-                    }
-                    if (!user.PhoneNumber.IsNullOrEmpty())
-                    {
-                        await _identityService.SetVerifiedPhoneNumberAsync(identity, user.PhoneNumber);
-                    }
-                    if (!user.DisplayName.IsNullOrEmpty())
-                    {
-                        await _identityService.SetUserFullNameAsync(identity, user.DisplayName);
+                        if (!result.Result.Errors.IsNullOrEmpty())
+                        {
+                            return BadRequest(result);
+                        }
+                        if (!user.PhoneNumber.IsNullOrEmpty())
+                        {
+                            await _identityService.SetVerifiedPhoneNumberAsync(identity, user.PhoneNumber);
+                        }
+                        if (!user.DisplayName.IsNullOrEmpty())
+                        {
+                            await _identityService.SetUserFullNameAsync(identity, user.DisplayName);
+                        }
+                        if (!user.PhotoUrl.IsNullOrEmpty())
+                        {
+                            await _identityService.SetUserAvatarUrlAsync(identity, user.PhotoUrl);
+                        }
+                        var walletId = await _walletService.CreateAsync(new WalletModel
+                        {
+                            Balance = 0,
+                        });
+                        await _identityService.SetWalletAsync(identity, walletId);
                     }
                 }
             }
@@ -114,9 +136,15 @@ public class AuthenticateController : ApiControllerBase
     private async Task<object> CreateAccessTokenAsync(ApplicationUser user)
     {
         var userClaims = await _identityService.GetClaimsAsync(user);
+        Wallet? wallet = null;
+        if (user.WalletID != null)
+        {
+            wallet = await _walletService.GetByIdAsync(user.WalletID);
+        }
         var roles = await _identityService.GetRolesAsync(user);
+        user.Wallet = wallet;
         var roleClaims = new List<Claim>();
-        if(roles != null)
+        if (roles != null)
         {
             for (int i = 0; i < roles.Count; i++)
             {
@@ -126,7 +154,13 @@ public class AuthenticateController : ApiControllerBase
         var claims = new[]
         {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("id", user.Id)
+                new Claim("Email", user.Email ?? ""),
+                new Claim("UserId", user.Id.ToString()),
+                new Claim("FullName", user.Name ?? ""),
+                new Claim("WalletBalance", user.Wallet.Balance.ToString()),
+                new Claim("PhoneNumber", user.PhoneNumber ?? ""),
+                new Claim("AvatarUrl", user.ImageUrl ?? ""),
+                new Claim("Username", user.UserName ?? ""),
         }.Union(userClaims).Union(roleClaims);
         var key = SystemSettingModel.Configs["Jwt:SecrectKey"];
         var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
@@ -138,7 +172,8 @@ public class AuthenticateController : ApiControllerBase
             expires: DateTime.UtcNow.AddMinutes(240),
             signingCredentials: signingCredentials);
         var token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-        return new { 
+        return new
+        {
             accesstoken = token,
             role = roles
         };

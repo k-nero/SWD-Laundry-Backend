@@ -45,7 +45,10 @@ namespace SWD_Laundry_Backend.Repository.Base
 
         public virtual async Task<int> DeleteAsync(Expression<Func<T, bool>> filter, CancellationToken cancellationToken = default)
         {
-            var i = await DbSet.Where(filter).ExecuteDeleteAsync(cancellationToken);
+            //var i = await DbSet.Where(filter).ExecuteDeleteAsync(cancellationToken);
+            var i = await DbSet.Where(filter)
+                .ExecuteUpdateAsync(x => x.SetProperty(x => x.IsDelete, true)
+                , cancellationToken);
             return i;
         }
 

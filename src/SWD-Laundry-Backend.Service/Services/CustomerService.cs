@@ -33,15 +33,18 @@ public class CustomerService : ICustomerService
 
     public async Task<int> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
-        var numberOfRows = await _repository.DeleteAsync(x => x.Id == id, cancellationToken: cancellationToken);
-        return numberOfRows;
+        int i = await _repository.DeleteAsync(x => x.Id == id,
+            cancellationToken);
+        return i;
     }
 
     public async Task<ICollection<Customer>> GetAllAsync(CustomerQuery? query, CancellationToken cancellationToken = default)
     {
         var list = await _repository
-            .GetAsync(null, cancellationToken: cancellationToken,
-            c => c.ApplicationUser);
+            .GetAsync(null, cancellationToken: cancellationToken
+            , x => x.ApplicationUser
+            , c => c.ApplicationUser.Wallet
+            , c => c.Building);
 
         return await list.ToListAsync(cancellationToken);
     }
@@ -49,13 +52,21 @@ public class CustomerService : ICustomerService
     public async Task<Customer?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
 
-        var customer = await _repository.GetSingleAsync(c => c.Id == id, cancellationToken, x => x.ApplicationUser);
+        var customer = await _repository.GetSingleAsync(c => c.Id == id, cancellationToken
+            , x => x.ApplicationUser
+            , c => c.ApplicationUser.Wallet
+            , c => c.Building);
         return customer;
     }
 
     public async Task<PaginatedList<Customer>> GetPaginatedAsync(CustomerQuery query, CancellationToken cancellationToken = default)
     {
-        var list = await _repository.GetAsync(cancellationToken: cancellationToken);
+        var list = await _repository.GetAsync(
+      c => c.IsDelete == query.IsDeleted
+            ,cancellationToken: cancellationToken
+            , x => x.ApplicationUser
+            , c => c.ApplicationUser.Wallet
+            , c => c.Building);
         var result = await list.PaginatedListAsync(query);
         return result;
 

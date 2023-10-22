@@ -45,11 +45,13 @@ public class Program
 
         var private_key = File.ReadAllText("private_key.pem");
         var public_key = File.ReadAllText("public_key.pem");
-        var rsa = RSA.Create();
-        rsa.ImportFromPem(private_key);
-        SystemSettingModel.SecurityPrivateKey = new RsaSecurityKey(rsa);
-        rsa.ImportFromPem(private_key);
-        SystemSettingModel.SecurityPublicKey = new RsaSecurityKey(rsa);
+        var private_rsa = RSA.Create();
+        private_rsa.ImportFromPem(private_key);
+        SystemSettingModel.RSAPrivateKey = new RsaSecurityKey(private_rsa);
+
+        var public_rsa = RSA.Create();
+        public_rsa.ImportFromPem(public_key);
+        SystemSettingModel.RSAPublicKey = new RsaSecurityKey(public_rsa);
 
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -155,7 +157,7 @@ public class Program
                 ValidateAudience = false,
                 ValidAudience = builder.Configuration["Jwt:ValidAudience"],
                 ValidIssuer = builder.Configuration["Jwt:ValidIssuer"],
-                IssuerSigningKey = SystemSettingModel.SecurityPublicKey,
+                IssuerSigningKey = SystemSettingModel.RSAPublicKey,
             };
         });
         builder.Services.AddAuthorization(options =>

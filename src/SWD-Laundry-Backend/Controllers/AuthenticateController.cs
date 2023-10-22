@@ -208,7 +208,7 @@ public class AuthenticateController : ApiControllerBase
         {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         }.Union(userClaims).Union(roleClaims);
-        var signingCredentials = new SigningCredentials(SystemSettingModel.SecurityPrivateKey, SecurityAlgorithms.RsaSha512);
+        var signingCredentials = new SigningCredentials(SystemSettingModel.RSAPrivateKey, SecurityAlgorithms.RsaSha512);
         var jwtSecurityToken = new JwtSecurityToken(
             issuer: SystemSettingModel.Configs["Jwt:ValidIssuer"],
             audience: SystemSettingModel.Configs["Jwt:ValidAudience"],

@@ -42,6 +42,12 @@ public class Program
                 .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", false, true)
                 .AddUserSecrets<Program>(true, false)
                 .Build();
+
+        builder.Host.UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
+                   .ReadFrom.Configuration(hostingContext.Configuration)
+                              .Enrich.FromLogContext()
+                                         .WriteTo.Console());
+
         string private_key = "";
         string public_key = "";
         try
@@ -60,26 +66,21 @@ public class Program
                 
             }
         }
-        catch (Exception)
+        catch (Exception e )
         {
-            Log.Error("Can't read private_key.pem or public_key.pem");
+            Console.Error.WriteLine(e);
+            Console.Error.WriteLine("Can't read private_key.pem or public_key.pem");
         }
         finally
         {
             if(SystemSettingModel.RSAPrivateKey == null || SystemSettingModel.RSAPublicKey == null)
             {
-                Log.Error("Can't read private_key.pem or public_key.pem");
-                Log.Information("Fallback to Hmac HS256 alg");
+                Console.WriteLine("Fallback to Hmac HS256 alg");
             }
         }
       
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-
-        builder.Host.UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
-                   .ReadFrom.Configuration(hostingContext.Configuration)
-                              .Enrich.FromLogContext()
-                                         .WriteTo.Console());
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowAll", builder =>

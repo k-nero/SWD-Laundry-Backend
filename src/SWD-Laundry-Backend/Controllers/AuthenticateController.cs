@@ -99,7 +99,14 @@ public class AuthenticateController : ApiControllerBase
             }
             if (identity != null)
             {
-                customToken = await CreateRSAAccessTokenAsync(identity);
+                if (SystemSettingModel.RSAPublicKey == null || SystemSettingModel.RSAPrivateKey == null)
+                {
+                    customToken = await CreateRSAAccessTokenAsync(identity);
+                }
+                else
+                {
+                    customToken = await CreateAccessTokenAsync(identity);
+                }
                 return Ok(customToken);
             }
             return BadRequest();

@@ -42,17 +42,37 @@ public class Program
                 .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", false, true)
                 .AddUserSecrets<Program>(true, false)
                 .Build();
+        string private_key = "";
+        string public_key = "";
+        try
+        {
+            private_key = File.ReadAllText("private_key.pem");
+            public_key = File.ReadAllText("public_key.pem");
+            if(private_key != "" && public_key != "")
+            {
+                var private_rsa = RSA.Create();
+                private_rsa.ImportFromPem(private_key);
+                SystemSettingModel.RSAPrivateKey = new RsaSecurityKey(private_rsa);
 
-        var private_key = File.ReadAllText("private_key.pem");
-        var public_key = File.ReadAllText("public_key.pem");
-        var private_rsa = RSA.Create();
-        private_rsa.ImportFromPem(private_key);
-        SystemSettingModel.RSAPrivateKey = new RsaSecurityKey(private_rsa);
-
-        var public_rsa = RSA.Create();
-        public_rsa.ImportFromPem(public_key);
-        SystemSettingModel.RSAPublicKey = new RsaSecurityKey(public_rsa);
-
+                var public_rsa = RSA.Create();
+                public_rsa.ImportFromPem(public_key);
+                SystemSettingModel.RSAPublicKey = new RsaSecurityKey(public_rsa);
+                
+            }
+        }
+        catch (Exception)
+        {
+            Log.Error("Can't read private_key.pem or public_key.pem");
+        }
+        finally
+        {
+            if(SystemSettingModel.RSAPrivateKey == null || SystemSettingModel.RSAPublicKey == null)
+            {
+                Log.Error("Can't read private_key.pem or public_key.pem");
+                Log.Information("Fallback to Hmac HS256 alg");
+            }
+        }
+      
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 
@@ -157,7 +177,7 @@ public class Program
                 ValidateAudience = false,
                 ValidAudience = builder.Configuration["Jwt:ValidAudience"],
                 ValidIssuer = builder.Configuration["Jwt:ValidIssuer"],
-                IssuerSigningKey = SystemSettingModel.RSAPublicKey,
+                IssuerSigningKey = SystemSettingModel.RSAPublicKey ?? new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecrectKey"])),
             };
         });
         builder.Services.AddAuthorization(options =>

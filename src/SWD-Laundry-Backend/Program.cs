@@ -52,8 +52,8 @@ public class Program
         string public_key = "";
         try
         {
-            private_key = File.ReadAllText("private_ke.pem");
-            public_key = File.ReadAllText("public_ke.pem");
+            private_key = File.ReadAllText("private_key.pem");
+            public_key = File.ReadAllText("public_key.pem");
             if(private_key != "" && public_key != "")
             {
                 var private_rsa = RSA.Create();

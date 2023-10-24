@@ -82,6 +82,14 @@ public class OrderService : IOrderService
     , c => c.Customer
     , c => c.Staff
     , c => c.LaundryStore);
+        if (query.LaundryStoreId != null)
+        {
+            list = list.Where(x => x.LaundryStoreID == query.LaundryStoreId);
+        }
+        if (query.CustomerId != null)
+        {
+            list = list.Where(x => x.CustomerID == query.CustomerId);
+        }
 
         var result = await list.PaginatedListAsync(query);
         return result;

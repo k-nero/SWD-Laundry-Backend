@@ -16,6 +16,7 @@ public static class AutoMapperExtension
             cfg.AddProfile<StaffTripMapperProfile>();
             cfg.AddProfile<TimeScheduleMapperProfile>();
             cfg.AddProfile<TransactionMapperProfile>();
+            cfg.AddProfile<StaffMapperProfile>();
         });
         return services;
     }

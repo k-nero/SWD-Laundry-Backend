@@ -7,6 +7,7 @@ public interface IIdentityService : IBaseIdentityService
 {
     public Task SetVerifiedPhoneNumberAsync(ApplicationUser user, string phoneNumber);
     public Task<IList<string>?>  GetRolesAsync(ApplicationUser user);
+    public ApplicationUser GetUserByIdAsync(string userId);
 
     public Task AddToRoleAsync(ApplicationUser user, string role);
 

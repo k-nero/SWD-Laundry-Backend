@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SWD-Laundry-Backend.Contract.Service\SWD-Laundry-Backend.Contract.Service.csproj" />
     <ProjectReference Include="..\SWD-Laundry-Backend.Mapper\SWD-Laundry-Backend.Mapper.csproj" />
+    <ProjectReference Include="..\SWD-Laundry-Backend.Repository\SWD-Laundry-Backend.Repository.csproj" />
   </ItemGroup>
 
   <ItemGroup>

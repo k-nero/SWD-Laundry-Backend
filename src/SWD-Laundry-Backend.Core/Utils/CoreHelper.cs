@@ -59,4 +59,20 @@ public static class CoreHelper
         }
         return new string(chars);
     }
+
+    public static string ObjecToQueryString(object obj)
+    {
+        var objType = obj.GetType();
+        var properties = objType.GetProperties();
+        var queryString = string.Empty;
+        foreach (var property in properties)
+        {
+            var value = property.GetValue(obj, null);
+            if (value != null)
+            {
+                queryString += $"{property.Name}={value}&";
+            }
+        }
+        return queryString;
+    }
 }

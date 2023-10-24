@@ -6,9 +6,9 @@ namespace SWD_Laundry_Backend.Core.Models.Common;
 public class PaginatedList<T>
 {
     public IReadOnlyCollection<T> Items { get; }
-    public int PageNumber { get; }
-    public int TotalPages { get; }
-    public int TotalCount { get; }
+    public int PageNumber { get; set; }
+    public int TotalPages { get; set; }
+    public int TotalCount { get; set; }
 
     public PaginatedList(IReadOnlyCollection<T> items, int count, int pageNumber, int pageSize)
     {

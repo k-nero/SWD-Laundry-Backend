@@ -9,7 +9,7 @@ namespace SWD_Laundry_Backend.Repository.Repository;
 [ScopedDependency(ServiceType = typeof(IOrderRepository))]
 public class OrderRepository : Repository<Order>, IOrderRepository
 {
-    public OrderRepository(AppDbContext dbContext, ICacheLayer<Order> cacheLayer) : base(dbContext, cacheLayer)
+    public OrderRepository(AppDbContext dbContext) : base(dbContext)
     {
     }
 }

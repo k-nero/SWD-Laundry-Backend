@@ -53,8 +53,8 @@ public class Program
         string public_key = "";
         try
         {
-            private_key = File.ReadAllText("private_key.pem");
-            public_key = File.ReadAllText("public_key.pem");
+            private_key = File.ReadAllText(builder.Configuration["Jwt:PrivateKey"]);
+            public_key = File.ReadAllText(builder.Configuration["Jwt:PublicKey"]);
             if(private_key != "" && public_key != "")
             {
                 var private_rsa = RSA.Create();
@@ -186,8 +186,11 @@ public class Program
             options.RequireHttpsMetadata = false;
             options.TokenValidationParameters = new TokenValidationParameters
             {
-                ValidateIssuer = false,
-                ValidateAudience = false,
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateIssuerSigningKey = true,
+                ValidateLifetime = true,
+                LogValidationExceptions = true,
                 ValidAudience = builder.Configuration["Jwt:ValidAudience"],
                 ValidIssuer = builder.Configuration["Jwt:ValidIssuer"],
                 IssuerSigningKey = SystemSettingModel.RSAPublicKey ?? new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecrectKey"])),
@@ -243,7 +246,6 @@ public class Program
         });
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
         //if (app.Environment.IsDevelopment())
         //{
             app.UseSwagger();

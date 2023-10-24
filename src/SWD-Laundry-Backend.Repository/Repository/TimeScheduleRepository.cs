@@ -12,7 +12,7 @@ namespace SWD_Laundry_Backend.Repository.Repository;
 [ScopedDependency(ServiceType = typeof(ITimeScheduleRepository))]
 public class TimeScheduleRepository : Repository<TimeSchedule>, ITimeScheduleRepository
 {
-    public TimeScheduleRepository(AppDbContext dbContext, ICacheLayer<TimeSchedule> cacheLayer) : base(dbContext, cacheLayer)
+    public TimeScheduleRepository(AppDbContext dbContext) : base(dbContext)
     {
     }
 }

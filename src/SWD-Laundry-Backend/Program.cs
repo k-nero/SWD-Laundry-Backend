@@ -18,6 +18,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Serilog;
+using StackExchange.Redis;
 using SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels;
 using SWD_Laundry_Backend.Core.Config;
 using SWD_Laundry_Backend.Core.Validator;
@@ -163,6 +164,7 @@ public class Program
         {
             options.Configuration = builder.Configuration.GetConnectionString("RedisConnection");
         });
+        builder.Services.AddSingleton<IConnectionMultiplexer>(await ConnectionMultiplexer.ConnectAsync(builder.Configuration.GetConnectionString("RedisConnection")));
         builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
         {
             options.SignIn.RequireConfirmedAccount = false;

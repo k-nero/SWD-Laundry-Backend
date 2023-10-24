@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
+﻿using System.Collections.Generic;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
+using StackExchange.Redis;
 using SWD_Laundry_Backend.Contract.Repository.Base_Interface;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Core.Utils;
@@ -10,11 +12,17 @@ public class BaseCacheLayer<T> : IBaseCacheLayer<T> where T : BaseEntity, new()
 {
     private readonly IDistributedCache distributedCache;
     private readonly IMemoryCache memoryCache;
+    private readonly IConnectionMultiplexer connectionMultiplexer;
+    private readonly IDatabase cacheDatabase;
+    private readonly IServer[] cacheServer;
 
-    public BaseCacheLayer(IMemoryCache memoryCache, IDistributedCache distributedCache)
+    public BaseCacheLayer(IMemoryCache memoryCache, IDistributedCache distributedCache, IConnectionMultiplexer connectionMultiplexer)
     {
         this.memoryCache = memoryCache;
         this.distributedCache = distributedCache;
+        this.connectionMultiplexer = connectionMultiplexer;
+        cacheDatabase = this.connectionMultiplexer.GetDatabase();
+        cacheServer = this.connectionMultiplexer.GetServers();
     }
 
     public BaseCacheLayer(IDistributedCache distributedCache)
@@ -33,12 +41,15 @@ public class BaseCacheLayer<T> : IBaseCacheLayer<T> where T : BaseEntity, new()
         return;
     }
 
+
+
     public async Task<T?> GetSingleAsync(string key, CancellationToken cancellationToken = default)
     {
         var json = await distributedCache.GetStringAsync(key, cancellationToken);
         if (json != null)
         {
             T? entity = JsonConvert.DeserializeObject<T>(json);
+
             return entity;
         }
         return null;
@@ -54,6 +65,25 @@ public class BaseCacheLayer<T> : IBaseCacheLayer<T> where T : BaseEntity, new()
     {
         await distributedCache.RemoveAsync(key, cancellationToken);
         return;
+    }
+
+    public async Task<string[]> GetAvailableKey(CancellationToken cancellationToken = default)
+    {
+        return await Task.Run(() =>
+            {
+                ISet<string>? keys = null;
+                foreach (var server in cacheServer)
+                {
+                    foreach (string? key in server.Keys().ToArray())
+                    {
+                        if (key != null)
+                        {
+                            keys.Add(key);
+                        }
+                    }
+                }
+                return keys.ToArray();
+            });
     }
 }
 

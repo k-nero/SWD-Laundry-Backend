@@ -11,6 +11,6 @@ public class BuildingRepository : Repository<Building>, IBuildingRepository
 {
     public BuildingRepository(AppDbContext dbContext, ICacheLayer<Building> cacheLayer) : base(dbContext, cacheLayer)
     {
-
+        
     }
 }

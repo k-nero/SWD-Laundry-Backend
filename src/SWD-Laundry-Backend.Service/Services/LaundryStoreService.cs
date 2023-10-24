@@ -1,8 +1,10 @@
 ﻿using System.Linq.Expressions;
 using AutoMapper;
 using Invedia.DI.Attributes;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
+using SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
@@ -17,16 +19,20 @@ public class LaundryStoreService : Base_Service.Service, ILaundryStoreService
 {
     private readonly ILaundryStoreRepository _repository;
     private readonly IMapper _mapper;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public LaundryStoreService(ILaundryStoreRepository repository, IMapper mapper)
+    public LaundryStoreService(ILaundryStoreRepository repository, IMapper mapper, UserManager<ApplicationUser> userManager)
     {
         _repository = repository;
         _mapper = mapper;
+        _userManager = userManager;
     }
 
     public async Task<string> CreateAsync(LaundryStoreModel model, CancellationToken cancellationToken = default)
     {
         var query = await _repository.AddAsync(_mapper.Map<LaundryStore>(model), cancellationToken);
+        var user = await _userManager.Users.FirstAsync(u => u.Id == query.ApplicationUserID);
+        await _userManager.AddToRoleAsync(user, "LaundryStore");
         var objectId = query.Id;
         return objectId;
     }

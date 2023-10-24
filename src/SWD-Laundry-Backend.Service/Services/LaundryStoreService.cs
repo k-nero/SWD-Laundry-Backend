@@ -22,18 +22,17 @@ public class LaundryStoreService : Base_Service.Service, ILaundryStoreService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IdentityService _identityService;
 
-    public LaundryStoreService(ILaundryStoreRepository repository, IMapper mapper, UserManager<ApplicationUser> userManager, IdentityService identityService)
+    public LaundryStoreService(ILaundryStoreRepository repository, IMapper mapper, IdentityService identityService)
     {
         _repository = repository;
         _mapper = mapper;
-        _userManager = userManager;
         _identityService = identityService;
     }
 
     public async Task<string> CreateAsync(LaundryStoreModel model, CancellationToken cancellationToken = default)
     {
         var query = await _repository.AddAsync(_mapper.Map<LaundryStore>(model), cancellationToken);
-        var user = await _userManager.Users.FirstAsync(u => u.Id == query.ApplicationUserID);
+        var user =  _identityService.GetUserByIdAsync(query.ApplicationUserID);
         await _identityService.AddToRoleAsync(user, "LaundryStore");
         var objectId = query.Id;
         return objectId;

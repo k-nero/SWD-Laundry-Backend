@@ -30,6 +30,13 @@ public class IdentityService : Base_Service.Service, IIdentityService
         return user.UserName;
     }
 
+    public ApplicationUser GetUserByIdAsync(string userId)
+    {
+        var user =  _userManager.Users.First(u => u.Id == userId);
+
+        return user;
+    }
+
     public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
     {
         var user = new ApplicationUser

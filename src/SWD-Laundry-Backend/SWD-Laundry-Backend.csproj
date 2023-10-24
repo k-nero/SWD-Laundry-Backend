@@ -20,20 +20,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="private_key.pem" />
-    <None Remove="public_key.pem" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="private_key.pem">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="public_key.pem">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="..\..\LICENSE.txt">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
@@ -47,6 +33,15 @@
     <ProjectReference Include="..\SWD-Laundry-Backend.Mapper\SWD-Laundry-Backend.Mapper.csproj" />
     <ProjectReference Include="..\SWD-Laundry-Backend.Repository\SWD-Laundry-Backend.Repository.csproj" />
     <ProjectReference Include="..\SWD-Laundry-Backend.Service\SWD-Laundry-Backend.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="private_key.pem">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="public_key.pem">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>

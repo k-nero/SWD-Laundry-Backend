@@ -19,9 +19,9 @@ public class CustomerService : ICustomerService
 {
     private readonly ICustomerRepository _repository;
     private readonly IMapper _mapper;
-    private readonly IdentityService _identityService;
+    private readonly IIdentityService _identityService;
 
-    public CustomerService(ICustomerRepository repository, IMapper mapper, IdentityService identityService)
+    public CustomerService(ICustomerRepository repository, IMapper mapper, IIdentityService identityService)
     {
         _repository = repository;
         _mapper = mapper;

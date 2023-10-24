@@ -17,9 +17,9 @@ public class StaffService : IStaffService
 {
     private readonly IStaffRepository _repository;
     private readonly IMapper _mapper;
-    private readonly IdentityService _identityService;
+    private readonly IIdentityService _identityService;
 
-    public StaffService(IStaffRepository repository, IMapper mapper, IdentityService identityService)
+    public StaffService(IStaffRepository repository, IMapper mapper, IIdentityService identityService)
     {
         _repository = repository;
         _mapper = mapper;

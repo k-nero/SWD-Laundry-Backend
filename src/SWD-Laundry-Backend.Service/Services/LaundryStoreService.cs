@@ -20,9 +20,9 @@ public class LaundryStoreService : Base_Service.Service, ILaundryStoreService
     private readonly ILaundryStoreRepository _repository;
     private readonly IMapper _mapper;
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IdentityService _identityService;
+    private readonly IIdentityService _identityService;
 
-    public LaundryStoreService(ILaundryStoreRepository repository, IMapper mapper, IdentityService identityService)
+    public LaundryStoreService(ILaundryStoreRepository repository, IMapper mapper, IIdentityService identityService)
     {
         _repository = repository;
         _mapper = mapper;

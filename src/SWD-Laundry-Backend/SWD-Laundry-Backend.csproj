@@ -25,6 +25,19 @@
       <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="private_key.pem" />
+    <None Remove="public_key.pem" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="private_key.pem">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="public_key.pem">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SWD-Laundry-Backend.Contract.Repository\SWD-Laundry-Backend.Contract.Repository.csproj" />

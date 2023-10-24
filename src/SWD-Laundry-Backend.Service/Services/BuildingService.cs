@@ -69,6 +69,7 @@ public class BuildingService : Base_Service.Service, IBuidingService
         var buildingCached = await _cacheLayer.GetMultipleAsync(key, cancellationToken);
         if (buildingCached != null)
         {
+            await _cacheLayer.RefreshKeyAsync(key, cancellationToken);
             return buildingCached;
         }
         var buildings = await _buildingRepository

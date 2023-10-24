@@ -18,12 +18,14 @@ public class StaffService : IStaffService
     private readonly IStaffRepository _repository;
     private readonly IMapper _mapper;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IdentityService _identityService;
 
-    public StaffService(IStaffRepository repository, IMapper mapper, UserManager<ApplicationUser> userManager)
+    public StaffService(IStaffRepository repository, IMapper mapper, UserManager<ApplicationUser> userManager, IdentityService identityService)
     {
         _repository = repository;
         _mapper = mapper;
         _userManager = userManager;
+        _identityService = identityService;
     }
 
     public async Task<string> CreateAsync(StaffModel model, CancellationToken cancellationToken = default)
@@ -31,7 +33,7 @@ public class StaffService : IStaffService
         var query = await _repository.AddAsync(_mapper.Map<Staff>(model), cancellationToken);
 
         var user = await _userManager.Users.FirstAsync(u => u.Id == query.ApplicationUserID);
-        await _userManager.AddToRoleAsync(user, "Staff");
+        await _identityService.AddToRoleAsync(user, "Staff");
         var objectId = query.Id;
         return objectId;
     }

@@ -20,19 +20,21 @@ public class CustomerService : ICustomerService
     private readonly ICustomerRepository _repository;
     private readonly IMapper _mapper;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IdentityService _identityService;
 
-    public CustomerService(ICustomerRepository repository, IMapper mapper, UserManager<ApplicationUser> userManager)
+    public CustomerService(ICustomerRepository repository, IMapper mapper, UserManager<ApplicationUser> userManager, IdentityService identityService)
     {
         _repository = repository;
         _mapper = mapper;
         _userManager = userManager;
+        _identityService = identityService;
     }
 
     public async Task<string> CreateAsync(CustomerModel model, CancellationToken cancellationToken = default)
     {
         var query = await _repository.AddAsync(_mapper.Map<Customer>(model), cancellationToken);
         var user = await _userManager.Users.FirstAsync(u => u.Id == query.ApplicationUserID);
-        await _userManager.AddToRoleAsync(user, "Customer");
+        await _identityService.AddToRoleAsync(user, "Customer");
         var objectId = query.Id;
         return objectId;
     }

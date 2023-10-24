@@ -186,8 +186,11 @@ public class Program
             options.RequireHttpsMetadata = false;
             options.TokenValidationParameters = new TokenValidationParameters
             {
-                ValidateIssuer = false,
-                ValidateAudience = false,
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateIssuerSigningKey = true,
+                ValidateLifetime = true,
+                LogValidationExceptions = true,
                 ValidAudience = builder.Configuration["Jwt:ValidAudience"],
                 ValidIssuer = builder.Configuration["Jwt:ValidIssuer"],
                 IssuerSigningKey = SystemSettingModel.RSAPublicKey ?? new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecrectKey"])),

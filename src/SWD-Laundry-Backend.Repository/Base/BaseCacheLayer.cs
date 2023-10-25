@@ -104,5 +104,18 @@ public class BaseCacheLayer<T> : IBaseCacheLayer<T> where T : BaseEntity, new()
         }
         return null;
     }
+
+    public async Task RemoveMultipleAsync(string keyPrefix, CancellationToken cancellationToken = default)
+    {
+        string prefix = keyPrefix + ":";
+        var availableKeys = await GetAvailableKey(cancellationToken);
+        foreach (var key in availableKeys)
+        {
+            if (key.Contains(prefix))
+            {
+                await RemoveAsync(key, cancellationToken);
+            }
+        }
+    }
 }
 

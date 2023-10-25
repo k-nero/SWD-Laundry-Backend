@@ -29,6 +29,7 @@ public class BuildingService : Base_Service.Service, IBuidingService
 
     public async Task<string> CreateAsync(BuildingModel model, CancellationToken cancellationToken = default)
     {
+        await _cacheLayer.RemoveMultipleAsync(typeof(Building).Name, cancellationToken);
         var id = await _buildingRepository.AddAsync(_mapper.Map<Building>(model), cancellationToken);
         return id.Id;
     }
@@ -36,6 +37,7 @@ public class BuildingService : Base_Service.Service, IBuidingService
     public async Task<int> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
         int i = await _buildingRepository.DeleteAsync(x => x.Id == id, cancellationToken);
+        await _cacheLayer.RemoveMultipleAsync(typeof(Building).Name, cancellationToken);
         return i;
     }
 
@@ -88,14 +90,7 @@ public class BuildingService : Base_Service.Service, IBuidingService
             .SetProperty(x => x.Address, y => model.Address ?? y.Address)
             .SetProperty(x => x.Description, y => model.Description ?? y.Description),
             cancellationToken: cancellationToken);
-        var keys = await _cacheLayer.GetAvailableKey(cancellationToken);
-        foreach (var key in keys)
-        {
-            if (key.Contains("Building:"))
-            {
-                await _cacheLayer.RemoveAsync(key, cancellationToken);
-            }
-        }
+        await _cacheLayer.RemoveMultipleAsync(typeof(Building).Name, cancellationToken);
         return i;
     }
 }

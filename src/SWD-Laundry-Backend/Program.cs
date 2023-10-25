@@ -92,15 +92,7 @@ public class Program
       
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-        builder.Services.AddCors(options =>
-        {
-            options.AddPolicy("AllowAll", builder =>
-            {
-                builder.AllowAnyOrigin()
-                       .AllowAnyMethod()
-                       .AllowAnyHeader();
-            });
-        });
+        builder.Services.AddCors();
         builder.Services.AddValidatorsFromAssemblyContaining<BuildingValidator>();
         builder.Services.AddFluentValidationAutoValidation(options =>
         {
@@ -257,7 +249,15 @@ public class Program
                 });
             IdentityModelEventSource.ShowPII = true;
         //}
-        app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+        app.UseCors(option =>
+        {
+            option.AllowAnyOrigin().WithMethods(HttpMethod.Get.Method,
+                HttpMethod.Post.Method,
+                HttpMethod.Put.Method,
+                HttpMethod.Delete.Method,
+                HttpMethod.Patch.Method
+                ).AllowAnyHeader();
+        });
         app.UseHttpsRedirection();
         app.UseSerilogRequestLogging();
         app.UseAuthentication();

@@ -4,31 +4,31 @@ using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
 using SWD_Laundry_Backend.Core.QueryObject;
-using SWD_Laundry_Backend.Service.Services;
 
 namespace SWD_Laundry_Backend.Controllers;
 
 [ApiController]
-public class TimeScheduleController : ApiControllerBase
+public class LaundryStoresController : ApiControllerBase
 {
-    private readonly ITimeScheduleService _service;
+    private readonly ILaundryStoreService _service;
 
-    public TimeScheduleController(ITimeScheduleService service)
+
+    public LaundryStoresController(ILaundryStoreService service)
     {
         _service = service;
+
     }
 
-    [HttpGet("/api/v1/time-schedules")]
+    [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Get([FromQuery]TimeScheduleQuery query)
+    public async Task<IActionResult> GetAll([FromQuery] LaundryStoreQuery query)
     {
         try
         {
             var pgresult = await _service.GetPaginatedAsync(query);
-            return Ok(new BaseResponseModel<PaginatedList<TimeSchedule>?>(StatusCodes.Status200OK, data: pgresult));
-            
+            return Ok(new BaseResponseModel<PaginatedList<LaundryStore>?>(StatusCodes.Status200OK, data: pgresult));
         }
         catch (Exception e)
         {
@@ -50,7 +50,7 @@ public class TimeScheduleController : ApiControllerBase
             {
                 return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
             }
-            return Ok(new BaseResponseModel<TimeSchedule?>(StatusCodes.Status200OK, data: result));
+            return Ok(new BaseResponseModel<LaundryStore?>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {
@@ -62,7 +62,7 @@ public class TimeScheduleController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Create([FromBody] TimeScheduleModel model)
+    public async Task<IActionResult> Create([FromBody] LaundryStoreModel model)
     {
         try
         {
@@ -82,7 +82,7 @@ public class TimeScheduleController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Update([FromRoute] string id, [FromBody] TimeScheduleModel model)
+    public async Task<IActionResult> Update([FromRoute] string id, [FromBody] LaundryStoreModel model)
     {
         try
         {
@@ -120,4 +120,6 @@ public class TimeScheduleController : ApiControllerBase
             return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
         }
     }
+
+
 }

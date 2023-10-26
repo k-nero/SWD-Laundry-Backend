@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
@@ -7,26 +8,27 @@ using SWD_Laundry_Backend.Core.QueryObject;
 namespace SWD_Laundry_Backend.Controllers;
 
 [ApiController]
-public class StaffController : ApiControllerBase
+public class StaffTripsController : ApiControllerBase
 {
-    private readonly IStaffService _service;
+    private readonly IStaffTripService _service;
 
-    public StaffController(IStaffService service)
+
+    public StaffTripsController(IStaffTripService service)
     {
         _service = service;
+
     }
 
-    [HttpGet("/api/v1/staffs")]
+    [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Get([FromQuery]StaffQuery query)
+    public async Task<IActionResult> Get([FromQuery]StaffTripQuery query)
     {
         try
         {
             var pgresult = await _service.GetPaginatedAsync(query);
-            return Ok(new BaseResponseModel<PaginatedList<Staff>?>(StatusCodes.Status200OK, data: pgresult));
-
+            return Ok(new BaseResponseModel<PaginatedList<StaffTrip>?>(StatusCodes.Status200OK, data: pgresult));
         }
         catch (Exception e)
         {
@@ -39,7 +41,7 @@ public class StaffController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> GetById([FromRoute] string id)
+    public async Task<IActionResult> GetByStaffId([FromRoute] string id)
     {
         try
         {
@@ -48,7 +50,7 @@ public class StaffController : ApiControllerBase
             {
                 return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
             }
-            return Ok(new BaseResponseModel<Staff?>(StatusCodes.Status200OK, data: result));
+            return Ok(new BaseResponseModel<StaffTrip?>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {
@@ -60,7 +62,7 @@ public class StaffController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Create([FromBody] StaffModel model)
+    public async Task<IActionResult> Create([FromBody] StaffTripModel model)
     {
         try
         {
@@ -80,7 +82,7 @@ public class StaffController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Update([FromRoute] string id, [FromBody] StaffModel model)
+    public async Task<IActionResult> Update([FromRoute] string id, [FromBody] StaffTripModel model)
     {
         try
         {

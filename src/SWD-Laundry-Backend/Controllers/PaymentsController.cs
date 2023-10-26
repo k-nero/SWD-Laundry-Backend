@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Service.Interface;
-using SWD_Laundry_Backend.Core.Config;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
 using SWD_Laundry_Backend.Core.QueryObject;
@@ -9,25 +8,25 @@ using SWD_Laundry_Backend.Core.QueryObject;
 namespace SWD_Laundry_Backend.Controllers;
 
 [ApiController]
-public class CustomerController : ApiControllerBase 
+public class PaymentsController : ApiControllerBase
 {
-    private readonly ICustomerService _service;
+    private readonly IPaymentService _service;
 
-    public CustomerController(ICustomerService service)
+    public PaymentsController(IPaymentService service)
     {
         _service = service;
     }
 
-    [HttpGet("/api/v1/customers")]
+    [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Get([FromQuery] CustomerQuery query)
+    public async Task<IActionResult> Get([FromQuery]PaymentQuery query)
     {
         try
         {
             var pgresult = await _service.GetPaginatedAsync(query);
-            return Ok(new BaseResponseModel<PaginatedList<Customer>?>(StatusCodes.Status200OK, data: pgresult));
+            return Ok(new BaseResponseModel<PaginatedList<Payment>?>(StatusCodes.Status200OK, data: pgresult));
         }
         catch (Exception e)
         {
@@ -49,7 +48,7 @@ public class CustomerController : ApiControllerBase
             {
                 return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
             }
-            return Ok(new BaseResponseModel<Customer?>(StatusCodes.Status200OK, data: result));
+            return Ok(new BaseResponseModel<Payment?>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {
@@ -61,16 +60,18 @@ public class CustomerController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Create([FromBody] CustomerModel model)
+    public async Task<IActionResult> Create([FromBody] PaymentModel model)
     {
         try
         {
             var result = await _service.CreateAsync(model);
-            return Ok(new BaseResponseModel<string>(StatusCodes.Status201Created, data: result));
+            return Ok(new BaseResponseModel<string>
+                (StatusCodes.Status201Created, data: result));
         }
         catch (Exception e)
         {
-            return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
+            return BadRequest(new BaseResponseModel<string>
+                (StatusCodes.Status500InternalServerError, e.Message));
         }
     }
 
@@ -79,7 +80,7 @@ public class CustomerController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Update([FromRoute] string id, [FromBody] CustomerModel model)
+    public async Task<IActionResult> Update([FromRoute] string id, [FromBody] PaymentModel model)
     {
         try
         {

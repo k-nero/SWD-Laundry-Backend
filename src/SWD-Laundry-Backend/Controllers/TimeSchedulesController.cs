@@ -4,29 +4,31 @@ using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
 using SWD_Laundry_Backend.Core.QueryObject;
+using SWD_Laundry_Backend.Service.Services;
 
 namespace SWD_Laundry_Backend.Controllers;
 
 [ApiController]
-public class PaymentController : ApiControllerBase
+public class TimeSchedulesController : ApiControllerBase
 {
-    private readonly IPaymentService _service;
+    private readonly ITimeScheduleService _service;
 
-    public PaymentController(IPaymentService service)
+    public TimeSchedulesController(ITimeScheduleService service)
     {
         _service = service;
     }
 
-    [HttpGet("/api/v1/payments")]
+    [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Get([FromQuery]PaymentQuery query)
+    public async Task<IActionResult> Get([FromQuery]TimeScheduleQuery query)
     {
         try
         {
             var pgresult = await _service.GetPaginatedAsync(query);
-            return Ok(new BaseResponseModel<PaginatedList<Payment>?>(StatusCodes.Status200OK, data: pgresult));
+            return Ok(new BaseResponseModel<PaginatedList<TimeSchedule>?>(StatusCodes.Status200OK, data: pgresult));
+            
         }
         catch (Exception e)
         {
@@ -48,7 +50,7 @@ public class PaymentController : ApiControllerBase
             {
                 return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
             }
-            return Ok(new BaseResponseModel<Payment?>(StatusCodes.Status200OK, data: result));
+            return Ok(new BaseResponseModel<TimeSchedule?>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {
@@ -60,7 +62,7 @@ public class PaymentController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Create([FromBody] PaymentModel model)
+    public async Task<IActionResult> Create([FromBody] TimeScheduleModel model)
     {
         try
         {
@@ -80,7 +82,7 @@ public class PaymentController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Update([FromRoute] string id, [FromBody] PaymentModel model)
+    public async Task<IActionResult> Update([FromRoute] string id, [FromBody] TimeScheduleModel model)
     {
         try
         {

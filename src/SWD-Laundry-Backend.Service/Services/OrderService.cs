@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 //using StackExchange.Redis;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
+using SWD_Laundry_Backend.Contract.Repository.Infrastructure;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
@@ -18,11 +19,13 @@ public class OrderService : IOrderService
 {
     private readonly IOrderRepository _repository;
     private readonly IMapper _mapper;
+    private readonly ICacheLayer<Order> _cacheLayer;
 
-    public OrderService(IOrderRepository repository, IMapper mapper)
+    public OrderService(IOrderRepository repository, IMapper mapper, ICacheLayer<Order> cacheLayer)
     {
         _repository = repository;
         _mapper = mapper;
+        _cacheLayer = cacheLayer;
     }
 
     public async Task<string> CreateAsync(OrderModel model, CancellationToken cancellationToken = default)

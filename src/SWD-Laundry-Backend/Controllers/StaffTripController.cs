@@ -28,7 +28,7 @@ public class StaffTripController : ApiControllerBase
         try
         {
             var pgresult = await _service.GetPaginatedAsync(query);
-            return Ok(new BaseResponseModel<PaginatedList<Staff_Trip>?>(StatusCodes.Status200OK, data: pgresult));
+            return Ok(new BaseResponseModel<PaginatedList<StaffTrip>?>(StatusCodes.Status200OK, data: pgresult));
         }
         catch (Exception e)
         {
@@ -50,7 +50,7 @@ public class StaffTripController : ApiControllerBase
             {
                 return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
             }
-            return Ok(new BaseResponseModel<Staff_Trip?>(StatusCodes.Status200OK, data: result));
+            return Ok(new BaseResponseModel<StaffTrip?>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {

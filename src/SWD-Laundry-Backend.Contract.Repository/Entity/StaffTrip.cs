@@ -5,7 +5,7 @@ namespace SWD_Laundry_Backend.Contract.Repository.Entity;
 
 #nullable disable
 
-public class Staff_Trip : BaseEntity
+public class StaffTrip : BaseEntity
 {
     public int TripCollect { get; set; } = 0;
 

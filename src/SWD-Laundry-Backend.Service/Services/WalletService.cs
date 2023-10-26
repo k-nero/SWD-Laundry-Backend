@@ -3,6 +3,7 @@ using AutoMapper;
 using Invedia.DI.Attributes;
 using Microsoft.EntityFrameworkCore;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
+using SWD_Laundry_Backend.Contract.Repository.Infrastructure;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
@@ -17,11 +18,13 @@ public class WalletService : Base_Service.Service, IWalletService
 {
     private readonly IWalletRepository _repository;
     private readonly IMapper _mapper;
+    private readonly ICacheLayer<Wallet> _cacheLayer;
 
-    public WalletService(IWalletRepository repository, IMapper mapper)
+    public WalletService(IWalletRepository repository, IMapper mapper, ICacheLayer<Wallet> cacheLayer)
     {
         _repository = repository;
         _mapper = mapper;
+        _cacheLayer = cacheLayer;
     }
 
     public async Task<string> CreateAsync(WalletModel model, CancellationToken cancellationToken = default)

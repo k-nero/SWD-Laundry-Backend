@@ -1,10 +1,8 @@
-﻿using System.Linq.Expressions;
-using AutoMapper;
+﻿using AutoMapper;
 using Invedia.DI.Attributes;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
-using SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels;
+using SWD_Laundry_Backend.Contract.Repository.Infrastructure;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
@@ -20,12 +18,14 @@ public class CustomerService : ICustomerService
     private readonly ICustomerRepository _repository;
     private readonly IMapper _mapper;
     private readonly IIdentityService _identityService;
+    private readonly ICacheLayer<Customer> _cacheLayer;
 
-    public CustomerService(ICustomerRepository repository, IMapper mapper, IIdentityService identityService)
+    public CustomerService(ICustomerRepository repository, IMapper mapper, IIdentityService identityService, ICacheLayer<Customer> cacheLayer)
     {
         _repository = repository;
         _mapper = mapper;
         _identityService = identityService;
+        _cacheLayer = cacheLayer;
     }
 
     public async Task<string> CreateAsync(CustomerModel model, CancellationToken cancellationToken = default)

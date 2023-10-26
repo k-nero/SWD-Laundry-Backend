@@ -2,6 +2,7 @@
 using Invedia.DI.Attributes;
 using Microsoft.EntityFrameworkCore;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
+using SWD_Laundry_Backend.Contract.Repository.Infrastructure;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Enum;
@@ -17,11 +18,13 @@ public class OrderHistoryService : IOrderHistoryService
 {
     private readonly IOrderHistoryRepository _repository;
     private readonly IMapper _mapper;
+    private readonly ICacheLayer<OrderHistory> _cacheLayer;
 
-    public OrderHistoryService(IOrderHistoryRepository repository, IMapper mapper)
+    public OrderHistoryService(IOrderHistoryRepository repository, IMapper mapper, ICacheLayer<OrderHistory> cacheLayer)
     {
         _repository = repository;
         _mapper = mapper;
+        _cacheLayer = cacheLayer;
     }
 
     public async Task<string> CreateAsync(OrderHistoryModel model, CancellationToken cancellationToken = default)

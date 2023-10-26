@@ -3,6 +3,7 @@ using AutoMapper;
 using Invedia.DI.Attributes;
 using Microsoft.EntityFrameworkCore;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
+using SWD_Laundry_Backend.Contract.Repository.Infrastructure;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
@@ -15,7 +16,7 @@ namespace SWD_Laundry_Backend.Service.Services;
 [ScopedDependency(ServiceType = typeof(IStaffTripService))]
 public class StaffTripService : Base_Service.Service, IStaffTripService
 {
-    private readonly Expression<Func<Staff_Trip, object>>[]? _items =
+    private readonly Expression<Func<StaffTrip, object>>[]? _items =
         {
             p => p.Staff,
             p => p.Building,
@@ -24,16 +25,18 @@ public class StaffTripService : Base_Service.Service, IStaffTripService
 
     private readonly IStaffTripRepository _repository;
     private readonly IMapper _mapper;
+    private readonly ICacheLayer<StaffTrip> _cacheLayer;
 
-    public StaffTripService(IStaffTripRepository staffTripRepository, IMapper mapper)
+    public StaffTripService(IStaffTripRepository staffTripRepository, IMapper mapper, ICacheLayer<StaffTrip> cacheLayer)
     {
         _repository = staffTripRepository;
         _mapper = mapper;
+        _cacheLayer = cacheLayer;
     }
 
     public async Task<string> CreateAsync(StaffTripModel model, CancellationToken cancellationToken = default)
     {
-        var query = await _repository.AddAsync(_mapper.Map<Staff_Trip>(model), cancellationToken);
+        var query = await _repository.AddAsync(_mapper.Map<StaffTrip>(model), cancellationToken);
         var objectId = query.Id;
         return objectId;
     }
@@ -45,7 +48,7 @@ public class StaffTripService : Base_Service.Service, IStaffTripService
         return i;
     }
 
-    public async Task<ICollection<Staff_Trip>> GetAllAsync(StaffTripQuery? query, CancellationToken cancellationToken = default)
+    public async Task<ICollection<StaffTrip>> GetAllAsync(StaffTripQuery? query, CancellationToken cancellationToken = default)
     {
         var list = await _repository.GetAsync(
             cancellationToken: cancellationToken,
@@ -53,14 +56,14 @@ public class StaffTripService : Base_Service.Service, IStaffTripService
         return await list.ToListAsync(cancellationToken);
     }
 
-    public async Task<Staff_Trip?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<StaffTrip?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
         var entity = await _repository.GetSingleAsync(c => c.Id == id, cancellationToken, _items);
         return entity;
     }
 
 
-    public async Task<PaginatedList<Staff_Trip>> GetPaginatedAsync(StaffTripQuery query, CancellationToken cancellationToken = default)
+    public async Task<PaginatedList<StaffTrip>> GetPaginatedAsync(StaffTripQuery query, CancellationToken cancellationToken = default)
     {
         var list = await _repository.GetAsync(
       c => c.IsDelete == query.IsDeleted

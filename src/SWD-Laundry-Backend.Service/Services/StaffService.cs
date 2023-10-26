@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using Invedia.DI.Attributes;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels;
+using SWD_Laundry_Backend.Contract.Repository.Infrastructure;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
@@ -18,12 +17,14 @@ public class StaffService : IStaffService
     private readonly IStaffRepository _repository;
     private readonly IMapper _mapper;
     private readonly IIdentityService _identityService;
+    private readonly ICacheLayer<Staff> _cacheLayer;
 
-    public StaffService(IStaffRepository repository, IMapper mapper, IIdentityService identityService)
+    public StaffService(IStaffRepository repository, IMapper mapper, IIdentityService identityService, ICacheLayer<Staff> cacheLayer)
     {
         _repository = repository;
         _mapper = mapper;
         _identityService = identityService;
+        _cacheLayer = cacheLayer;
     }
 
     public async Task<string> CreateAsync(StaffModel model, CancellationToken cancellationToken = default)

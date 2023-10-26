@@ -3,6 +3,7 @@ using AutoMapper;
 using Invedia.DI.Attributes;
 using Microsoft.EntityFrameworkCore;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
+using SWD_Laundry_Backend.Contract.Repository.Infrastructure;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
@@ -17,11 +18,13 @@ public class TransactionService : Base_Service.Service, ITransactionService
 {
     private readonly ITransactionRepository _repository;
     private readonly IMapper _mapper;
+    private readonly ICacheLayer<Transaction> _cacheLayer;
 
-    public TransactionService(ITransactionRepository repository, IMapper mapper)
+    public TransactionService(ITransactionRepository repository, IMapper mapper, ICacheLayer<Transaction> cacheLayer)
     {
         _repository = repository;
         _mapper = mapper;
+        _cacheLayer = cacheLayer;
     }
 
     public async Task<string> CreateAsync(TransactionModel model, CancellationToken cancellationToken = default)

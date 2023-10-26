@@ -11,7 +11,7 @@ using SWD_Laundry_Backend.Repository.Infrastructure;
 
 namespace SWD_Laundry_Backend.Repository.Repository;
 [ScopedDependency(ServiceType = typeof(IStaffTripRepository))]
-public class StaffTripRepository : Repository<Staff_Trip>, IStaffTripRepository
+public class StaffTripRepository : Repository<StaffTrip>, IStaffTripRepository
 {
     public StaffTripRepository(AppDbContext dbContext) : base(dbContext)
     {

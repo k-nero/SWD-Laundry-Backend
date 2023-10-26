@@ -41,7 +41,7 @@ public class OrderController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> GetById(string id)
+    public async Task<IActionResult> GetById([FromRoute] string id)
     {
         try
         {
@@ -64,7 +64,7 @@ public class OrderController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Create(OrderModel model)
+    public async Task<IActionResult> Create([FromBody] OrderModel model)
     {
         try
         {
@@ -84,7 +84,7 @@ public class OrderController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Update(string id, OrderModel model)
+    public async Task<IActionResult> Update([FromRoute] string id, [FromBody] OrderModel model)
     {
         try
         {
@@ -106,7 +106,7 @@ public class OrderController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Delete(string id)
+    public async Task<IActionResult> Delete([FromRoute] string id)
     {
         try
         {
@@ -141,12 +141,12 @@ public class OrderController : ApiControllerBase
         }
     }
 
-    [HttpPost("{orderId}/order-history")]
+    [HttpPost("{order-id}/order-history")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> CreateOrderHistory(string orderId, [FromQuery] OrderHistoryModel model)
+    public async Task<IActionResult> CreateOrderHistory([FromRoute(Name = "order-id")] string orderId, [FromQuery] OrderHistoryModel model)
     {
         try
         {

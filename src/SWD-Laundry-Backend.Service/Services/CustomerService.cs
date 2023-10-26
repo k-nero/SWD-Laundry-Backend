@@ -47,10 +47,10 @@ public class CustomerService : ICustomerService
     public async Task<ICollection<Customer>> GetAllAsync(CustomerQuery? query, CancellationToken cancellationToken = default)
     {
         var list = await _repository
-            .GetAsync(null, cancellationToken: cancellationToken
-            , x => x.ApplicationUser
-            , c => c.ApplicationUser.Wallet
-            , c => c.Building);
+            .GetAsync(null, cancellationToken: cancellationToken, 
+            x => x.ApplicationUser, 
+            c => c.ApplicationUser.Wallet, 
+            c => c.Building);
 
         return await list.ToListAsync(cancellationToken);
     }
@@ -58,21 +58,21 @@ public class CustomerService : ICustomerService
     public async Task<Customer?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
 
-        var customer = await _repository.GetSingleAsync(c => c.Id == id, cancellationToken
-            , x => x.ApplicationUser
-            , c => c.ApplicationUser.Wallet
-            , c => c.Building);
+        var customer = await _repository.GetSingleAsync(c => c.Id == id, cancellationToken, 
+            x => x.ApplicationUser, 
+            c => c.ApplicationUser.Wallet, 
+            c => c.Building);
         return customer;
     }
 
     public async Task<PaginatedList<Customer>> GetPaginatedAsync(CustomerQuery query, CancellationToken cancellationToken = default)
     {
         var list = await _repository.GetAsync(
-      c => c.IsDelete == query.IsDeleted
-            ,cancellationToken: cancellationToken
-            , x => x.ApplicationUser
-            , c => c.ApplicationUser.Wallet
-            , c => c.Building);
+          c => c.IsDelete == query.IsDeleted, 
+          cancellationToken: cancellationToken, 
+          x => x.ApplicationUser, 
+          c => c.ApplicationUser.Wallet,
+          c => c.Building);
         var result = await list.PaginatedListAsync(query);
         return result;
 
@@ -83,8 +83,8 @@ public class CustomerService : ICustomerService
         var numberOfRows = await _repository.UpdateAsync(x => x.Id == id,
          x => x
         .SetProperty(x => x.BuildingID, model.BuildingId)
-        .SetProperty(x => x.ApplicationUserID, model.ApplicationUserId)
-        , cancellationToken);
+        .SetProperty(x => x.ApplicationUserID, model.ApplicationUserId), 
+        cancellationToken: cancellationToken);
         return numberOfRows;
     }
 

@@ -1,7 +1,8 @@
-﻿using SWD_Laundry_Backend.Core.Models.Common;
+﻿using SWD_Laundry_Backend.Contract.Repository.Entity;
+using SWD_Laundry_Backend.Core.Models.Common;
 
 namespace SWD_Laundry_Backend.Contract.Repository.Base_Interface;
-public interface IBaseCacheLayer<T> where T : class, new()
+public interface IBaseCacheLayer<T> where T : BaseEntity, new()
 {
     Task<T?> GetSingleAsync(string key, CancellationToken cancellationToken = default);
     Task AddSingleAsync(T entity, CancellationToken cancellationToken = default);

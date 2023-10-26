@@ -41,7 +41,7 @@ public class StaffTripController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> GetByStaffId(string id)
+    public async Task<IActionResult> GetByStaffId([FromRoute] string id)
     {
         try
         {
@@ -62,7 +62,7 @@ public class StaffTripController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Create(StaffTripModel model)
+    public async Task<IActionResult> Create([FromBody] StaffTripModel model)
     {
         try
         {
@@ -82,7 +82,7 @@ public class StaffTripController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Update(string id, StaffTripModel model)
+    public async Task<IActionResult> Update([FromRoute] string id, [FromBody] StaffTripModel model)
     {
         try
         {
@@ -104,7 +104,7 @@ public class StaffTripController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Delete(string id)
+    public async Task<IActionResult> Delete([FromRoute] string id)
     {
         try
         {

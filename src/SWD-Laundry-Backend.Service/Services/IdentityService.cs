@@ -97,6 +97,8 @@ public class IdentityService : Base_Service.Service, IIdentityService
         if (user != null)
         {
             await _userManager.SetPhoneNumberAsync(user, phoneNumber);
+            user.PhoneNumberConfirmed = true;
+            await _userManager.UpdateAsync(user);
         }
         return;
     }
@@ -125,6 +127,8 @@ public class IdentityService : Base_Service.Service, IIdentityService
     public async Task SetVerfiedEmailAsync(ApplicationUser user, string email)
     {
         await _userManager.SetEmailAsync(user, email);
+        user.EmailConfirmed = true;
+        await _userManager.UpdateAsync(user);
     }
 
     public async Task SetUserAvatarUrlAsync(ApplicationUser user, string photoUrl)

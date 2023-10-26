@@ -52,9 +52,7 @@ public class WalletService : Base_Service.Service, IWalletService
 
     public async Task<PaginatedList<Wallet>> GetPaginatedAsync(WalletQuery query, CancellationToken cancellationToken = default)
     {
-        var list = await _repository.GetAsync(
-      c => c.IsDelete == query.IsDeleted
-            , cancellationToken: cancellationToken);
+        var list = await _repository.GetAsync(c => c.IsDelete == query.IsDeleted, cancellationToken: cancellationToken);
         var result = await list.PaginatedListAsync(query) ;
         return result;
 
@@ -64,8 +62,8 @@ public class WalletService : Base_Service.Service, IWalletService
     {
         var numberOfRows = await _repository.UpdateAsync(x => x.Id == id,
             x => x
-            .SetProperty(x => x.Balance, model.Balance)
-            , cancellationToken);
+            .SetProperty(x => x.Balance, model.Balance),
+            cancellationToken);
 
         return numberOfRows;
     }

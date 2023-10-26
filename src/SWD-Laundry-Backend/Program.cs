@@ -92,7 +92,33 @@ public class Program
       
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-        builder.Services.AddCors();
+        builder.Services.AddCors( options =>
+        {
+            options.AddPolicy("Development", policy =>
+            {
+                policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+            });
+            options.AddPolicy("Production", policy =>
+            {
+                policy.WithOrigins(builder.Configuration["AllowedOrigin"])
+                .WithMethods(HttpMethod.Get.Method,
+                HttpMethod.Post.Method,
+                HttpMethod.Put.Method,
+                HttpMethod.Delete.Method,
+                HttpMethod.Patch.Method
+                ).AllowAnyHeader();
+            });
+            options.AddPolicy("Default", policy =>
+            {
+                policy.AllowAnyOrigin()
+                .WithMethods(HttpMethod.Get.Method,
+                HttpMethod.Post.Method,
+                HttpMethod.Put.Method,
+                HttpMethod.Delete.Method,
+                HttpMethod.Patch.Method
+                ).AllowAnyHeader();
+            });
+        } );
         builder.Services.AddValidatorsFromAssemblyContaining<BuildingValidator>();
         builder.Services.AddFluentValidationAutoValidation(options =>
         {
@@ -249,15 +275,8 @@ public class Program
                 });
             IdentityModelEventSource.ShowPII = true;
         //}
-        app.UseCors(option =>
-        {
-            option.AllowAnyOrigin().WithMethods(HttpMethod.Get.Method,
-                HttpMethod.Post.Method,
-                HttpMethod.Put.Method,
-                HttpMethod.Delete.Method,
-                HttpMethod.Patch.Method
-                ).AllowAnyHeader();
-        });
+        //app.UseCors(builder.Environment.EnvironmentName);
+        app.UseCors("Default");
         app.UseHttpsRedirection();
         app.UseSerilogRequestLogging();
         app.UseAuthentication();

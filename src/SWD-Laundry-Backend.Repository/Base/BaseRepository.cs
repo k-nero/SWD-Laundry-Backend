@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using SWD_Laundry_Backend.Contract.Repository.Base_Interface;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
-using SWD_Laundry_Backend.Contract.Repository.Infrastructure;
 using SWD_Laundry_Backend.Core.Utils;
 
 namespace SWD_Laundry_Backend.Repository.Base
@@ -11,7 +10,6 @@ namespace SWD_Laundry_Backend.Repository.Base
     public abstract class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity, new()
     {
         protected readonly DbContext _dbContext;
-        protected readonly ICacheLayer<T> _cacheLayer;
 
         private DbSet<T> _dbSet;
 
@@ -29,10 +27,9 @@ namespace SWD_Laundry_Backend.Repository.Base
             }
         }
 
-        protected BaseRepository(DbContext dbContext, ICacheLayer<T> cacheLayer)
+        protected BaseRepository(DbContext dbContext)
         {
             _dbContext = dbContext;
-            _cacheLayer = cacheLayer;
         }
 
         public virtual async Task<T> AddAsync(T entity, CancellationToken cancellationToken = default)

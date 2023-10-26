@@ -9,7 +9,7 @@ namespace SWD_Laundry_Backend.Repository.Repository;
 [ScopedDependency(ServiceType = typeof(IWalletRepository))]
 public class WalletRepository : Repository<Wallet>, IWalletRepository
 {
-    public WalletRepository(AppDbContext dbContext, ICacheLayer<Wallet> cachelayer) : base(dbContext, cachelayer)
+    public WalletRepository(AppDbContext dbContext) : base(dbContext)
     {
     }
 }

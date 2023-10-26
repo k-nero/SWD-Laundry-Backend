@@ -8,7 +8,7 @@ namespace SWD_Laundry_Backend.Repository.Repository;
 [ScopedDependency(ServiceType = typeof(IStaffRepository))]
 public class StaffRepository : Repository<Staff>, IStaffRepository
 {
-    public StaffRepository(AppDbContext dbContext, ICacheLayer<Staff> cacheLayer) : base(dbContext, cacheLayer)
+    public StaffRepository(AppDbContext dbContext) : base(dbContext)
     {
     }
 }

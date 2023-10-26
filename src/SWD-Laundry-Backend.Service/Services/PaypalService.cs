@@ -119,10 +119,9 @@ public class PaypalService : IPaypalService
         return result;
     }
 
-    private async Task<PaypalAccessTokenResponse?> GetAccessToken()
+    private static async Task<PaypalAccessTokenResponse?> GetAccessToken()
     {
-        const SecurityProtocolType tls13 = (SecurityProtocolType)12288;
-        ServicePointManager.SecurityProtocol = tls13 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls13 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
 
         string? client_id = SystemSettingModel.Configs["Paypal:paypal_client_id"];
         string? client_secret = SystemSettingModel.Configs["Paypal:paypal_client_secret"];

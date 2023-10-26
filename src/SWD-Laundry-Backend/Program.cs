@@ -1,4 +1,5 @@
 using System.IO.Compression;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using FirebaseAdmin;
@@ -17,6 +18,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Serilog;
+using StackExchange.Redis;
 using SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels;
 using SWD_Laundry_Backend.Core.Config;
 using SWD_Laundry_Backend.Core.Validator;
@@ -42,22 +44,81 @@ public class Program
                 .AddUserSecrets<Program>(true, false)
                 .Build();
 
-        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-
         builder.Host.UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
                    .ReadFrom.Configuration(hostingContext.Configuration)
                               .Enrich.FromLogContext()
                                          .WriteTo.Console());
-        builder.Services.AddCors(options =>
+
+        string private_key = "";
+        string public_key = "";
+        try
         {
-            options.AddPolicy("AllowAll", builder =>
+            private_key = File.ReadAllText(builder.Configuration["Jwt:PrivateKey"]);
+            public_key = File.ReadAllText(builder.Configuration["Jwt:PublicKey"]);
+            if(private_key != "" && public_key != "")
             {
-                builder.AllowAnyOrigin()
-                       .AllowAnyMethod()
-                       .AllowAnyHeader();
+                var private_rsa = RSA.Create();
+                private_rsa.ImportFromPem(private_key);
+                SystemSettingModel.RSAPrivateKey = new RsaSecurityKey(private_rsa);
+
+                var public_rsa = RSA.Create();
+                public_rsa.ImportFromPem(public_key);
+                SystemSettingModel.RSAPublicKey = new RsaSecurityKey(public_rsa);
+                
+            }
+        }
+        catch (Exception e )
+        {
+            if(builder.Environment.IsDevelopment())
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Error.WriteLine(e);
+                Console.Error.WriteLine("Can't read private_key.pem or public_key.pem");
+            }
+        }
+        finally
+        {
+            if(SystemSettingModel.RSAPrivateKey == null || SystemSettingModel.RSAPublicKey == null)
+            {
+                if(builder.Environment.IsDevelopment())
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("Fallback to Hmac HS256 alg");
+                    Console.ResetColor();
+
+                }
+            }
+        }
+      
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+        builder.Services.AddCors( options =>
+        {
+            options.AddPolicy("Development", policy =>
+            {
+                policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
             });
-        });
+            options.AddPolicy("Production", policy =>
+            {
+                policy.WithOrigins(builder.Configuration["AllowedOrigin"])
+                .WithMethods(HttpMethod.Get.Method,
+                HttpMethod.Post.Method,
+                HttpMethod.Put.Method,
+                HttpMethod.Delete.Method,
+                HttpMethod.Patch.Method
+                ).AllowAnyHeader();
+            });
+            options.AddPolicy("Default", policy =>
+            {
+                policy.AllowAnyOrigin()
+                .WithMethods(HttpMethod.Get.Method,
+                HttpMethod.Post.Method,
+                HttpMethod.Put.Method,
+                HttpMethod.Delete.Method,
+                HttpMethod.Patch.Method
+                ).AllowAnyHeader();
+            });
+        } );
         builder.Services.AddValidatorsFromAssemblyContaining<BuildingValidator>();
         builder.Services.AddFluentValidationAutoValidation(options =>
         {
@@ -121,6 +182,7 @@ public class Program
         {
             options.Configuration = builder.Configuration.GetConnectionString("RedisConnection");
         });
+        builder.Services.AddSingleton<IConnectionMultiplexer>(await ConnectionMultiplexer.ConnectAsync(builder.Configuration.GetConnectionString("RedisConnection")));
         builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
         {
             options.SignIn.RequireConfirmedAccount = false;
@@ -142,11 +204,14 @@ public class Program
             options.RequireHttpsMetadata = false;
             options.TokenValidationParameters = new TokenValidationParameters
             {
-                ValidateIssuer = false,
-                ValidateAudience = false,
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateIssuerSigningKey = true,
+                ValidateLifetime = true,
+                LogValidationExceptions = true,
                 ValidAudience = builder.Configuration["Jwt:ValidAudience"],
                 ValidIssuer = builder.Configuration["Jwt:ValidIssuer"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecrectKey"]))
+                IssuerSigningKey = SystemSettingModel.RSAPublicKey ?? new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecrectKey"])),
             };
         });
         builder.Services.AddAuthorization(options =>
@@ -182,7 +247,7 @@ public class Program
         _ = builder.Services.AddSystemSetting(builder.Configuration.GetSection("SystemSetting").Get<SystemSettingModel>());
         builder.Services.Configure<DataProtectionTokenProviderOptions>(opt => opt.TokenLifespan = TimeSpan.FromMinutes(30));
         builder.Services.AddDI();
-        builder.Services.PrintServiceAddedToConsole();
+        //builder.Services.PrintServiceAddedToConsole();
         builder.Services.Configure<GzipCompressionProviderOptions>(options =>
         {
             options.Level = CompressionLevel.Optimal;
@@ -199,7 +264,6 @@ public class Program
         });
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
         //if (app.Environment.IsDevelopment())
         //{
             app.UseSwagger();
@@ -211,7 +275,8 @@ public class Program
                 });
             IdentityModelEventSource.ShowPII = true;
         //}
-        app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+        //app.UseCors(builder.Environment.EnvironmentName);
+        app.UseCors("Default");
         app.UseHttpsRedirection();
         app.UseSerilogRequestLogging();
         app.UseAuthentication();

@@ -47,9 +47,9 @@ public class OrderService : IOrderService
 
     public async Task<Order?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
-        var entity = await _repository.GetSingleAsync(c => c.Id == id, cancellationToken, c => c.Customer
-    , c => c.Staff
-    , c => c.LaundryStore);
+        var entity = await _repository.GetSingleAsync(c => c.Id == id, cancellationToken, c => c.Customer,
+            c => c.Staff,
+            c => c.LaundryStore);
         return entity;
     }
 
@@ -67,8 +67,8 @@ public class OrderService : IOrderService
             .SetProperty(x => x.TotalPrice, model.TotalPrice)
             .SetProperty(x => x.CustomerID, model.CustomerId)
             .SetProperty(x => x.StaffID, model.StaffId)
-            .SetProperty(x => x.LaundryStoreID, model.LaundryStoreId)
-            , cancellationToken);
+            .SetProperty(x => x.LaundryStoreID, model.LaundryStoreId),
+            cancellationToken);
 
         return numberOfRows;
     }
@@ -77,11 +77,19 @@ public class OrderService : IOrderService
     {
         var list = await _repository
         .GetAsync(
-    c => c.IsDelete == query.IsDeleted
-    , cancellationToken: cancellationToken
-    , c => c.Customer
-    , c => c.Staff
-    , c => c.LaundryStore);
+        c => c.IsDelete == query.IsDeleted,
+        cancellationToken: cancellationToken,
+        c => c.Customer,
+        c => c.Staff,
+        c => c.LaundryStore);
+        if (query.LaundryStoreId != null)
+        {
+            list = list.Where(x => x.LaundryStoreID == query.LaundryStoreId);
+        }
+        if (query.CustomerId != null)
+        {
+            list = list.Where(x => x.CustomerID == query.CustomerId);
+        }
 
         var result = await list.PaginatedListAsync(query);
         return result;

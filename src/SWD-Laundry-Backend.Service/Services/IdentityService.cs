@@ -30,6 +30,13 @@ public class IdentityService : Base_Service.Service, IIdentityService
         return user.UserName;
     }
 
+    public ApplicationUser GetUserByIdAsync(string userId)
+    {
+        var user =  _userManager.Users.First(u => u.Id == userId);
+
+        return user;
+    }
+
     public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
     {
         var user = new ApplicationUser
@@ -90,6 +97,8 @@ public class IdentityService : Base_Service.Service, IIdentityService
         if (user != null)
         {
             await _userManager.SetPhoneNumberAsync(user, phoneNumber);
+            user.PhoneNumberConfirmed = true;
+            await _userManager.UpdateAsync(user);
         }
         return;
     }
@@ -118,6 +127,8 @@ public class IdentityService : Base_Service.Service, IIdentityService
     public async Task SetVerfiedEmailAsync(ApplicationUser user, string email)
     {
         await _userManager.SetEmailAsync(user, email);
+        user.EmailConfirmed = true;
+        await _userManager.UpdateAsync(user);
     }
 
     public async Task SetUserAvatarUrlAsync(ApplicationUser user, string photoUrl)

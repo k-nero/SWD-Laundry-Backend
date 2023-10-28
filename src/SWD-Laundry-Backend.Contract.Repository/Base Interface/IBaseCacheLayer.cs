@@ -11,5 +11,5 @@ public interface IBaseCacheLayer<T> where T : BaseEntity, new()
     Task<string[]> GetAvailableKey(CancellationToken cancellationToken = default);
     Task AddMultipleAsync(string key, PaginatedList<T> entities, CancellationToken cancellationToken = default);
     Task<PaginatedList<T>?> GetMultipleAsync(string keys, CancellationToken cancellationToken = default);
-    Task RemoveMultipleAsync(string keyPrefix, CancellationToken cancellationToken = default);
+    Task RemoveMultipleAsync(string[] keyPrefix, CancellationToken cancellationToken = default);
 }

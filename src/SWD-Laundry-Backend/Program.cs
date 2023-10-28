@@ -35,7 +35,7 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         //builder.Environment.EnvironmentName = Environments.Development;
-        builder.Environment.EnvironmentName = Environments.Production;
+        //builder.Environment.EnvironmentName = Environments.Production;
 
         // Add services to the container.
 
@@ -194,7 +194,7 @@ public class Program
      .AddRoles<IdentityRole>()
      .AddEntityFrameworkStores<AppDbContext>()
      .AddDefaultTokenProviders();
-        builder.Services.AddAuthentication(options =>
+        _ = builder.Services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -205,7 +205,7 @@ public class Program
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
-                ValidateAudience = true,
+                ValidateAudience = false,
                 ValidateIssuerSigningKey = true,
                 ValidateLifetime = true,
                 LogValidationExceptions = true,

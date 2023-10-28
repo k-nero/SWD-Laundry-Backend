@@ -14,8 +14,8 @@ public class Customer : BaseEntity
     public string ApplicationUserID { get; set; }
 
     ////===========================
-    public Building Building { get; set; }
+    public Building? Building { get; set; }
 
-    public ApplicationUser ApplicationUser { get; set; }
+    public ApplicationUser? ApplicationUser { get; set; }
     //public virtual List<Order> Order { get; set; }
 }

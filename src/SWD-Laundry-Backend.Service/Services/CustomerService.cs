@@ -83,8 +83,8 @@ public class CustomerService : ICustomerService
     {
         var numberOfRows = await _repository.UpdateAsync(x => x.Id == id,
          x => x
-        .SetProperty(x => x.BuildingID, model.BuildingId)
-        .SetProperty(x => x.ApplicationUserID, model.ApplicationUserId), 
+        .SetProperty(x => x.BuildingID, model.BuildingID)
+        .SetProperty(x => x.ApplicationUserID, model.ApplicationUserID), 
         cancellationToken: cancellationToken);
         return numberOfRows;
     }

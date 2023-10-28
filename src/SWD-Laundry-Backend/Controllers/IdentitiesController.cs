@@ -1,0 +1,122 @@
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SWD_Laundry_Backend.Contract.Service.Interface;
+using SWD_Laundry_Backend.Core.Models.Common;
+using SWD_Laundry_Backend.Core.Models;
+using SWD_Laundry_Backend.Core.QueryObject;
+using SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels;
+
+namespace SWD_Laundry_Backend.Controllers;
+
+[ApiController]
+//[Authorize("Admin")]
+public class IdentitiesController : ApiControllerBase
+{
+    private readonly IIdentityService _service;
+
+    public IdentitiesController(IIdentityService identityService)
+    {
+        _service = identityService;
+    }
+
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesDefaultResponseType]
+    public async Task<IActionResult> Get([FromQuery] ApplicationUserQuery query)
+    {
+        try
+        {
+            var pgresult = await _service.GetPaginatedAsync(query);
+            return Ok(new BaseResponseModel<PaginatedList<ApplicationUser>?>(StatusCodes.Status200OK, data: pgresult));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
+        }
+    }
+
+    [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesDefaultResponseType]
+    public async Task<IActionResult> GetById([FromRoute] string id)
+    {
+        try
+        {
+            var result = await _service.GetUserByIdAsync(id);
+            if (result == null)
+            {
+                return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
+            }
+            return Ok(new BaseResponseModel<ApplicationUser?>(StatusCodes.Status200OK, data: result));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
+        }
+    }
+
+    //[HttpPost]
+    //[ProducesResponseType(StatusCodes.Status201Created)]
+    //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    //[ProducesDefaultResponseType]
+    //public async Task<IActionResult> Create([FromBody] TransactionModel model)
+    //{
+    //    try
+    //    {
+    //        var result = await _service.(model);
+    //        return Ok(new BaseResponseModel<string>(StatusCodes.Status201Created, data: result));
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
+    //    }
+    //}
+
+    //[HttpPut("{id}")]
+    //[ProducesResponseType(StatusCodes.Status200OK)]
+    //[ProducesResponseType(StatusCodes.Status404NotFound)]
+    //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    //[ProducesDefaultResponseType]
+    //public async Task<IActionResult> Update([FromRoute] string id, [FromBody] TransactionModel model)
+    //{
+    //    try
+    //    {
+    //        var result = await _service.UpdateAsync(id, model);
+    //        if (result == 0)
+    //        {
+    //            return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
+    //        }
+    //        return Ok(new BaseResponseModel<int>(StatusCodes.Status200OK, data: result));
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
+    //    }
+    //}
+
+    //[HttpDelete("{id}")]
+    //[ProducesResponseType(StatusCodes.Status200OK)]
+    //[ProducesResponseType(StatusCodes.Status404NotFound)]
+    //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    //[ProducesDefaultResponseType]
+    //public async Task<IActionResult> Delete([FromRoute] string id)
+    //{
+    //    try
+    //    {
+    //        var result = await _service.DeleteAsync(id);
+    //        if (result == 0)
+    //        {
+    //            return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
+    //        }
+    //        return Ok(new BaseResponseModel<int>(StatusCodes.Status200OK, data: result));
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
+    //    }
+    //}
+
+}

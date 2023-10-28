@@ -34,7 +34,7 @@ public class LaundryStoreService : Base_Service.Service, ILaundryStoreService
     public async Task<string> CreateAsync(LaundryStoreModel model, CancellationToken cancellationToken = default)
     {
         var query = await _repository.AddAsync(_mapper.Map<LaundryStore>(model), cancellationToken);
-        var user =  _identityService.GetUserByIdAsync(query.ApplicationUserID);
+        var user = await  _identityService.GetUserByIdAsync(query.ApplicationUserID);
         await _identityService.AddToRoleAsync(user, "LaundryStore");
         var objectId = query.Id;
         return objectId;

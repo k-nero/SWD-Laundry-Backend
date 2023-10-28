@@ -3,13 +3,14 @@ using Invedia.DI.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using StackExchange.Redis;
 using SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels;
-using SWD_Laundry_Backend.Contract.Repository.Infrastructure;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models.Common;
+using SWD_Laundry_Backend.Core.QueryObject;
+using SWD_Laundry_Backend.Core.Utils;
 
 namespace SWD_Laundry_Backend.Service.Services;
+
 [TransientDependency(ServiceType = typeof(IIdentityService))]
 public class IdentityService : Base_Service.Service, IIdentityService
 {
@@ -31,9 +32,10 @@ public class IdentityService : Base_Service.Service, IIdentityService
         return user.UserName;
     }
 
-    public ApplicationUser GetUserByIdAsync(string userId)
+    public async Task<ApplicationUser> GetUserByIdAsync(string userId)
     {
-        var user =  _userManager.Users.First(u => u.Id == userId);
+        var user = await _userManager.Users.FirstAsync(u => u.Id == userId);
+
 
         return user;
     }
@@ -106,12 +108,12 @@ public class IdentityService : Base_Service.Service, IIdentityService
 
     public async Task<IList<string>?> GetRolesAsync(ApplicationUser user)
     {
-       return await _userManager.GetRolesAsync(user);
+        return await _userManager.GetRolesAsync(user);
     }
 
     public async Task AddToRoleAsync(ApplicationUser user, string role)
     {
-       await _userManager.AddToRoleAsync(user, role);
+        await _userManager.AddToRoleAsync(user, role);
     }
 
     public async Task SetUserFullNameAsync(ApplicationUser user, string fullName)
@@ -140,8 +142,20 @@ public class IdentityService : Base_Service.Service, IIdentityService
 
     public async Task<int> SetWalletAsync(ApplicationUser user, string walletId)
     {
-       user.WalletID = walletId;
-       var rs = await _userManager.UpdateAsync(user);
-       return rs.ToApplicationResult().Succeeded ? 1 : 0;
+        user.WalletID = walletId;
+        var rs = await _userManager.UpdateAsync(user);
+        return rs.ToApplicationResult().Succeeded ? 1 : 0;
+    }
+
+    public async Task<PaginatedList<ApplicationUser>> GetPaginatedAsync(ApplicationUserQuery query, CancellationToken cancellationToken = default)
+    {
+        var result = _userManager.Users.AsNoTracking();
+        if (query.Email != null)
+        {
+            result.Where(c => c.Email == query.Email
+            || c.UserName == query.Email);
+        }
+        var rs = await result.PaginatedListAsync(query);
+        return rs;
     }
 }

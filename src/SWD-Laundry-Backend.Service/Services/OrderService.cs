@@ -7,6 +7,7 @@ using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Repository.Infrastructure;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
+using SWD_Laundry_Backend.Core.Enum;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
 using SWD_Laundry_Backend.Core.QueryObject;
@@ -20,17 +21,34 @@ public class OrderService : IOrderService
     private readonly IOrderRepository _repository;
     private readonly IMapper _mapper;
     private readonly ICacheLayer<Order> _cacheLayer;
+    private readonly IOrderHistoryRepository _orderHistoryRepository;
 
-    public OrderService(IOrderRepository repository, IMapper mapper, ICacheLayer<Order> cacheLayer)
+    public OrderService(IOrderRepository repository, IMapper mapper, ICacheLayer<Order> cacheLayer, IOrderHistoryRepository orderHistoryRepository)
     {
         _repository = repository;
         _mapper = mapper;
         _cacheLayer = cacheLayer;
+        _orderHistoryRepository = orderHistoryRepository;
     }
 
     public async Task<string> CreateAsync(OrderModel model, CancellationToken cancellationToken = default)
     {
+        model.StaffId = null;
         var query = await _repository.AddAsync(_mapper.Map<Order>(model), cancellationToken);
+        if(query != null)
+        {
+            OrderHistoryModel historyModel = new()
+            {
+                OrderId = query.Id,
+                Title = "Delivery Preparing",
+                Message = "Order created and shipper will collect your order soon.",
+                OrderStatus = OrderStatus.Preparing,
+                DeliveryStatus = DeliveryStatus.Pending,
+                LaundryStatus = LaundryStatus.Pending,
+            };
+
+            await _orderHistoryRepository.AddAsync(_mapper.Map<OrderHistory>(historyModel), cancellationToken);
+        }
         var objectId = query.Id;
         return objectId;
     }

@@ -46,6 +46,7 @@ public class IdentityService : Base_Service.Service, IIdentityService
         {
             UserName = userName,
             Email = userName,
+            CreatedTime = DateTime.Now,
         };
 
         var result = await _userManager.CreateAsync(user, password);
@@ -75,11 +76,11 @@ public class IdentityService : Base_Service.Service, IIdentityService
         return result.Succeeded;
     }
 
-    public async Task<Result> DeleteUserAsync(string userId)
+    public async Task<int> DeleteUserAsync(string userId)
     {
-        var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
+        var row = _userManager.Users.ExecuteUpdate(x => x.SetProperty(x => x.IsDelete, true));
 
-        return user != null ? await DeleteUserAsync(user) : Result.Success();
+        return row;
     }
 
     public async Task<Result> DeleteUserAsync(ApplicationUser user)

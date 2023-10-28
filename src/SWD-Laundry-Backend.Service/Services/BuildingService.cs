@@ -91,6 +91,7 @@ public class BuildingService : Base_Service.Service, IBuidingService
             .SetProperty(x => x.Description, y => model.Description ?? y.Description),
             cancellationToken: cancellationToken);
         await _cacheLayer.RemoveMultipleAsync(typeof(Building).Name, cancellationToken);
+        await _cacheLayer.RemoveMultipleAsync(id, cancellationToken);
         return i;
     }
 }

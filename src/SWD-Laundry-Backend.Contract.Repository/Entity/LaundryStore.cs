@@ -2,7 +2,6 @@
 using SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels;
 
 namespace SWD_Laundry_Backend.Contract.Repository.Entity;
-#nullable disable
 
 public class LaundryStore : BaseEntity
 {
@@ -17,7 +16,7 @@ public class LaundryStore : BaseEntity
     [ForeignKey("ApplicationUser")]
     public string ApplicationUserID { get; set; }
 
-    public ApplicationUser ApplicationUser { get; set; }
+    public ApplicationUser? ApplicationUser { get; set; }
 
     //public List<Order> Orders { get; set; }
 }

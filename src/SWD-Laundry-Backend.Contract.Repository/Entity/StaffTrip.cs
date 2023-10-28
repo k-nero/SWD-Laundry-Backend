@@ -3,8 +3,6 @@ using SWD_Laundry_Backend.Core.Enum;
 
 namespace SWD_Laundry_Backend.Contract.Repository.Entity;
 
-#nullable disable
-
 public class StaffTrip : BaseEntity
 {
     public int TripCollect { get; set; } = 0;
@@ -23,7 +21,7 @@ public class StaffTrip : BaseEntity
 
     ////===========================
 
-    public Building Building { get; set; }
-    public Staff Staff { get; set; }
-    public TimeSchedule TimeSchedule { get; set; }
+    public Building? Building { get; set; }
+    public Staff? Staff { get; set; }
+    public TimeSchedule? TimeSchedule { get; set; }
 }

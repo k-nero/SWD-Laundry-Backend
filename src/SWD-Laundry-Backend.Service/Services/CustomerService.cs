@@ -32,7 +32,7 @@ public class CustomerService : ICustomerService
     {
         var test = _mapper.Map<Customer>(model);
         var query = await _repository.AddAsync(_mapper.Map<Customer>(model), cancellationToken);
-        var user = _identityService.GetUserByIdAsync(query.ApplicationUserID);
+        var user = await _identityService.GetUserByIdAsync(query.ApplicationUserID);
         await _identityService.AddToRoleAsync(user, "Customer");
         var objectId = query.Id;
         return objectId;

@@ -31,7 +31,7 @@ public class StaffService : IStaffService
     {
         var query = await _repository.AddAsync(_mapper.Map<Staff>(model), cancellationToken);
 
-        var user = _identityService.GetUserByIdAsync(query.ApplicationUserID);
+        var user = await _identityService.GetUserByIdAsync(query.ApplicationUserID);
         await _identityService.AddToRoleAsync(user, "Staff");
         var objectId = query.Id;
         return objectId;

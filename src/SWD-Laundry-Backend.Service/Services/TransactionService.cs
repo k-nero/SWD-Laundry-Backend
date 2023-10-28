@@ -69,6 +69,7 @@ public class TransactionService : Base_Service.Service, ITransactionService
     {
         var numberOfRows = await _repository.UpdateAsync(x => x.Id == id,
             x => x
+            .SetProperty(x => x.Status, model.Status)
             .SetProperty(x => x.Amount, model.Amount)
             .SetProperty(x => x.TransactionType, model.TransactionType)
             .SetProperty(x => x.PaymentType, model.PaymentType)

@@ -93,6 +93,7 @@ namespace SWD_Laundry_Backend.Repository.Base
             int i = await DbSet.Where(filter).ExecuteUpdateAsync(update, cancellationToken);
             return i;
         }
+
         protected void TryAttach(T entity)
         {
             try

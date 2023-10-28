@@ -30,6 +30,7 @@ public class CustomerService : ICustomerService
 
     public async Task<string> CreateAsync(CustomerModel model, CancellationToken cancellationToken = default)
     {
+        var test = _mapper.Map<Customer>(model);
         var query = await _repository.AddAsync(_mapper.Map<Customer>(model), cancellationToken);
         var user = _identityService.GetUserByIdAsync(query.ApplicationUserID);
         await _identityService.AddToRoleAsync(user, "Customer");
@@ -82,8 +83,8 @@ public class CustomerService : ICustomerService
     {
         var numberOfRows = await _repository.UpdateAsync(x => x.Id == id,
          x => x
-        .SetProperty(x => x.BuildingID, model.BuildingId)
-        .SetProperty(x => x.ApplicationUserID, model.ApplicationUserId), 
+        .SetProperty(x => x.BuildingID, model.BuildingID)
+        .SetProperty(x => x.ApplicationUserID, model.ApplicationUserID), 
         cancellationToken: cancellationToken);
         return numberOfRows;
     }

@@ -79,9 +79,9 @@ public class StaffTripService : Base_Service.Service, IStaffTripService
             x => x
             .SetProperty(x => x.TripCollect, model.TripCollect)
             .SetProperty(x => x.TripType, model.TripType)
-            .SetProperty(x => x.TimeScheduleID, model.TimeScheduleID)
-            .SetProperty(x => x.BuildingID, model.BuildingID)
-            .SetProperty(x => x.StaffID, model.StaffID)
+            .SetProperty(x => x.TimeScheduleID, y => model.TimeScheduleID ?? y.TimeScheduleID)
+            .SetProperty(x => x.BuildingID, y => model.BuildingID ?? y.BuildingID)
+            .SetProperty(x => x.StaffID, y => model.StaffID ?? y.StaffID)
             , cancellationToken);
 
         return numberOfRows;

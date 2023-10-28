@@ -68,9 +68,9 @@ public class OrderService : IOrderService
             .SetProperty(x => x.Address, model.Address)
             .SetProperty(x => x.Amount, model.Amount)
             .SetProperty(x => x.TotalPrice, model.TotalPrice)
-            .SetProperty(x => x.CustomerID, model.CustomerId)
-            .SetProperty(x => x.StaffID, model.StaffId)
-            .SetProperty(x => x.LaundryStoreID, model.LaundryStoreId),
+            .SetProperty(x => x.CustomerID, y => model.CustomerId ?? y.CustomerID)
+            .SetProperty(x => x.StaffID, y => model.StaffId ?? y.StaffID)
+            .SetProperty(x => x.LaundryStoreID, y => model.LaundryStoreId ?? y.LaundryStoreID),
             cancellationToken);
 
         return numberOfRows;

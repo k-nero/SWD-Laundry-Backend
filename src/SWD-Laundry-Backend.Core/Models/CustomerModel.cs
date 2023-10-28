@@ -2,6 +2,6 @@
 
 public class CustomerModel
 {
-    public string? BuildingId { get; set; }
-    public string? ApplicationUserId { get; set; }
+    public string? BuildingID { get; set; }
+    public string? ApplicationUserID { get; set; }
 }

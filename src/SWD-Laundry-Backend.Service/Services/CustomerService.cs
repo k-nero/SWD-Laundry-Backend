@@ -30,6 +30,7 @@ public class CustomerService : ICustomerService
 
     public async Task<string> CreateAsync(CustomerModel model, CancellationToken cancellationToken = default)
     {
+        var test = _mapper.Map<Customer>(model);
         var query = await _repository.AddAsync(_mapper.Map<Customer>(model), cancellationToken);
         var user = _identityService.GetUserByIdAsync(query.ApplicationUserID);
         await _identityService.AddToRoleAsync(user, "Customer");

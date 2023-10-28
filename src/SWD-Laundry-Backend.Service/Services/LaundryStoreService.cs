@@ -75,6 +75,7 @@ public class LaundryStoreService : Base_Service.Service, ILaundryStoreService
     {
         var numberOfRows = await _repository.UpdateAsync(x => x.Id == id,
             x => x
+            .SetProperty(x => x.Name, model.Name)
             .SetProperty(x => x.StartTime, model.StartTime)
             .SetProperty(x => x.EndTime, model.EndTime)
             .SetProperty(x => x.Address, model.Address)

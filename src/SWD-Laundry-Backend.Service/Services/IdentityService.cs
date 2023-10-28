@@ -152,7 +152,7 @@ public class IdentityService : Base_Service.Service, IIdentityService
         var result = _userManager.Users.AsNoTracking();
         if (query.Email != null)
         {
-            result.Where(c => c.Email == query.Email
+            result = result.Where(c => c.Email == query.Email
             || c.UserName == query.Email);
         }
         var rs = await result.PaginatedListAsync(query);

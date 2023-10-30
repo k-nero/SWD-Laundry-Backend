@@ -67,6 +67,10 @@ public class LaundryStoreService : Base_Service.Service, ILaundryStoreService
             , cancellationToken: cancellationToken
             , c => c.ApplicationUser
             , c => c.ApplicationUser.Wallet);
+        if(query.UserId != null)
+        {
+            list = list.Where(c => c.ApplicationUserID == query.UserId);
+        }
         var result = await list.PaginatedListAsync(query);
         return result;
     }

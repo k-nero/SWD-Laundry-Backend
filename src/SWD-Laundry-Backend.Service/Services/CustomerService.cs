@@ -74,6 +74,10 @@ public class CustomerService : ICustomerService
           x => x.ApplicationUser, 
           c => c.ApplicationUser.Wallet,
           c => c.Building);
+        if (query.UserId != null)
+        {
+            list = list.Where(c => c.ApplicationUserID == query.UserId);
+        }
         var result = await list.PaginatedListAsync(query);
         return result;
 

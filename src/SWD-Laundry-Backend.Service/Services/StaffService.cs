@@ -31,7 +31,7 @@ public class StaffService : IStaffService
     {
         var query = await _repository.AddAsync(_mapper.Map<Staff>(model), cancellationToken);
 
-        var user = _identityService.GetUserByIdAsync(query.ApplicationUserID);
+        var user = await _identityService.GetUserByIdAsync(query.ApplicationUserID);
         await _identityService.AddToRoleAsync(user, "Staff");
         var objectId = query.Id;
         return objectId;
@@ -69,6 +69,10 @@ public class StaffService : IStaffService
         , cancellationToken: cancellationToken
             , c => c.ApplicationUser
             , c => c.ApplicationUser.Wallet);
+        if (query.UserId != null)
+        {
+            list = list.Where(c => c.ApplicationUserID == query.UserId);
+        }
         var result = await list.PaginatedListAsync(query);
         return result;
 

@@ -163,11 +163,11 @@ public class Program
         });
 
 
-        builder.Services.AddSingleton(FirebaseApp.Create(new AppOptions()
-        {
-            Credential = await GoogleCredential.FromFileAsync(builder.Configuration["Firebase:Credential"], cancellationToken: default),
-            ServiceAccountId = builder.Configuration["Firebase:ServiceAccountId"],
-        }));
+       builder.Services.AddSingleton(FirebaseApp.Create(new AppOptions()
+       {
+           Credential = await GoogleCredential.FromFileAsync(builder.Configuration["Firebase:Credential"], cancellationToken: default),
+           ServiceAccountId = builder.Configuration["Firebase:ServiceAccountId"],
+       }));
 
 
         builder.Services.AddDbContext<AppDbContext>(options =>
@@ -194,7 +194,7 @@ public class Program
      .AddRoles<IdentityRole>()
      .AddEntityFrameworkStores<AppDbContext>()
      .AddDefaultTokenProviders();
-        builder.Services.AddAuthentication(options =>
+        _ = builder.Services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -205,7 +205,7 @@ public class Program
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
-                ValidateAudience = true,
+                ValidateAudience = false,
                 ValidateIssuerSigningKey = true,
                 ValidateLifetime = true,
                 LogValidationExceptions = true,

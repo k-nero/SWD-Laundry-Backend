@@ -8,8 +8,8 @@ public class LaundryStore : BaseEntity
     public string Name { get; set; }
     public string Address { get; set; }
 
-    public DateTime StartTime { get; set; }
-    public DateTime EndTime { get; set; }
+    public TimeOnly StartTime { get; set; }
+    public TimeOnly EndTime { get; set; }
     public bool Status { get; set; }
 
     ////===========================

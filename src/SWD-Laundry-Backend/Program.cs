@@ -35,7 +35,7 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         //builder.Environment.EnvironmentName = Environments.Development;
-        builder.Environment.EnvironmentName = Environments.Production;
+        //builder.Environment.EnvironmentName = Environments.Production;
 
         // Add services to the container.
 

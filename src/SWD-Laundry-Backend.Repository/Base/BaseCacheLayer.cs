@@ -109,7 +109,6 @@ public class BaseCacheLayer<T> : IBaseCacheLayer<T> where T : BaseEntity, new()
 
     public async Task RemoveMultipleAsync(string[] keyPrefix, CancellationToken cancellationToken = default)
     {
-        string prefix = keyPrefix;
         var availableKeys = await GetAvailableKey(cancellationToken);
         foreach (var key in availableKeys)
         {

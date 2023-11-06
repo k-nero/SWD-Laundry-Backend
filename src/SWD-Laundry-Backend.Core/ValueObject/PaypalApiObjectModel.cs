@@ -16,9 +16,9 @@ public class PaypalApiObjectModel
 
         public readonly struct PaypalOrderResponse
         {
-            public string create_time { get; init; }
+            public DateTime? create_time { get; init; }
             public string id { get; init; }
-            public string update_time { get; init; }
+            public DateTime? update_time { get; init; }
             public string processing_instruction { get; init; }
             public PaypalLink[] links { get; init; }
             public string intent { get; init; }
@@ -28,26 +28,51 @@ public class PaypalApiObjectModel
         public readonly struct PaypalOrderCaptureResponse
         {
             public string id { get; init; }
+            public PaymentSource? payment_source { get; init; }
             public string status { get; init; }
-            public string create_time { get; init; }
-            public string update_time { get; init; }
+            public DateTime? create_time { get; init; }
+            public DateTime? update_time { get; init; }
             public PaypalLink[] links { get; init; }
-            public PaypalPayer payer { get; init; }
+            public PaypalPayer? payer { get; init; }
             public PaypalPurchaseUnit[] purchase_units { get; init; }
+        }
+
+        public readonly struct ShippingDetail
+        {
+            public PayerName name { get; init; }
+            public string type { get; init; }
+            public PayerAdress address { get; init; }
+
+        }
+
+        public readonly struct PaymentSource
+        {
+            public PaymentSourcePaypal? paypal { get; init; }
         }
 
         public readonly struct PaypalPayer
         {
             public string email_address { get; init; }
             public string payer_id { get; init; }
-            public string address { get; init; }
+            public PayerAdress address { get; init; }
             public PayerName name { get; init; }
+        }
+
+        public readonly struct PayerAdress
+        {
+            public string address_line_1 { get; init; }
+            public string address_line_2 { get; init; }
+            public string admin_area_2 { get; init; }
+            public string admin_area_1 { get; init; }
+            public string postal_code { get; init; }
+            public string country_code { get; init; }
         }
 
         public readonly struct PayerName
         {
             public string given_name { get; init; }
             public string surname { get; init; }
+            public string? full_name { get; init; }
         }
 
         public readonly struct PaypalLink
@@ -78,6 +103,9 @@ public class PaypalApiObjectModel
             public string? billing_agreement_id { get; init; }
             public string? vault_id { get; init; }
             public string? email_address { get; init; }
+            public string? account_id { get; init; }
+            public string? account_status { get; init; }
+            public PayerAdress? address { get; init; }
 
         }
 
@@ -102,6 +130,49 @@ public class PaypalApiObjectModel
             public string? soft_descriptor { get; init; }
             public PaypalItem[]? items { get; init; }
             public PaypalAmountRequest amount { get; init; }
+            public ShippingDetail? shipping { get; init; }
+            public Payment? payments { get; init; }
+        }
+
+        public readonly struct Payment
+        {
+            public object[]? authorizations { get; init; }
+            public object[]? refunds { get; init; }
+            public Capture[]? captures { get; init; }
+
+        }
+
+        public readonly struct Capture
+        {
+            public string status { get; init; }
+            public object? status_details { get; init; }
+            public string id { get; init; }
+            public string? invoice_id { get; init; }
+            public string? custom { get; init; }
+            public bool? final_capture { get; init; }
+            public string? disbursement_mode { get; init; }
+            public PaypalLink[]? links { get; init; }
+            public Amount? amount { get; init; }
+            public DateTime? create_time { get; init; }
+            public DateTime? update_time { get; init; }
+            public PaypalSellerProtection? seller_protection { get; init; }
+            public PaypalSellerReceivableBreakdown? seller_receivable_breakdown { get; init; }
+            public object? processor_response { get; init; }
+        }
+
+        public readonly struct PaypalSellerReceivableBreakdown
+        {
+            public Amount? gross_amount { get; init; }
+            public Amount? paypal_fee { get; init; }
+            public Amount? net_amount { get; init; }
+            public Amount? total_refunded_amount { get; init; }
+            public Amount? total_charged_back_amount { get; init; }
+        }
+
+        public readonly struct PaypalSellerProtection
+        {
+            public string? status { get; init; }
+            public string[]? dispute_categories { get; init; }
         }
 
         public readonly struct PaypalAmountRequest

@@ -1,10 +1,8 @@
-﻿using System.Linq.Expressions;
-using AutoMapper;
+﻿using AutoMapper;
 using Invedia.DI.Attributes;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
-using SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels;
+using SWD_Laundry_Backend.Contract.Repository.Infrastructure;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
@@ -20,18 +18,21 @@ public class CustomerService : ICustomerService
     private readonly ICustomerRepository _repository;
     private readonly IMapper _mapper;
     private readonly IIdentityService _identityService;
+    private readonly ICacheLayer<Customer> _cacheLayer;
 
-    public CustomerService(ICustomerRepository repository, IMapper mapper, IIdentityService identityService)
+    public CustomerService(ICustomerRepository repository, IMapper mapper, IIdentityService identityService, ICacheLayer<Customer> cacheLayer)
     {
         _repository = repository;
         _mapper = mapper;
         _identityService = identityService;
+        _cacheLayer = cacheLayer;
     }
 
     public async Task<string> CreateAsync(CustomerModel model, CancellationToken cancellationToken = default)
     {
+        var test = _mapper.Map<Customer>(model);
         var query = await _repository.AddAsync(_mapper.Map<Customer>(model), cancellationToken);
-        var user = _identityService.GetUserByIdAsync(query.ApplicationUserID);
+        var user = await _identityService.GetUserByIdAsync(query.ApplicationUserID);
         await _identityService.AddToRoleAsync(user, "Customer");
         var objectId = query.Id;
         return objectId;
@@ -47,10 +48,10 @@ public class CustomerService : ICustomerService
     public async Task<ICollection<Customer>> GetAllAsync(CustomerQuery? query, CancellationToken cancellationToken = default)
     {
         var list = await _repository
-            .GetAsync(null, cancellationToken: cancellationToken
-            , x => x.ApplicationUser
-            , c => c.ApplicationUser.Wallet
-            , c => c.Building);
+            .GetAsync(null, cancellationToken: cancellationToken, 
+            x => x.ApplicationUser, 
+            c => c.ApplicationUser.Wallet, 
+            c => c.Building);
 
         return await list.ToListAsync(cancellationToken);
     }
@@ -58,21 +59,25 @@ public class CustomerService : ICustomerService
     public async Task<Customer?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
 
-        var customer = await _repository.GetSingleAsync(c => c.Id == id, cancellationToken
-            , x => x.ApplicationUser
-            , c => c.ApplicationUser.Wallet
-            , c => c.Building);
+        var customer = await _repository.GetSingleAsync(c => c.Id == id, cancellationToken, 
+            x => x.ApplicationUser, 
+            c => c.ApplicationUser.Wallet, 
+            c => c.Building);
         return customer;
     }
 
     public async Task<PaginatedList<Customer>> GetPaginatedAsync(CustomerQuery query, CancellationToken cancellationToken = default)
     {
         var list = await _repository.GetAsync(
-      c => c.IsDelete == query.IsDeleted
-            ,cancellationToken: cancellationToken
-            , x => x.ApplicationUser
-            , c => c.ApplicationUser.Wallet
-            , c => c.Building);
+          c => c.IsDelete == query.IsDeleted, 
+          cancellationToken: cancellationToken, 
+          x => x.ApplicationUser, 
+          c => c.ApplicationUser.Wallet,
+          c => c.Building);
+        if (query.UserId != null)
+        {
+            list = list.Where(c => c.ApplicationUserID == query.UserId);
+        }
         var result = await list.PaginatedListAsync(query);
         return result;
 
@@ -82,9 +87,9 @@ public class CustomerService : ICustomerService
     {
         var numberOfRows = await _repository.UpdateAsync(x => x.Id == id,
          x => x
-        .SetProperty(x => x.BuildingID, model.BuildingId)
-        .SetProperty(x => x.ApplicationUserID, model.ApplicationUserId)
-        , cancellationToken);
+        .SetProperty(x => x.BuildingID, model.BuildingID)
+        .SetProperty(x => x.ApplicationUserID, model.ApplicationUserID), 
+        cancellationToken: cancellationToken);
         return numberOfRows;
     }
 

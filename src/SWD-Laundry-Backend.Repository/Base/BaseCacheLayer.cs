@@ -83,14 +83,16 @@ public class BaseCacheLayer<T> : IBaseCacheLayer<T> where T : BaseEntity, new()
             });
     }
 
-    public Task AddMultipleAsync(string key, PaginatedList<T> entities, CancellationToken cancellationToken = default)
+    public async Task AddMultipleAsync(string key, PaginatedList<T> entities, CancellationToken cancellationToken = default)
     {
         key = typeof(T).Name + ":" + key;
         var json = JsonConvert.SerializeObject(entities);
         var options = new DistributedCacheEntryOptions()
        .SetSlidingExpiration(TimeSpan.FromHours(8))
        .SetAbsoluteExpiration(DateTime.Now.AddHours(24));
-        return _distributedCache.SetStringAsync(key, json, options, cancellationToken);
+        await _distributedCache.SetStringAsync(key, json, options, cancellationToken);
+        
+        return;
     }
 
     public async Task<PaginatedList<T>?> GetMultipleAsync(string keys, CancellationToken cancellationToken = default)
@@ -105,15 +107,17 @@ public class BaseCacheLayer<T> : IBaseCacheLayer<T> where T : BaseEntity, new()
         return null;
     }
 
-    public async Task RemoveMultipleAsync(string keyPrefix, CancellationToken cancellationToken = default)
+    public async Task RemoveMultipleAsync(string[] keyPrefix, CancellationToken cancellationToken = default)
     {
-        string prefix = keyPrefix + ":";
         var availableKeys = await GetAvailableKey(cancellationToken);
         foreach (var key in availableKeys)
         {
-            if (key.Contains(prefix))
+            foreach(var prefix in keyPrefix)
             {
-                await RemoveAsync(key, cancellationToken);
+                if (key.Contains(prefix))
+                {
+                    await RemoveAsync(key, cancellationToken);
+                }
             }
         }
     }

@@ -73,6 +73,7 @@ public static class CoreHelper
                 queryString += $"{property.Name}={value}&";
             }
         }
+        queryString = queryString.TrimEnd('&');
         return queryString;
     }
 }

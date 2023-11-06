@@ -44,14 +44,13 @@ namespace SWD_Laundry_Backend.Repository.Base
         {
             //var i = await DbSet.Where(filter).ExecuteDeleteAsync(cancellationToken);
             var i = await DbSet.Where(filter)
-                .ExecuteUpdateAsync(x => x.SetProperty(x => x.IsDelete, true)
-                , cancellationToken);
+                .ExecuteUpdateAsync(x => x.SetProperty(x => x.IsDelete, true),
+               cancellationToken: cancellationToken);
             return i;
         }
 
         public virtual async Task<IQueryable<T>> GetAsync(Expression<Func<T, bool>>? filter = null, CancellationToken cancellationToken = default, params Expression<Func<T, object>>[]? includes)
         {
-
             return await Task.Run(() =>
             {
                 var query = DbSet.AsNoTracking();
@@ -94,6 +93,7 @@ namespace SWD_Laundry_Backend.Repository.Base
             int i = await DbSet.Where(filter).ExecuteUpdateAsync(update, cancellationToken);
             return i;
         }
+
         protected void TryAttach(T entity)
         {
             try

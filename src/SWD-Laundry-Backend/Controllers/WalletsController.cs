@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Service.Interface;
+using SWD_Laundry_Backend.Core.Enum;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
 using SWD_Laundry_Backend.Core.QueryObject;
@@ -8,25 +9,27 @@ using SWD_Laundry_Backend.Core.QueryObject;
 namespace SWD_Laundry_Backend.Controllers;
 
 [ApiController]
-public class PaymentController : ApiControllerBase
+public class WalletsController : ApiControllerBase
 {
-    private readonly IPaymentService _service;
+    private readonly IWalletService _service;
+    private readonly ITransactionService _service2;
 
-    public PaymentController(IPaymentService service)
+    public WalletsController(IWalletService service, ITransactionService service2)
     {
         _service = service;
+        _service2 = service2;
     }
 
-    [HttpGet("/api/v1/payments")]
+    [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Get([FromQuery]PaymentQuery query)
+    public async Task<IActionResult> Get([FromQuery]WalletQuery query)
     {
         try
         {
             var pgresult = await _service.GetPaginatedAsync(query);
-            return Ok(new BaseResponseModel<PaginatedList<Payment>?>(StatusCodes.Status200OK, data: pgresult));
+            return Ok(new BaseResponseModel<PaginatedList<Wallet>?>(StatusCodes.Status200OK, data: pgresult));
         }
         catch (Exception e)
         {
@@ -39,7 +42,7 @@ public class PaymentController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> GetById(string id)
+    public async Task<IActionResult> GetById([FromRoute] string id)
     {
         try
         {
@@ -48,7 +51,7 @@ public class PaymentController : ApiControllerBase
             {
                 return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
             }
-            return Ok(new BaseResponseModel<Payment?>(StatusCodes.Status200OK, data: result));
+            return Ok(new BaseResponseModel<Wallet?>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {
@@ -60,7 +63,7 @@ public class PaymentController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Create(PaymentModel model)
+    public async Task<IActionResult> Create([FromBody] WalletModel model)
     {
         try
         {
@@ -80,7 +83,7 @@ public class PaymentController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Update(string id, PaymentModel model)
+    public async Task<IActionResult> DepositWallet([FromRoute] string id, [FromBody] WalletModel model)
     {
         try
         {
@@ -89,7 +92,18 @@ public class PaymentController : ApiControllerBase
             {
                 return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
             }
-            return Ok(new BaseResponseModel<int>(StatusCodes.Status200OK, data: result));
+
+            var result2 = await _service2.CreateAsync(new TransactionModel()
+            {
+                WalletID = id,
+                TransactionType = AllowedTransactionType.Deposit,
+                PaymentType = PaymentType.Paypal,
+                Amount = model.Balance,
+                Description = $"Deposit: {model.Balance} into WalletId: {id}",
+                PaymentID = null
+            });
+
+            return Ok(new BaseResponseModel<int>(StatusCodes.Status200OK, data: result, additionalData: result2));
         }
         catch (Exception e)
         {
@@ -102,7 +116,7 @@ public class PaymentController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Delete(string id)
+    public async Task<IActionResult> Delete([FromRoute] string id)
     {
         try
         {

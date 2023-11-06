@@ -7,7 +7,7 @@ namespace SWD_Laundry_Backend.Contract.Service.Interface;
 
 public interface IStaffTripService : 
     ICreateAble<StaffTripModel, string>, 
-    IGetAble<Staff_Trip, string, StaffTripQuery>, 
+    IGetAble<StaffTrip, string, StaffTripQuery>, 
     IUpdateAble<StaffTripModel, string>, 
     IDeleteAble<string>
 {

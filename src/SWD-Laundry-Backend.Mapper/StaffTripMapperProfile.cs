@@ -8,6 +8,6 @@ public class StaffTripMapperProfile : Profile
 {
     public StaffTripMapperProfile()
     {
-        CreateMap<StaffTripModel, Staff_Trip>().ForMember(x => x.Id, opt => opt.Ignore()).ReverseMap();
+        CreateMap<StaffTripModel, StaffTrip>().ForMember(x => x.Id, opt => opt.Ignore()).ReverseMap();
     }
 }

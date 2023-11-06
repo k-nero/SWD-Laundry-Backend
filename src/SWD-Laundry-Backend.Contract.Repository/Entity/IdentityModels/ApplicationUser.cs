@@ -11,6 +11,10 @@ public class ApplicationUser : IdentityUser
 
     public string? ImageUrl { get; set; }
 
+    public bool IsDelete { get; set; } = false;
+    public string? CreatedBy { get; set; }
+    public string? LastUpdatedBy { get; set; }
+
     #region Relationship
 
     [ForeignKey("Wallet")]
@@ -18,6 +22,13 @@ public class ApplicationUser : IdentityUser
 
 
     public Wallet? Wallet { get; set; }
+
+
+    //public string? DeletedBy { get; set; }
+
+    public DateTimeOffset? CreatedTime { get; set; }
+
+    public DateTimeOffset? LastUpdatedTime { get; set; }
 
     #endregion Relationship
 }

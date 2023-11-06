@@ -8,18 +8,18 @@ using SWD_Laundry_Backend.Core.QueryObject;
 namespace SWD_Laundry_Backend.Controllers;
 
 [ApiController]
-public class LaundryStoreController : ApiControllerBase
+public class LaundryStoresController : ApiControllerBase
 {
     private readonly ILaundryStoreService _service;
 
 
-    public LaundryStoreController(ILaundryStoreService service)
+    public LaundryStoresController(ILaundryStoreService service)
     {
         _service = service;
 
     }
 
-    [HttpGet("/api/v1/laundry-stores")]
+    [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
@@ -41,7 +41,7 @@ public class LaundryStoreController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> GetById(string id)
+    public async Task<IActionResult> GetById([FromRoute] string id)
     {
         try
         {
@@ -62,7 +62,7 @@ public class LaundryStoreController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Create(LaundryStoreModel model)
+    public async Task<IActionResult> Create([FromBody] LaundryStoreModel model)
     {
         try
         {
@@ -82,7 +82,7 @@ public class LaundryStoreController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Update(string id, LaundryStoreModel model)
+    public async Task<IActionResult> Update([FromRoute] string id, [FromBody] LaundryStoreModel model)
     {
         try
         {
@@ -104,7 +104,7 @@ public class LaundryStoreController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Delete(string id)
+    public async Task<IActionResult> Delete([FromRoute] string id)
     {
         try
         {

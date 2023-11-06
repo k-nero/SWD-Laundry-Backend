@@ -6,7 +6,7 @@ public sealed partial class AppDbContext
 {
     public DbSet<Building> Buildings { get; set; }
     public DbSet<Staff> Staffs { get; set; }
-    public DbSet<Staff_Trip> Staff_Trips { get; set; }
+    public DbSet<StaffTrip> Staff_Trips { get; set; }
     public DbSet<TimeSchedule> TimeSchedules { get; set; }
     public DbSet<Wallet> Wallets { get; set; }
     public DbSet<Customer> Customers { get; set; }

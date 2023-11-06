@@ -20,7 +20,7 @@ public class PaypalController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> CreatePayment(TransactionModel model)
+    public async Task<IActionResult> CreatePayment([FromBody] TransactionModel model)
     {
         try
         {
@@ -33,11 +33,11 @@ public class PaypalController : ApiControllerBase
         }
     }
 
-    [HttpGet("/capture-paypal-order/{orderId}")]
+    [HttpGet("/capture-paypal-order/{order-id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> CapturePaypalOrder(string orderId)
+    public async Task<IActionResult> CapturePaypalOrder([FromRoute(Name = "order-id")] string orderId)
     {
         try
         {

@@ -2,7 +2,6 @@
 using SWD_Laundry_Backend.Core.Enum;
 
 namespace SWD_Laundry_Backend.Contract.Repository.Entity;
-#nullable disable
 
 public class OrderHistory : BaseEntity
 {
@@ -17,5 +16,5 @@ public class OrderHistory : BaseEntity
     [ForeignKey("Order")]
     public string OrderID { get; set; }
 
-    public Order Order { get; set; }
+    public Order? Order { get; set; }
 }

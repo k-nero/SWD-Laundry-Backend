@@ -37,11 +37,11 @@ public class PaypalService : IPaypalService
         client.DefaultRequestHeaders.Add("Accept-Language", "en_US");
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", access_token.Value.access_token);
         var response = await client.PostAsync(paypal_api_url, new StringContent("", Encoding.UTF8, "application/json"), cancellationToken);
-
+        var responseString = await response.Content.ReadAsStringAsync(cancellationToken);
         Transaction? transaction;
         if (response.IsSuccessStatusCode)
         {
-            var responseString = await response.Content.ReadAsStringAsync(cancellationToken);
+
             var result = JsonConvert.DeserializeObject<PaypalOrderCaptureResponse>(responseString);
 
             var transactionId = result.purchase_units[0].reference_id;
@@ -71,7 +71,7 @@ public class PaypalService : IPaypalService
             }
         }
         
-        return null;
+        throw new Exception(responseString);
     }
 
     public async Task<PaypalOrderResponse> CreatePaypalOrderAsync(TransactionModel model, CancellationToken cancellationToken = default)
@@ -99,7 +99,7 @@ public class PaypalService : IPaypalService
                 {
                     amount = new PaypalAmountRequest()
                     {
-                        currency_code = "VND",
+                        currency_code = "USD",
                         value = model.Amount.ToString()
                     },
                     reference_id = transId,
@@ -114,7 +114,12 @@ public class PaypalService : IPaypalService
         var result = JsonConvert.DeserializeObject<PaypalOrderResponse>(responseString);
         if (result.id == null)
         {
-            throw new Exception("There is something wrong, cannot create order. Paypal URL: " + paypal_api_url);
+            var rs = JsonConvert.DeserializeObject<object>(responseString);
+            if (rs != null)
+            {
+                throw new Exception(rs.ToString());
+            }
+            throw new Exception("Unknow error, cannot create order. Paypal URL: " + paypal_api_url);
         }
         return result;
     }
@@ -142,7 +147,12 @@ public class PaypalService : IPaypalService
             var result = JsonConvert.DeserializeObject<PaypalAccessTokenResponse>(responseString);
             if(result.access_token == null)
             {
-                throw new Exception("There is something wrong, cannot get access token. ClientId " + client_id + " - ClientSecret: " + client_secret + " - Paypal URL: " + paypal_api_url);
+                var rs = JsonConvert.DeserializeObject<object>(responseString);
+                if (rs != null)
+                {
+                    throw new Exception(rs.ToString());
+                }
+                throw new Exception("Unknow error, cannot get access token");
             }
             return result;
         }

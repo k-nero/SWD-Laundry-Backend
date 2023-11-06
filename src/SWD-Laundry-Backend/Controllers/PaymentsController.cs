@@ -4,30 +4,29 @@ using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
 using SWD_Laundry_Backend.Core.QueryObject;
-using SWD_Laundry_Backend.Service.Services;
 
 namespace SWD_Laundry_Backend.Controllers;
 
 [ApiController]
-public class TransactionController : ApiControllerBase
+public class PaymentsController : ApiControllerBase
 {
-    private readonly ITransactionService _service;
+    private readonly IPaymentService _service;
 
-    public TransactionController(ITransactionService service)
+    public PaymentsController(IPaymentService service)
     {
         _service = service;
     }
 
-    [HttpGet("/api/v1/transactions")]
+    [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Get([FromQuery]TransactionQuery query)
+    public async Task<IActionResult> Get([FromQuery]PaymentQuery query)
     {
         try
         {
             var pgresult = await _service.GetPaginatedAsync(query);
-            return Ok(new BaseResponseModel<PaginatedList<Transaction>?>(StatusCodes.Status200OK, data: pgresult));
+            return Ok(new BaseResponseModel<PaginatedList<Payment>?>(StatusCodes.Status200OK, data: pgresult));
         }
         catch (Exception e)
         {
@@ -40,7 +39,7 @@ public class TransactionController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> GetById(string id)
+    public async Task<IActionResult> GetById([FromRoute] string id)
     {
         try
         {
@@ -49,7 +48,7 @@ public class TransactionController : ApiControllerBase
             {
                 return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
             }
-            return Ok(new BaseResponseModel<Transaction?>(StatusCodes.Status200OK, data: result));
+            return Ok(new BaseResponseModel<Payment?>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {
@@ -61,16 +60,18 @@ public class TransactionController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Create(TransactionModel model)
+    public async Task<IActionResult> Create([FromBody] PaymentModel model)
     {
         try
         {
             var result = await _service.CreateAsync(model);
-            return Ok(new BaseResponseModel<string>(StatusCodes.Status201Created, data: result));
+            return Ok(new BaseResponseModel<string>
+                (StatusCodes.Status201Created, data: result));
         }
         catch (Exception e)
         {
-            return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
+            return BadRequest(new BaseResponseModel<string>
+                (StatusCodes.Status500InternalServerError, e.Message));
         }
     }
 
@@ -79,7 +80,7 @@ public class TransactionController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Update(string id, TransactionModel model)
+    public async Task<IActionResult> Update([FromRoute] string id, [FromBody] PaymentModel model)
     {
         try
         {
@@ -101,7 +102,7 @@ public class TransactionController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Delete(string id)
+    public async Task<IActionResult> Delete([FromRoute] string id)
     {
         try
         {

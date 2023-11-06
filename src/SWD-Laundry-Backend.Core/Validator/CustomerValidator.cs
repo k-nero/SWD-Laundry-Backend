@@ -7,7 +7,7 @@ public class CustomerValidator : AbstractValidator<CustomerModel>
 {
     public CustomerValidator()
     {
-        RuleFor(x => x.ApplicationUserId).NotEmpty().WithMessage("ApllicationUserId is required.");
-        RuleFor(x => x.BuildingId).NotEmpty().WithMessage("BuildingId is required.");
+        RuleFor(x => x.ApplicationUserID).NotEmpty().WithMessage("ApllicationUserId is required.");
+        RuleFor(x => x.BuildingID).NotEmpty().WithMessage("BuildingId is required.");
     }
 }

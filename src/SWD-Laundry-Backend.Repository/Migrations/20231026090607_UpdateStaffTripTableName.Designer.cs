@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SWD_Laundry_Backend.Repository.Infrastructure;
 
@@ -11,13 +12,15 @@ using SWD_Laundry_Backend.Repository.Infrastructure;
 namespace SWD_Laundry_Backend.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231026090607_UpdateStaffTripTableName")]
+    partial class UpdateStaffTripTableName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.13")
+                .HasAnnotation("ProductVersion", "7.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -195,11 +198,9 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ApplicationUserID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("BuildingID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CreatedBy")
@@ -238,12 +239,6 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset?>("CreatedTime")
-                        .HasColumnType("datetimeoffset");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -253,15 +248,6 @@ namespace SWD_Laundry_Backend.Repository.Migrations
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastUpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset?>("LastUpdatedTime")
-                        .HasColumnType("datetimeoffset");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -325,11 +311,9 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ApplicationUserID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CreatedBy")
@@ -338,8 +322,8 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                     b.Property<DateTimeOffset?>("CreatedTime")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<TimeSpan>("EndTime")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
@@ -351,11 +335,10 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeSpan>("StartTime")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
@@ -455,18 +438,15 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Message")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OrderID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("OrderStatus")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -497,7 +477,6 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("OrderId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<double>("Price")
@@ -516,7 +495,6 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("BuildingID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CreatedBy")
@@ -535,11 +513,9 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("StaffID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("TimeScheduleID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("TripCollect")
@@ -680,7 +656,6 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ApplicationUserID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CreatedBy")
@@ -760,15 +735,11 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                 {
                     b.HasOne("SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("ApplicationUserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ApplicationUserID");
 
                     b.HasOne("SWD_Laundry_Backend.Contract.Repository.Entity.Building", "Building")
                         .WithMany()
-                        .HasForeignKey("BuildingID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BuildingID");
 
                     b.Navigation("ApplicationUser");
 
@@ -788,9 +759,7 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                 {
                     b.HasOne("SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("ApplicationUserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ApplicationUserID");
 
                     b.Navigation("ApplicationUser");
                 });
@@ -820,9 +789,7 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                 {
                     b.HasOne("SWD_Laundry_Backend.Contract.Repository.Entity.Order", "Order")
                         .WithMany()
-                        .HasForeignKey("OrderID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrderID");
 
                     b.Navigation("Order");
                 });
@@ -831,9 +798,7 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                 {
                     b.HasOne("SWD_Laundry_Backend.Contract.Repository.Entity.Order", "Orders")
                         .WithMany()
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrderId");
 
                     b.Navigation("Orders");
                 });
@@ -842,21 +807,15 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                 {
                     b.HasOne("SWD_Laundry_Backend.Contract.Repository.Entity.Building", "Building")
                         .WithMany()
-                        .HasForeignKey("BuildingID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BuildingID");
 
                     b.HasOne("Staff", "Staff")
                         .WithMany()
-                        .HasForeignKey("StaffID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StaffID");
 
                     b.HasOne("SWD_Laundry_Backend.Contract.Repository.Entity.TimeSchedule", "TimeSchedule")
                         .WithMany()
-                        .HasForeignKey("TimeScheduleID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TimeScheduleID");
 
                     b.Navigation("Building");
 
@@ -884,9 +843,7 @@ namespace SWD_Laundry_Backend.Repository.Migrations
                 {
                     b.HasOne("SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("ApplicationUserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ApplicationUserID");
 
                     b.Navigation("ApplicationUser");
                 });

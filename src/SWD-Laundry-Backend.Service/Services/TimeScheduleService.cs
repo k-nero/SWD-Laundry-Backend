@@ -3,6 +3,7 @@ using AutoMapper;
 using Invedia.DI.Attributes;
 using Microsoft.EntityFrameworkCore;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
+using SWD_Laundry_Backend.Contract.Repository.Infrastructure;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
@@ -17,11 +18,13 @@ public class TimeScheduleService : Base_Service.Service, ITimeScheduleService
 {
     private readonly ITimeScheduleRepository _repository;
     private readonly IMapper _mapper;
+    private readonly ICacheLayer<TimeSchedule> _cacheLayer;
 
-    public TimeScheduleService(ITimeScheduleRepository repository, IMapper mapper)
+    public TimeScheduleService(ITimeScheduleRepository repository, IMapper mapper, ICacheLayer<TimeSchedule> cacheLayer)
     {
         _repository = repository;
         _mapper = mapper;
+        _cacheLayer = cacheLayer;
     }
 
     public async Task<string> CreateAsync(TimeScheduleModel model, CancellationToken cancellationToken = default)

@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using Invedia.DI.Attributes;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels;
+using SWD_Laundry_Backend.Contract.Repository.Infrastructure;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
@@ -18,19 +17,21 @@ public class StaffService : IStaffService
     private readonly IStaffRepository _repository;
     private readonly IMapper _mapper;
     private readonly IIdentityService _identityService;
+    private readonly ICacheLayer<Staff> _cacheLayer;
 
-    public StaffService(IStaffRepository repository, IMapper mapper, IIdentityService identityService)
+    public StaffService(IStaffRepository repository, IMapper mapper, IIdentityService identityService, ICacheLayer<Staff> cacheLayer)
     {
         _repository = repository;
         _mapper = mapper;
         _identityService = identityService;
+        _cacheLayer = cacheLayer;
     }
 
     public async Task<string> CreateAsync(StaffModel model, CancellationToken cancellationToken = default)
     {
         var query = await _repository.AddAsync(_mapper.Map<Staff>(model), cancellationToken);
 
-        var user = _identityService.GetUserByIdAsync(query.ApplicationUserID);
+        var user = await _identityService.GetUserByIdAsync(query.ApplicationUserID);
         await _identityService.AddToRoleAsync(user, "Staff");
         var objectId = query.Id;
         return objectId;
@@ -68,6 +69,10 @@ public class StaffService : IStaffService
         , cancellationToken: cancellationToken
             , c => c.ApplicationUser
             , c => c.ApplicationUser.Wallet);
+        if (query.UserId != null)
+        {
+            list = list.Where(c => c.ApplicationUserID == query.UserId);
+        }
         var result = await list.PaginatedListAsync(query);
         return result;
 

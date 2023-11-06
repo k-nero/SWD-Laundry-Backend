@@ -2,6 +2,7 @@
 using Invedia.DI.Attributes;
 using Microsoft.EntityFrameworkCore;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
+using SWD_Laundry_Backend.Contract.Repository.Infrastructure;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Models;
@@ -16,11 +17,13 @@ public class PaymentService : IPaymentService
 {
     private readonly IPaymentRepository _repository;
     private readonly IMapper _mapper;
+    private readonly ICacheLayer<Payment> _cacheLayer;
 
-    public PaymentService(IPaymentRepository repository, IMapper mapper)
+    public PaymentService(IPaymentRepository repository, IMapper mapper, ICacheLayer<Payment> cacheLayer)
     {
         _repository = repository;
         _mapper = mapper;
+        _cacheLayer = cacheLayer;
     }
 
     public async Task<string> CreateAsync(PaymentModel model, CancellationToken cancellationToken = default)

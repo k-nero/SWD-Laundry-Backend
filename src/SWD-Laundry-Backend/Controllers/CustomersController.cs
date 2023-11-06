@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Service.Interface;
+using SWD_Laundry_Backend.Core.Config;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
 using SWD_Laundry_Backend.Core.QueryObject;
@@ -8,27 +9,25 @@ using SWD_Laundry_Backend.Core.QueryObject;
 namespace SWD_Laundry_Backend.Controllers;
 
 [ApiController]
-public class StaffTripController : ApiControllerBase
+public class CustomersController : ApiControllerBase 
 {
-    private readonly IStaffTripService _service;
+    private readonly ICustomerService _service;
 
-
-    public StaffTripController(IStaffTripService service)
+    public CustomersController(ICustomerService service)
     {
         _service = service;
-
     }
 
-    [HttpGet("/api/v1/staff-trips")]
+    [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Get([FromQuery]StaffTripQuery query)
+    public async Task<IActionResult> Get([FromQuery] CustomerQuery query)
     {
         try
         {
             var pgresult = await _service.GetPaginatedAsync(query);
-            return Ok(new BaseResponseModel<PaginatedList<Staff_Trip>?>(StatusCodes.Status200OK, data: pgresult));
+            return Ok(new BaseResponseModel<PaginatedList<Customer>?>(StatusCodes.Status200OK, data: pgresult));
         }
         catch (Exception e)
         {
@@ -41,7 +40,7 @@ public class StaffTripController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> GetByStaffId(string id)
+    public async Task<IActionResult> GetById([FromRoute] string id)
     {
         try
         {
@@ -50,7 +49,7 @@ public class StaffTripController : ApiControllerBase
             {
                 return NotFound(new BaseResponseModel<string>(StatusCodes.Status404NotFound, "Not Found"));
             }
-            return Ok(new BaseResponseModel<Staff_Trip?>(StatusCodes.Status200OK, data: result));
+            return Ok(new BaseResponseModel<Customer?>(StatusCodes.Status200OK, data: result));
         }
         catch (Exception e)
         {
@@ -62,18 +61,16 @@ public class StaffTripController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Create(StaffTripModel model)
+    public async Task<IActionResult> Create([FromBody] CustomerModel model)
     {
         try
         {
             var result = await _service.CreateAsync(model);
-            return Ok(new BaseResponseModel<string>
-                (StatusCodes.Status201Created, data: result));
+            return Ok(new BaseResponseModel<string>(StatusCodes.Status201Created, data: result));
         }
         catch (Exception e)
         {
-            return BadRequest(new BaseResponseModel<string>
-                (StatusCodes.Status500InternalServerError, e.Message));
+            return BadRequest(new BaseResponseModel<string>(StatusCodes.Status500InternalServerError, e.Message));
         }
     }
 
@@ -82,7 +79,7 @@ public class StaffTripController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Update(string id, StaffTripModel model)
+    public async Task<IActionResult> Update([FromRoute] string id, [FromBody] CustomerModel model)
     {
         try
         {
@@ -104,7 +101,7 @@ public class StaffTripController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> Delete(string id)
+    public async Task<IActionResult> Delete([FromRoute] string id)
     {
         try
         {

@@ -91,6 +91,7 @@ namespace SWD_Laundry_Backend.Repository.Base
         public virtual async Task<int> UpdateAsync(Expression<Func<T, bool>> filter, Expression<Func<SetPropertyCalls<T>, SetPropertyCalls<T>>> update, CancellationToken cancellationToken = default)
         {
             int i = await DbSet.Where(filter).ExecuteUpdateAsync(update, cancellationToken);
+            await DbSet.Where(filter).ExecuteUpdateAsync(x => x.SetProperty(x => x.LastUpdatedTime, DateTimeOffset.UtcNow), cancellationToken);
             return i;
         }
 

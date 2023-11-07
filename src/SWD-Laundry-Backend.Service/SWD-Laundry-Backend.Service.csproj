@@ -13,8 +13,4 @@
     <ProjectReference Include="..\SWD-Laundry-Backend.Repository\SWD-Laundry-Backend.Repository.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Base Service\" />
-  </ItemGroup>
-
 </Project>

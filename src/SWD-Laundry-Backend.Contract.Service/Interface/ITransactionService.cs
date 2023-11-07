@@ -11,4 +11,5 @@ public interface ITransactionService :
     IUpdateAble<TransactionModel, string>,
     IDeleteAble<string>
 {
+    Task<int> CancelTransactionAsync(CancellationToken cancellationToken = default);
 }

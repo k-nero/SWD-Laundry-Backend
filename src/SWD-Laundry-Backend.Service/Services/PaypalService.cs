@@ -45,19 +45,19 @@ public class PaypalService : IPaypalService
             var result = JsonConvert.DeserializeObject<PaypalOrderCaptureResponse>(responseString);
 
             var transactionId = result.purchase_units[0].reference_id;
-            if(transactionId != null)
+            if (transactionId != null)
             {
                 transaction = await _transactionService.GetByIdAsync(transactionId, cancellationToken);
                 TransactionModel transactionModel;
-                if(transaction != null && result.status == "COMPLETED")
+                if (transaction != null && result.status == "COMPLETED")
                 {
-                    if(transaction.TransactionType == Core.Enum.AllowedTransactionType.Deposit && transaction.WalletID != null)
+                    if (transaction.TransactionType == Core.Enum.AllowedTransactionType.Deposit && transaction.WalletID != null)
                     {
                         var wallet = await _walletService.GetByIdAsync(transaction.WalletID, cancellationToken);
-                        if(wallet != null)
+                        if (wallet != null)
                         {
                             var newBalance = wallet.Balance + transaction.Amount;
-                            await _walletService.UpdateAsync(transaction.WalletID, new WalletModel() { Balance = newBalance } , cancellationToken);
+                            await _walletService.UpdateAsync(transaction.WalletID, new WalletModel() { Balance = newBalance }, cancellationToken);
                             transactionModel = _mapper.Map<TransactionModel>(transaction);
                             transactionModel.Status = Core.Enum.TransactionStatus.Success;
                             await _transactionService.UpdateAsync(transactionId, transactionModel, cancellationToken);
@@ -70,7 +70,7 @@ public class PaypalService : IPaypalService
                 await _transactionService.UpdateAsync(transactionId, transactionModel, cancellationToken);
             }
         }
-        
+
         throw new Exception(responseString);
     }
 
@@ -114,11 +114,11 @@ public class PaypalService : IPaypalService
         var result = JsonConvert.DeserializeObject<PaypalOrderResponse>(responseString);
         if (result.id == null)
         {
-            var rs = JsonConvert.DeserializeObject<object>(responseString);
-            if (rs != null)
+            if(responseString != null)
             {
-                throw new Exception(rs.ToString());
+                throw new Exception(responseString);
             }
+
             throw new Exception("Unknow error, cannot create order. Paypal URL: " + paypal_api_url);
         }
         return result;
@@ -145,12 +145,11 @@ public class PaypalService : IPaypalService
             var response = await client.PostAsync(paypal_api_url, formContent);
             var responseString = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<PaypalAccessTokenResponse>(responseString);
-            if(result.access_token == null)
+            if (result.access_token == null)
             {
-                var rs = JsonConvert.DeserializeObject<object>(responseString);
-                if (rs != null)
+                if (responseString != null)
                 {
-                    throw new Exception(rs.ToString());
+                    throw new Exception(responseString);
                 }
                 throw new Exception("Unknow error, cannot get access token");
             }

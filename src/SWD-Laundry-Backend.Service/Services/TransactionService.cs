@@ -6,6 +6,7 @@ using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Repository.Infrastructure;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
+using SWD_Laundry_Backend.Core.Enum;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
 using SWD_Laundry_Backend.Core.QueryObject;
@@ -25,6 +26,13 @@ public class TransactionService : Base_Service.Service, ITransactionService
         _repository = repository;
         _mapper = mapper;
         _cacheLayer = cacheLayer;
+    }
+
+    public Task<int> CancelTransactionAsync(CancellationToken cancellationToken = default)
+    {
+       var i = _repository.UpdateAsync(x => x.Status == TransactionStatus.Pending && (DateTimeOffset.Now - x.CreatedTime) >= TimeSpan.FromDays(30),
+           x => x.SetProperty(x => x.Status, TransactionStatus.Failed), cancellationToken);
+       return i;
     }
 
     public async Task<string> CreateAsync(TransactionModel model, CancellationToken cancellationToken = default)

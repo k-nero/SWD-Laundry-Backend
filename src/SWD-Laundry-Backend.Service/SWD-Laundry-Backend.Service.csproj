@@ -1,20 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0-windows10.0.22621.0</TargetFramework>
     <RootNamespace>SWD_Laundry_Backend.Service</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SWD-Laundry-Backend.Contract.Service\SWD-Laundry-Backend.Contract.Service.csproj" />
     <ProjectReference Include="..\SWD-Laundry-Backend.Mapper\SWD-Laundry-Backend.Mapper.csproj" />
     <ProjectReference Include="..\SWD-Laundry-Backend.Repository\SWD-Laundry-Backend.Repository.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Base Service\" />
   </ItemGroup>
 
 </Project>

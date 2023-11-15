@@ -6,6 +6,7 @@ using SWD_Laundry_Backend.Contract.Repository.Entity;
 using SWD_Laundry_Backend.Contract.Repository.Infrastructure;
 using SWD_Laundry_Backend.Contract.Repository.Interface;
 using SWD_Laundry_Backend.Contract.Service.Interface;
+using SWD_Laundry_Backend.Core.Enum;
 using SWD_Laundry_Backend.Core.Models;
 using SWD_Laundry_Backend.Core.Models.Common;
 using SWD_Laundry_Backend.Core.QueryObject;
@@ -25,6 +26,13 @@ public class TransactionService : Base_Service.Service, ITransactionService
         _repository = repository;
         _mapper = mapper;
         _cacheLayer = cacheLayer;
+    }
+
+    public Task<int> CancelTransactionAsync(CancellationToken cancellationToken = default)
+    {
+       var i = _repository.UpdateAsync(x => x.Status == TransactionStatus.Pending && x.CreatedTime.AddDays(30) >= DateTimeOffset.UtcNow,
+           x => x.SetProperty(x => x.Status, TransactionStatus.Failed), cancellationToken);
+       return i;
     }
 
     public async Task<string> CreateAsync(TransactionModel model, CancellationToken cancellationToken = default)
@@ -57,10 +65,8 @@ public class TransactionService : Base_Service.Service, ITransactionService
     public async Task<PaginatedList<Transaction>> GetPaginatedAsync(TransactionQuery query, CancellationToken cancellationToken = default)
     {
         var list = await _repository
-        .GetAsync(c => c.IsDelete == query.IsDeleted
-        , cancellationToken: cancellationToken);
-
-
+        .GetAsync(c => c.IsDelete == query.IsDeleted,
+        cancellationToken: cancellationToken);
         var result = await list.PaginatedListAsync(query);
         return result;
     }
@@ -73,8 +79,8 @@ public class TransactionService : Base_Service.Service, ITransactionService
             .SetProperty(x => x.Amount, model.Amount)
             .SetProperty(x => x.TransactionType, model.TransactionType)
             .SetProperty(x => x.PaymentType, model.PaymentType)
-            .SetProperty(x => x.Description, model.Description)
-            , cancellationToken);
+            .SetProperty(x => x.Description, model.Description),
+            cancellationToken);
 
         return numberOfRows;
     }

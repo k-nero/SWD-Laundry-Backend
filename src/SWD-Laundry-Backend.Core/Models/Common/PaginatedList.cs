@@ -26,12 +26,12 @@ public class PaginatedList<T>
     {
         if (query.StartDate != null)
         {
-            DateTimeOffset? startDate = DateTime.SpecifyKind(query.StartDate.Value, DateTimeKind.Utc);
+            DateTimeOffset startDate = DateTime.SpecifyKind(query.StartDate.Value, DateTimeKind.Utc);
             ParameterExpression xParam = Expression.Parameter(typeof(T), "x");
             MemberExpression createdTimeProperty = Expression.Property(xParam, "CreatedTime");
             if(createdTimeProperty != null)
             {
-                BinaryExpression comparison = Expression.GreaterThanOrEqual(createdTimeProperty, Expression.Constant(startDate, typeof(DateTimeOffset?)));
+                BinaryExpression comparison = Expression.GreaterThanOrEqual(createdTimeProperty, Expression.Constant(startDate, typeof(DateTimeOffset)));
                 Expression<Func<T, bool>> expression = Expression.Lambda<Func<T, bool>>(comparison, xParam);
                 source = source.Where(expression);
             }
@@ -43,12 +43,12 @@ public class PaginatedList<T>
 
         if (query.EndDate != null)
         {
-            DateTimeOffset? endDate = DateTime.SpecifyKind(query.EndDate.Value.AddMilliseconds(86399000), DateTimeKind.Utc);
+            DateTimeOffset endDate = DateTime.SpecifyKind(query.EndDate.Value.AddMilliseconds(86399000), DateTimeKind.Utc);
             ParameterExpression xParam = Expression.Parameter(typeof(T), "x");
             MemberExpression createdTimeProperty = Expression.Property(xParam, "CreatedTime");
             if(createdTimeProperty != null)
             {
-                BinaryExpression comparison = Expression.LessThanOrEqual(createdTimeProperty, Expression.Constant(endDate, typeof(DateTimeOffset?)));
+                BinaryExpression comparison = Expression.LessThanOrEqual(createdTimeProperty, Expression.Constant(endDate, typeof(DateTimeOffset)));
                 Expression<Func<T, bool>> expression = Expression.Lambda<Func<T, bool>>(comparison, xParam);
                 source = source.Where(expression);
             }
@@ -64,7 +64,7 @@ public class PaginatedList<T>
             MemberExpression createdTimeProperty = Expression.Property(xParam, "CreatedTime");
             if(createdTimeProperty != null)
             {
-                Expression<Func<T, DateTimeOffset?>> expression = Expression.Lambda<Func<T, DateTimeOffset?>>(createdTimeProperty, xParam);
+                Expression<Func<T, DateTimeOffset>> expression = Expression.Lambda<Func<T, DateTimeOffset>>(createdTimeProperty, xParam);
                 source = source.OrderByDescending(expression);
             }
             else

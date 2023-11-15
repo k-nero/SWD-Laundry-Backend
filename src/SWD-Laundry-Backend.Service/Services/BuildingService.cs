@@ -29,15 +29,15 @@ public class BuildingService : Base_Service.Service, IBuidingService
 
     public async Task<string> CreateAsync(BuildingModel model, CancellationToken cancellationToken = default)
     {
-        await _cacheLayer.RemoveMultipleAsync(new string[] { typeof(Building).Name }, cancellationToken);
         var id = await _buildingRepository.AddAsync(_mapper.Map<Building>(model), cancellationToken);
+        await _cacheLayer.RemoveMultipleAsync(new string[] { typeof(Building).Name }, cancellationToken);
         return id.Id;
     }
 
     public async Task<int> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
         int i = await _buildingRepository.DeleteAsync(x => x.Id == id, cancellationToken);
-        await _cacheLayer.RemoveMultipleAsync(new string[] { typeof(Building).Name }, cancellationToken);
+        await _cacheLayer.RemoveMultipleAsync(new string[] { typeof(Building).Name, id }, cancellationToken);
         return i;
     }
 

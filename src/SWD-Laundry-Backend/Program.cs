@@ -24,7 +24,7 @@ using SWD_Laundry_Backend.Core.Config;
 using SWD_Laundry_Backend.Core.Validator;
 using SWD_Laundry_Backend.Extensions;
 using SWD_Laundry_Backend.Repository.Infrastructure;
-
+using SWD_Laundry_Backend.Service.Base_Service;
 
 namespace SWD_Laundry_Backend;
 
@@ -262,6 +262,9 @@ public class Program
             options.Providers.Add<GzipCompressionProvider>();
             options.Providers.Add<BrotliCompressionProvider>();
         });
+
+        builder.Services.AddHostedService<BackgroundTaskConsumer>();
+
         var app = builder.Build();
 
         //if (app.Environment.IsDevelopment())

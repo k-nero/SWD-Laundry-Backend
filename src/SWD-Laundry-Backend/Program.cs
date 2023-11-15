@@ -20,13 +20,11 @@ using Newtonsoft.Json;
 using Serilog;
 using StackExchange.Redis;
 using SWD_Laundry_Backend.Contract.Repository.Entity.IdentityModels;
-using SWD_Laundry_Backend.Contract.Service.Interface;
 using SWD_Laundry_Backend.Core.Config;
 using SWD_Laundry_Backend.Core.Validator;
 using SWD_Laundry_Backend.Extensions;
 using SWD_Laundry_Backend.Repository.Infrastructure;
 using SWD_Laundry_Backend.Service.Base_Service;
-using SWD_Laundry_Backend.Service.Services;
 
 namespace SWD_Laundry_Backend;
 

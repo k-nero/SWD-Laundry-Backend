@@ -16,25 +16,12 @@ using SWD_Laundry_Backend.Core.Utils;
 namespace SWD_Laundry_Backend.Service.Services;
 
 [ScopedDependency(ServiceType = typeof(IOrderService))]
-public class OrderService : IOrderService
+public class OrderService(IOrderRepository repository, IMapper mapper, ICacheLayer<Order> cacheLayer, IOrderHistoryRepository orderHistoryRepository) : IOrderService
 {
-    private readonly IOrderRepository _repository;
-    private readonly IMapper _mapper;
-    private readonly ICacheLayer<Order> _cacheLayer;
-    private readonly IOrderHistoryRepository _orderHistoryRepository;
-
-    public OrderService(IOrderRepository repository, IMapper mapper, ICacheLayer<Order> cacheLayer, IOrderHistoryRepository orderHistoryRepository)
-    {
-        _repository = repository;
-        _mapper = mapper;
-        _cacheLayer = cacheLayer;
-        _orderHistoryRepository = orderHistoryRepository;
-    }
-
     public async Task<string> CreateAsync(OrderModel model, CancellationToken cancellationToken = default)
     {
         model.StaffId = null;
-        var query = await _repository.AddAsync(_mapper.Map<Order>(model), cancellationToken);
+        var query = await repository.AddAsync(mapper.Map<Order>(model), cancellationToken);
         if(query != null)
         {
             OrderHistoryModel historyModel = new()
@@ -47,7 +34,7 @@ public class OrderService : IOrderService
                 LaundryStatus = LaundryStatus.Pending,
             };
 
-            await _orderHistoryRepository.AddAsync(_mapper.Map<OrderHistory>(historyModel), cancellationToken);
+            await orderHistoryRepository.AddAsync(mapper.Map<OrderHistory>(historyModel), cancellationToken);
         }
         var objectId = query.Id;
         return objectId;
@@ -55,20 +42,20 @@ public class OrderService : IOrderService
 
     public async Task<int> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
-        int i = await _repository.DeleteAsync(x => x.Id == id,
+        int i = await repository.DeleteAsync(x => x.Id == id,
             cancellationToken);
         return i;
     }
 
     public async Task<ICollection<Order>> GetAllAsync(OrderQuery? query, CancellationToken cancellationToken = default)
     {
-        var list = await _repository.GetAsync(cancellationToken: cancellationToken);
+        var list = await repository.GetAsync(cancellationToken: cancellationToken);
         return await list.ToListAsync(cancellationToken);
     }
 
     public async Task<Order?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
-        var entity = await _repository.GetSingleAsync(c => c.Id == id, cancellationToken, c => c.Customer,
+        var entity = await repository.GetSingleAsync(c => c.Id == id, cancellationToken, c => c.Customer,
             c => c.Staff,
             c => c.LaundryStore);
         return entity;
@@ -76,7 +63,7 @@ public class OrderService : IOrderService
 
     public async Task<int> UpdateAsync(string id, OrderModel model, CancellationToken cancellationToken = default)
     {
-        var numberOfRows = await _repository.UpdateAsync(x => x.Id == id,
+        var numberOfRows = await repository.UpdateAsync(x => x.Id == id,
             x => x
             .SetProperty(x => x.OrderDate, model.OrderDate)
             .SetProperty(x => x.DeliveryTimeFrame, model.DeliveryTimeFrame)
@@ -96,7 +83,7 @@ public class OrderService : IOrderService
 
     public async Task<PaginatedList<Order>> GetPaginatedAsync(OrderQuery query, CancellationToken cancellationToken = default)
     {
-        var list = await _repository
+        var list = await repository
         .GetAsync(
         c => c.IsDelete == query.IsDeleted,
         cancellationToken: cancellationToken,

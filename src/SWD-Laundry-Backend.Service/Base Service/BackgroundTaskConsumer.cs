@@ -19,18 +19,14 @@ public class BackgroundTaskConsumer : BackgroundService
 
     private async Task DoWork(CancellationToken stoppingToken)
     {
-        
-        using (var scope = Services.CreateScope())
-        {
-            var scopedProcessingService = scope.ServiceProvider.GetRequiredService<ICancelTransactionService>();
-            await scopedProcessingService.DoWork(stoppingToken);
-        }
+
+        using var scope = Services.CreateScope();
+        var scopedProcessingService = scope.ServiceProvider.GetRequiredService<ICancelTransactionService>();
+        await scopedProcessingService.DoWork(stoppingToken);
     }
 
     public override async Task StopAsync(CancellationToken stoppingToken)
     {
-     
-
         await base.StopAsync(stoppingToken);
     }
 }

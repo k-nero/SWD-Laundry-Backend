@@ -8,7 +8,7 @@ using SWD_Laundry_Backend.Core.QueryObject;
 
 namespace SWD_Laundry_Backend.Controllers;
 
-//[Authorize(Roles = "Admin, Staff")]
+[Authorize(Roles = "Admin, Staff")]
 [ApiController]
 public class BuildingsController : ApiControllerBase
 {

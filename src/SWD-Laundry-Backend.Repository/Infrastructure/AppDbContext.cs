@@ -27,14 +27,9 @@ public sealed partial class AppDbContext : BaseDbContext
     {
         if (!optionsBuilder.IsConfigured)
         {
-            /*  var configuration = new ConfigurationBuilder()
-                  .SetBasePath(Directory.GetCurrentDirectory())
-                  .AddJsonFile("appsettings.Development.json")
-                  .Build();
-              var connectionString = configuration.GetConnectionString("DefaultConnection");*/
+
 
             var connectionString = SystemHelper.AppDb;
-            //var connectionString = "Data Source=(local);Initial Catalog=WaterCity-Portal;user=sa;pwd=12345;Trusted_Connection=True;Trust Server Certificate=True";
 
             optionsBuilder.UseSqlServer(connectionString, sqlServerOptionsAction =>
             {

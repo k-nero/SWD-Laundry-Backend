@@ -19,6 +19,7 @@ public class CancelTransactionService : ICancelTransactionService
     {
         while (!cancellationToken.IsCancellationRequested)
         {
+
             await _transactionService.CancelTransactionAsync(cancellationToken);
             _logger.Information("Cancel transaction service is running");
             await Task.Delay(TimeSpan.FromHours(24), cancellationToken);

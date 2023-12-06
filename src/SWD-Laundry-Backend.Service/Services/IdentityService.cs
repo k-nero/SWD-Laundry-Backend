@@ -12,29 +12,18 @@ using SWD_Laundry_Backend.Core.Utils;
 namespace SWD_Laundry_Backend.Service.Services;
 
 [TransientDependency(ServiceType = typeof(IIdentityService))]
-public class IdentityService : Base_Service.Service, IIdentityService
+public class IdentityService(UserManager<ApplicationUser> userManager, IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory, IAuthorizationService authorizationService) : Base_Service.Service, IIdentityService
 {
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
-    private readonly IAuthorizationService _authorizationService;
-
-    public IdentityService(UserManager<ApplicationUser> userManager, IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory, IAuthorizationService authorizationService)
-    {
-        _userManager = userManager;
-        _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
-        _authorizationService = authorizationService;
-    }
-
     public async Task<string?> GetUserNameAsync(string userId)
     {
-        var user = await _userManager.Users.FirstAsync(u => u.Id == userId);
+        var user = await userManager.Users.FirstAsync(u => u.Id == userId);
 
         return user.UserName;
     }
 
     public async Task<ApplicationUser> GetUserByIdAsync(string userId)
     {
-        var user = await _userManager.Users.FirstAsync(u => u.Id == userId);
+        var user = await userManager.Users.FirstAsync(u => u.Id == userId);
 
 
         return user;
@@ -49,50 +38,50 @@ public class IdentityService : Base_Service.Service, IIdentityService
             CreatedTime = DateTime.Now,
         };
 
-        var result = await _userManager.CreateAsync(user, password);
+        var result = await userManager.CreateAsync(user, password);
         return (result.ToApplicationResult(), user.Id);
     }
 
     public async Task<bool> IsInRoleAsync(string userId, string role)
     {
-        var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
+        var user = userManager.Users.SingleOrDefault(u => u.Id == userId);
 
-        return user != null && await _userManager.IsInRoleAsync(user, role);
+        return user != null && await userManager.IsInRoleAsync(user, role);
     }
 
     public async Task<bool> AuthorizeAsync(string userId, string policyName)
     {
-        var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
+        var user = userManager.Users.SingleOrDefault(u => u.Id == userId);
 
         if (user == null)
         {
             return false;
         }
 
-        var principal = await _userClaimsPrincipalFactory.CreateAsync(user);
+        var principal = await userClaimsPrincipalFactory.CreateAsync(user);
 
-        var result = await _authorizationService.AuthorizeAsync(principal, policyName);
+        var result = await authorizationService.AuthorizeAsync(principal, policyName);
 
         return result.Succeeded;
     }
 
     public async Task<int> DeleteUserAsync(string userId)
     {
-        var row = _userManager.Users.ExecuteUpdate(x => x.SetProperty(x => x.IsDelete, true));
+        var row = userManager.Users.ExecuteUpdate(x => x.SetProperty(x => x.IsDelete, true));
 
         return row;
     }
 
     public async Task<Result> DeleteUserAsync(ApplicationUser user)
     {
-        var result = await _userManager.DeleteAsync(user);
+        var result = await userManager.DeleteAsync(user);
 
         return result.ToApplicationResult();
     }
 
     public async Task<ApplicationUser?> GetUserByUserNameAsync(string username)
     {
-        var user = await _userManager.Users.SingleOrDefaultAsync(u => u.UserName == username);
+        var user = await userManager.Users.SingleOrDefaultAsync(u => u.UserName == username);
         return user;
     }
 
@@ -100,57 +89,57 @@ public class IdentityService : Base_Service.Service, IIdentityService
     {
         if (user != null)
         {
-            await _userManager.SetPhoneNumberAsync(user, phoneNumber);
+            await userManager.SetPhoneNumberAsync(user, phoneNumber);
             user.PhoneNumberConfirmed = true;
-            await _userManager.UpdateAsync(user);
+            await userManager.UpdateAsync(user);
         }
         return;
     }
 
     public async Task<IList<string>?> GetRolesAsync(ApplicationUser user)
     {
-        return await _userManager.GetRolesAsync(user);
+        return await userManager.GetRolesAsync(user);
     }
 
     public async Task AddToRoleAsync(ApplicationUser user, string role)
     {
-        await _userManager.AddToRoleAsync(user, role);
+        await userManager.AddToRoleAsync(user, role);
     }
 
     public async Task SetUserFullNameAsync(ApplicationUser user, string fullName)
     {
         user.Name = fullName;
-        await _userManager.UpdateAsync(user);
+        await userManager.UpdateAsync(user);
     }
 
     public async Task<IList<Claim>> GetClaimsAsync(ApplicationUser user)
     {
-        return await _userManager.GetClaimsAsync(user);
+        return await userManager.GetClaimsAsync(user);
     }
 
     public async Task SetVerfiedEmailAsync(ApplicationUser user, string email)
     {
-        await _userManager.SetEmailAsync(user, email);
+        await userManager.SetEmailAsync(user, email);
         user.EmailConfirmed = true;
-        await _userManager.UpdateAsync(user);
+        await userManager.UpdateAsync(user);
     }
 
     public async Task SetUserAvatarUrlAsync(ApplicationUser user, string photoUrl)
     {
         user.ImageUrl = photoUrl;
-        await _userManager.UpdateAsync(user);
+        await userManager.UpdateAsync(user);
     }
 
     public async Task<int> SetWalletAsync(ApplicationUser user, string walletId)
     {
         user.WalletID = walletId;
-        var rs = await _userManager.UpdateAsync(user);
+        var rs = await userManager.UpdateAsync(user);
         return rs.ToApplicationResult().Succeeded ? 1 : 0;
     }
 
     public async Task<PaginatedList<ApplicationUser>> GetPaginatedAsync(ApplicationUserQuery query, CancellationToken cancellationToken = default)
     {
-        var result = _userManager.Users.AsNoTracking();
+        var result = userManager.Users.AsNoTracking();
         if (query.Email != null)
         {
             result = result.Where(c => c.Email == query.Email

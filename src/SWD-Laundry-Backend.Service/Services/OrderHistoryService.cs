@@ -110,7 +110,7 @@ public class OrderHistoryService : IOrderHistoryService
         var list = await _repository.GetAsync(
             c => c.IsDelete == query.IsDeleted,
         cancellationToken: cancellationToken,
-    c => c.Order, c => c.Order.LaundryStore);
+        c => c.Order, c => c.Order.LaundryStore);
         if (query.OrderId != null)
         {
             list = list.Where(x => x.OrderID == query.OrderId);

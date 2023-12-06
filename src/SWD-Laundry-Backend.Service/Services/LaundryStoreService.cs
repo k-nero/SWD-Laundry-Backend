@@ -16,53 +16,40 @@ using SWD_Laundry_Backend.Core.Utils;
 namespace SWD_Laundry_Backend.Service.Services;
 
 [ScopedDependency(ServiceType = typeof(ILaundryStoreService))]
-public class LaundryStoreService : Base_Service.Service, ILaundryStoreService
+public class LaundryStoreService(ILaundryStoreRepository repository, IMapper mapper, IIdentityService identityService, ICacheLayer<LaundryStore> cacheLayer) : Base_Service.Service, ILaundryStoreService
 {
-    private readonly ILaundryStoreRepository _repository;
-    private readonly IMapper _mapper;
-    private readonly IIdentityService _identityService;
-    private readonly ICacheLayer<LaundryStore> _cacheLayer;
-
-    public LaundryStoreService(ILaundryStoreRepository repository, IMapper mapper, IIdentityService identityService, ICacheLayer<LaundryStore> cacheLayer)
-    {
-        _repository = repository;
-        _mapper = mapper;
-        _identityService = identityService;
-        _cacheLayer = cacheLayer;
-    }
-
     public async Task<string> CreateAsync(LaundryStoreModel model, CancellationToken cancellationToken = default)
     {
-        var query = await _repository.AddAsync(_mapper.Map<LaundryStore>(model), cancellationToken);
-        var user = await  _identityService.GetUserByIdAsync(query.ApplicationUserID);
-        await _identityService.AddToRoleAsync(user, "LaundryStore");
+        var query = await repository.AddAsync(mapper.Map<LaundryStore>(model), cancellationToken);
+        var user = await  identityService.GetUserByIdAsync(query.ApplicationUserID);
+        await identityService.AddToRoleAsync(user, "LaundryStore");
         var objectId = query.Id;
         return objectId;
     }
 
     public async Task<int> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
-        int i = await _repository.DeleteAsync(x => x.Id == id,
+        int i = await repository.DeleteAsync(x => x.Id == id,
             cancellationToken);
         return i;
     }
 
     public async Task<ICollection<LaundryStore>> GetAllAsync(LaundryStoreQuery? query, CancellationToken cancellationToken = default)
     {
-       var list = await _repository.GetAsync(null,cancellationToken: cancellationToken, c => c.ApplicationUser);
+       var list = await repository.GetAsync(null,cancellationToken: cancellationToken, c => c.ApplicationUser);
        var test = await list.ToListAsync(cancellationToken: cancellationToken);
         return await list.ToListAsync(cancellationToken);
     }
 
     public async Task<LaundryStore?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
-        var customer = await _repository.GetSingleAsync(c => c.Id == id, cancellationToken, x => x.ApplicationUser);
+        var customer = await repository.GetSingleAsync(c => c.Id == id, cancellationToken, x => x.ApplicationUser);
         return customer;
     }
 
     public async Task<PaginatedList<LaundryStore>> GetPaginatedAsync(LaundryStoreQuery query, CancellationToken cancellationToken = default)
     {
-        var list = await _repository.GetAsync(
+        var list = await repository.GetAsync(
             c => c.IsDelete == query.IsDeleted
             , cancellationToken: cancellationToken
             , c => c.ApplicationUser
@@ -77,7 +64,7 @@ public class LaundryStoreService : Base_Service.Service, ILaundryStoreService
 
     public async Task<int> UpdateAsync(string id, LaundryStoreModel model, CancellationToken cancellationToken = default)
     {
-        var numberOfRows = await _repository.UpdateAsync(x => x.Id == id,
+        var numberOfRows = await repository.UpdateAsync(x => x.Id == id,
             x => x
             .SetProperty(x => x.Name, model.Name)
             .SetProperty(x => x.StartTime, model.StartTime)
